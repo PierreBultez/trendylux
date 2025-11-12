@@ -1,0 +1,4 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Ici, nous pourrons ajouter nos styles custom et les configurations @theme plus tard */
