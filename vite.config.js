@@ -25,7 +25,7 @@ export default defineConfig({
         // Le dossier de sortie pour les fichiers compilés
         outDir: 'dist',
         // Générer un manifest.json pour l'intégration PHP
-        manifest: true,
+        manifest: 'manifest.json',
         rollupOptions: {
             // Spécifier les points d'entrée
             input: {
