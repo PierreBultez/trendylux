@@ -1,4 +1,41 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* Ici, nous pourrons ajouter nos styles custom et les configurations @theme plus tard */
+@plugin "daisyui/theme" {
+    name: "trendylux";
+    default: true;
+
+    /* --- COULEURS --- */
+    /* Accentuation Or */
+    --color-primary: #D4AF37;
+    --color-primary-content: #1f2937; /* Texte sombre sur fond Or */
+
+    /* Fond principal Blanc */
+    --color-base-100: #ffffff;
+    --color-base-200: #f9fafb;        /* Gris très clair pour nuances */
+    --color-base-300: #f3f4f6;        /* Gris un peu plus foncé */
+    --color-base-content: #1f2937;    /* Texte principal (presque noir) */
+
+    /* Fond secondaire Noir pour Header/Footer */
+    --color-neutral: #111827;         /* Presque noir */
+    --color-neutral-focus: #111827;         /* Presque noir */
+    --color-neutral-content: #a6adbb; /* Texte gris clair sur fond noir */
+
+    --color-accent: #facc15;
+
+    /* Couleurs sémantiques (inchangées) */
+    --color-info: #3abff8;
+    --color-success: #36d399;
+    --color-warning: #fbbd23;
+    --color-error: #f87272;
+
+    /* --- BORDER RADIUS --- */
+    /* Rayon "moyen", entre le luxe et la modernité */
+    --radius-box: 0.75rem; /* 12px - Pour les cards, modales etc. */
+    --radius-field: 0.5rem;  /* 8px - Pour les boutons, inputs */
+    --radius-selector: 0.5rem;  /* 8px - Pour les badges, etc. */
+}
+
+[x-cloak] {
+    display: none !important;
+}

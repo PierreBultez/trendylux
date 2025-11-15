@@ -1,5 +1,7 @@
 <?php
 
+require_once get_template_directory() . '/inc/class-trendylux-nav-walker.php';
+
 // Mise en file d'attente des assets Vite
 function trendylux_vite_assets(): void {
     if (defined('IS_VITE_DEVELOPMENT') && IS_VITE_DEVELOPMENT === true) {
@@ -37,3 +39,10 @@ function trendylux_add_module_type_attribute($tag, $handle, $src) {
     return $tag;
 }
 add_filter('script_loader_tag', 'trendylux_add_module_type_attribute', 10, 3);
+
+function trendylux_register_nav_menu() {
+    register_nav_menus( [
+        'primary_menu' => __( 'Menu Principal', 'trendylux' ),
+    ] );
+}
+add_action( 'after_setup_theme', 'trendylux_register_nav_menu' );
