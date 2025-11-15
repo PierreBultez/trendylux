@@ -9,15 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ... (étapes inchangées : Checkout, Setup Node, Installation, Compilation) ...
-
       - name: Checkout du code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           cache: 'npm'
 
       - name: Installation des dépendances
@@ -25,6 +23,10 @@ jobs:
 
       - name: Compilation des assets (build)
         run: npm run build
+
+      # --- ÉTAPE DE DÉBOGAGE AJOUTÉE ---
+      - name: Vérifier le contenu du dossier avant déploiement
+        run: ls -R
 
       # Déploie les fichiers sur le VPS via rsync
       - name: Déploiement des fichiers avec rsync
@@ -36,7 +38,8 @@ jobs:
           REMOTE_PORT: ${{ secrets.VPS_SSH_PORT }}
           SOURCE: "./"
           TARGET: ${{ secrets.PREPROD_PATH }}
-          EXCLUDE: "/node_modules/, /src/, /.git/, /.github/, /vite.config.js, /tailwind.config.js, /package.json, /package-lock.json, /README.md"
+          # --- SYNTAXE DE L'EXCLUDE CORRIGÉE ---
+          EXCLUDE: "node_modules, src, .git, .github, vite.config.js, tailwind.config.js, package.json, package-lock.json, README.md"
           SCRIPT_AFTER: |
             sudo chown -R pierre:www-data ${{ secrets.PREPROD_PATH }}
             sudo find ${{ secrets.PREPROD_PATH }} -type d -exec chmod 775 {} \;
