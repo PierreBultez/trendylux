@@ -70,7 +70,7 @@
 
     <!-- Section Newsletter (reste sur le même fond) -->
     <div class="bg-neutral text-neutral-content border-t border-[var(--color-neutral-focus)]">
-        <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center">
+        <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-around items-center">
             <h3 class="font-bold text-lg mb-4 md:mb-0">Inscrivez-vous à notre newsletter</h3>
             <div class="form-control">
                 <div class="join">
