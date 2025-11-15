@@ -28,7 +28,8 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
         $menu_item = $data_object;
         $this->current_item_id = $menu_item->ID;
 
-        $has_children = in_array('menu-item-has-children', $menu_item->classes);
+        // On vérifie que $menu_item->classes est bien un tableau avant de l'utiliser.
+        $has_children = ( is_array($menu_item->classes) && in_array('menu-item-has-children', $menu_item->classes) );
 
         // Gère la balise <li> parente
         if ($depth === 0 && $has_children) {
