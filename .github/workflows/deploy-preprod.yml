@@ -34,12 +34,10 @@ jobs:
           REMOTE_HOST: ${{ secrets.VPS_SSH_HOST }}
           REMOTE_USER: ${{ secrets.VPS_SSH_USER }}
           REMOTE_PORT: ${{ secrets.VPS_SSH_PORT }}
-          SOURCE: |
-            dist/
-            *.php
-            inc/
-            style.css
-            screenshot.png
+          SOURCE: "./"
           TARGET: ${{ secrets.PREPROD_PATH }}
-          EXCLUDE: ""
-          POST_SCRIPT: 'sudo chown -R pierre:www-data ${{ secrets.PREPROD_PATH }} && sudo find ${{ secrets.PREPROD_PATH }} -type d -exec chmod 775 {} \; && sudo find ${{ secrets.PREPROD_PATH }} -type f -exec chmod 664 {} \;'
+          EXCLUDE: "/node_modules/, /src/, /.git/, /.github/, /vite.config.js, /tailwind.config.js, /package.json, /package-lock.json, /README.md"
+          SCRIPT_AFTER: |
+            sudo chown -R pierre:www-data ${{ secrets.PREPROD_PATH }}
+            sudo find ${{ secrets.PREPROD_PATH }} -type d -exec chmod 775 {} \;
+            sudo find ${{ secrets.PREPROD_PATH }} -type f -exec chmod 664 {} \;
