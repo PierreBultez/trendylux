@@ -21,8 +21,7 @@
     <div class="container mx-auto">
         <div class="navbar">
             <div class="navbar-start">
-                <a href="<?php echo home_url(); ?>" class="btn btn-ghost text-2xl font-serif text-primary uppercase tracking-wider">TrendyLux</a>
-            </div>
+                <a href="<?php echo home_url(); ?>" class="text-2xl font-serif text-primary uppercase tracking-wider transition-opacity hover:opacity-80">TrendyLux</a>            </div>
 
             <!-- Menu pour grand écran -->
             <div class="navbar-center hidden lg:flex">
