@@ -8,9 +8,6 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
     return;
 }
 ?>
-    <div class="mb-8">
-        <h1 class="text-4xl font-serif font-bold text-primary"><?php the_title(); ?></h1>
-    </div>
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
         <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-12">
             <div class="col-1">

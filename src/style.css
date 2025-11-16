@@ -81,7 +81,11 @@
     .woocommerce-page a.button,
     .woocommerce-page button.button,
     .woocommerce-page input.button {
-        @apply !btn;
+        @apply !btn !no-underline;
+    }
+
+    .woocommerce-page .button:hover {
+        filter: brightness(95%);
     }
 
     /* On applique les couleurs aux boutons spécifiques */
@@ -96,7 +100,7 @@
         @apply btn-secondary;
     }
 
-    /* Le reste du CSS pour les formulaires et les tables reste bon */
+    /* === FORMULAIRES === */
     .woocommerce-page form .form-row .input-text,
     .woocommerce-page form select,
     .woocommerce-page form textarea,
@@ -108,5 +112,62 @@
         min-height: 3rem;
         line-height: 1.5rem;
     }
-    /* ... (les autres règles pour les tables, etc., ne changent pas) ... */
+    .woocommerce-page form .form-row label {
+        @apply mb-2 block text-sm font-bold;
+    }
+
+    /* Espacement pour les formulaires en 2 colonnes (Prénom/Nom) */
+    .woocommerce form .form-row-first { @apply sm:pr-2; }
+    .woocommerce form .form-row-last { @apply sm:pl-2; }
+
+    /* === PAGE PANIER === */
+    .woocommerce-cart-form .coupon { @apply join; }
+    .woocommerce-cart-form .coupon .input-text { @apply join-item; }
+    .woocommerce-cart-form .coupon .button { @apply join-item; }
+    .woocommerce-page table.shop_table { @apply table; }
+    .woocommerce-page table.shop_table thead { @apply bg-base-200/50; }
+    .woocommerce-page table.shop_table td.product-remove a.remove { @apply text-error/80 hover:text-error; }
+
+    /* Bloc "Total Panier" */
+    .woocommerce-page .cart-collaterals .cart_totals {
+        @apply bg-base-200 p-6 rounded-box space-y-4;
+    }
+    .woocommerce-page .cart-collaterals .cart_totals h2 {
+        @apply mb-4 font-serif text-2xl font-bold;
+    }
+    .woocommerce-page .cart-collaterals .wc-proceed-to-checkout a.button { @apply w-full; }
+
+    /* === PAGE CHECKOUT === */
+    /* Titres de section (Détails facturation, etc.) */
+    .woocommerce-checkout #customer_details h3,
+    #order_review_heading {
+        @apply font-serif text-2xl mb-6 font-bold text-primary;
+    }
+
+    /* Bannière "Code promo" */
+    .woocommerce-info {
+        @apply alert alert-info bg-blue-100 text-blue-800 border-blue-200 mb-8;
+    }
+    .woocommerce-info::before {
+        @apply text-amber-800; /* Adapte la couleur de l'icône par défaut */
+    }
+
+    /* Tableau récapitulatif de la commande */
+    .woocommerce-checkout-review-order-table {
+        @apply table;
+    }
+
+    /* Section Paiement */
+    .woocommerce-checkout #payment {
+        @apply bg-base-200 rounded-box p-6 mt-8;
+    }
+    .woocommerce-checkout #payment ul.payment_methods {
+        @apply list-none p-0 m-0 border-b border-base-300 pb-4;
+    }
+    .woocommerce-checkout #payment div.payment_box {
+        @apply bg-base-100/50 p-4 mt-4 rounded-md text-sm text-base-content/80;
+    }
+    .woocommerce-checkout #payment div.place-order {
+        @apply mt-6 pt-6 border-t border-base-300;
+    }
 }
