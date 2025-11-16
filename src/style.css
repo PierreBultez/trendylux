@@ -39,3 +39,61 @@
 [x-cloak] {
     display: none !important;
 }
+
+@layer components {
+    /* Style de base pour les champs de formulaire WooCommerce */
+    .woocommerce form .form-row .input-text,
+    .woocommerce form .form-row select,
+    .woocommerce form .form-row textarea,
+    .woocommerce .coupon .input-text {
+        border-width: var(--border, 1px);
+        border-color: oklch(var(--b3)); /* Couleur du base-300 */
+        border-radius: var(--radius-field);
+        background-color: oklch(var(--b1)); /* Couleur du base-100 */
+        padding: 0.5rem 1rem;
+        height: 3rem;
+        line-height: 2;
+        width: 100%;
+    }
+
+    .woocommerce form .form-row .input-text:focus,
+    .woocommerce form .form-row select:focus,
+    .woocommerce form .form-row textarea:focus,
+    .woocommerce .coupon .input-text:focus {
+        outline: 2px solid oklch(var(--bc)); /* Couleur du base-content */
+        outline-offset: 2px;
+        border-color: oklch(var(--p)); /* Couleur primary */
+    }
+
+    /* Style pour les labels */
+    .woocommerce form .form-row label {
+        @apply block mb-2 font-bold;
+    }
+
+    /* Style générique pour les boutons WooCommerce */
+    .woocommerce .button,
+    .woocommerce a.button,
+    .woocommerce button.button,
+    .woocommerce input.button {
+        @apply btn;
+    }
+
+    /* Style spécifique pour les boutons primaires (Paiement, Appliquer coupon) */
+    .woocommerce #payment #place_order,
+    .woocommerce .coupon .button {
+        @apply btn-primary;
+    }
+
+    /* Style pour le bouton "Mettre à jour le panier" */
+    .woocommerce .actions > .button {
+        @apply btn-secondary;
+    }
+
+    /* Conteneur et tableau du panier */
+    .woocommerce-cart-form {
+        @apply overflow-x-auto;
+    }
+    .woocommerce table.shop_table {
+        @apply table;
+    }
+}

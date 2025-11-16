@@ -24,10 +24,6 @@ jobs:
       - name: Compilation des assets (build)
         run: npm run build
 
-      # --- ÉTAPE DE DÉBOGAGE AJOUTÉE ---
-      - name: Vérifier le contenu du dossier avant déploiement
-        run: ls -R
-
       # Déploie les fichiers sur le VPS via rsync
       - name: Déploiement des fichiers avec rsync
         uses: easingthemes/ssh-deploy@v5.0.0
