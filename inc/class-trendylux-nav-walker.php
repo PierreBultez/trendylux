@@ -7,7 +7,12 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
     public function start_lvl( &$output, $depth = 0, $args = null ): void
     {
         if ( $depth === 0 && $this->is_mega_menu ) {
-            $output .= '<div x-cloak x-show="openMenu === \'menu-item-' . $this->current_item_id . '\'" @mouseenter="openMenu = \'menu-item-' . $this->current_item_id . '\'" @mouseleave="openMenu = null" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-1/2 -translate-x-1/2 top-full z-10 mt-3 w-screen max-w-4xl overflow-hidden rounded-box bg-neutral text-neutral-content shadow-lg ring-1 ring-black/5" style="display: none;">';
+            $output .= '<div x-cloak x-show="openMenu === \'menu-item-' . $this->current_item_id . '\'" 
+                @mouseenter="openMenu = \'menu-item-' . $this->current_item_id . '\'" 
+                @mouseleave="openMenu = null" 
+                x-transition
+                class="absolute top-full left-1/2 -translate-x-1/2 z-10 w-screen max-w-4xl overflow-hidden rounded-box bg-neutral text-neutral-content shadow-lg ring-1 ring-black/5" 
+                style="display: none;">';
             $output .= '<div class="p-4"><ul class="grid grid-cols-2 gap-x-8 gap-y-4">';
         } else {
             $output .= '<ul class="p-2 bg-base-100 rounded-box">';
@@ -34,7 +39,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
         // Gère la balise <li> parente
         if ($depth === 0 && $has_children) {
             $this->is_mega_menu = true;
-            $output .= '<li class="relative">';
+            $output .= '<li class="static">';
         } else {
             $this->is_mega_menu = ($depth > 0 && $this->is_mega_menu);
             $output .= '<li>';
@@ -50,8 +55,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             } else {
                 // Ici, on gère les classes pour les liens simples
                 if (strtoupper($menu_item->title) === 'PROMOS') {
-                    $a_classes[] = 'text-error';
-                    $a_classes[] = 'hover:text-error/80';
+                    $a_classes[] = 'btn btn-dash btn-error';
                 } else {
                     $a_classes[] = 'hover:text-primary';
                 }

@@ -13,10 +13,9 @@
 <body <?php body_class( 'font-sans bg-base-100 text-base-content' ); ?>>
 
 <header
-        class="bg-neutral text-neutral-content"
+        class="bg-neutral text-neutral-content relative"
         x-data="{ openMenu: null }"
         @keydown.escape.window="openMenu = null"
-        @click.outside="openMenu = null"
 >
     <div class="container mx-auto">
         <div class="navbar">
@@ -30,6 +29,7 @@
                         'theme_location' => 'primary_menu',
                         'container'      => false,
                         'menu_class'     => 'menu menu-horizontal px-1 font-bold text-sm',
+                        'items_wrap'     => '<ul id="%1$s" class="%2$s" @mouseleave="openMenu = null">%3$s</ul>',
                         'walker'         => new TRENDYLUX_Nav_Walker(),
                 ]);
                 ?>
