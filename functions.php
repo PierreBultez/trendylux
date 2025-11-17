@@ -206,3 +206,51 @@ function trendylux_add_alpine_attributes_to_kses( $allowed_tags ) {
     return $allowed_tags;
 }
 add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
+
+/**
+ * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
+ * pour y ajouter les classes de DaisyUI et Tailwind. (Version corrigée)
+ */
+function trendylux_checkout_field_args( $args, $key, $value ) {
+    // Classes pour le conteneur du champ. Ajout de 'mb-4' pour l'espacement vertical.
+    $args['class'][] = 'form-control w-full mb-10';
+
+    // Classes pour le label
+    $args['label_class'] = array('label');
+
+    // Classes pour l'input lui-même
+    $args['input_class'] = array('input', 'input-bordered', 'w-full');
+
+    // Adapter les classes pour les types de champs spécifiques
+    if ( 'select' === $args['type'] ) {
+        $args['input_class'] = array('select', 'select-bordered', 'w-full');
+    }
+
+    if ( 'textarea' === $args['type'] ) {
+        $args['input_class'] = array('textarea', 'textarea-bordered', 'w-full', 'h-24');
+    }
+
+    // Enveloppe le texte du label dans un span avec la classe DaisyUI.
+    // On retire la logique qui ajoutait un deuxième astérisque.
+    if ( $args['label'] ) {
+        $args['label'] = '<span class="label-text">' . $args['label'] . '</span>';
+    }
+
+    return $args;
+}
+add_filter( 'woocommerce_form_field_args', 'trendylux_checkout_field_args', 10, 3 );
+
+/**
+ * Déplace le formulaire de code promo de la page de paiement.
+ * On le retire de sa position par défaut (en haut) pour le réinsérer
+ * juste avant la section des moyens de paiement.
+ */
+function trendylux_move_checkout_coupon_form(): void
+{
+    // 1. On le "décroche" de son emplacement d'origine.
+    remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+
+    // 2. On le "raccroche" juste avant le bloc de paiement.
+    add_action( 'woocommerce_review_order_before_payment', 'woocommerce_checkout_coupon_form', 10 );
+}
+add_action( 'init', 'trendylux_move_checkout_coupon_form' );

@@ -31,43 +31,43 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
 <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data" aria-label="<?php echo esc_attr__( 'Checkout', 'woocommerce' ); ?>">
 
-	<div class="grid grid-cols-1 lg:grid-cols-12 gap-x-12">
+	<?php if ( $checkout->get_checkout_fields() ) : ?>
 
-        <!-- Colonne de gauche : Détails client -->
-		<div class="lg:col-span-7">
-			<?php if ( $checkout->get_checkout_fields() ) : ?>
-				<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
-                
-                <div>
-                    <div>
-						<?php do_action( 'woocommerce_checkout_billing' ); ?>
-                    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16 lg:items-start">
 
-                    <div>
-						<?php do_action( 'woocommerce_checkout_shipping' ); ?>
-                    </div>
+        <!-- Colonne de Gauche : Détails de facturation et livraison -->
+        <div class="lg:col-span-1">
+		    <?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
+            <div class="col2-set" id="customer_details">
+                <div class="col-1">
+                    <?php do_action( 'woocommerce_checkout_billing' ); ?>
                 </div>
-
-				<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
-			<?php endif; ?>
-		</div>
-
-        <!-- Colonne de droite : Récapitulatif de la commande -->
-		<div class="lg:col-span-5">
-            <div class="p-8 border rounded-lg bg-base-100/50 shadow-sm">
-				<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
-                <h3 id="order_review_heading" class="text-3xl font-serif font-bold text-primary mb-6"><?php esc_html_e( 'Your order', 'woocommerce' ); ?></h3>
-				<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
-
-                <div id="order_review" class="woocommerce-checkout-review-order">
-					<?php do_action( 'woocommerce_checkout_order_review' ); ?>
+                <div class="col-2 mt-20">
+                    <?php do_action( 'woocommerce_checkout_shipping' ); ?>
                 </div>
-
-				<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
             </div>
-		</div>
+		    <?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
+        </div>
 
-	</div>
+        <!-- Colonne de Droite : Récapitulatif de commande et Paiement -->
+        <div class="lg:col-span-1 lg:sticky lg:top-8">
+            <div class="card bg-base-200 shadow-lg rounded-lg">
+                <div class="card-body">
+                    <?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
+                    <h3 id="order_review_heading" class="card-title mb-6"><?php esc_html_e( 'Your order', 'woocommerce' ); ?></h3>
+	                <?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
+                    <div id="order_review" class="woocommerce-checkout-review-order">
+                    <?php do_action( 'woocommerce_checkout_order_review' ); ?>
+                    </div>
+	                <?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <?php endif; ?>
+
 </form>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>

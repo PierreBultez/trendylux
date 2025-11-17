@@ -4,76 +4,65 @@
 @plugin "daisyui/theme" {
     name: "trendylux";
     default: true;
-    color-scheme: light; /* Le site est majoritairement clair */
 
     /* --- COULEURS --- */
-    /* Or, utilisé pour les actions principales */
-    --color-primary: oklch(74% 0.11 85); /* #D4AF37 */
-    --color-primary-content: #1f2937;
+    /* Accentuation Or */
+    --color-primary: #D4AF37;
+    --color-primary-content: #1f2937; /* Texte sombre sur fond Or */
+    --color-secondary: #ead271;
+    --color-secondary-content: #6c7b91;
+    --color-accent: #facc15;
 
-    /* Or plus clair pour les survols ou accents secondaires */
-    --color-secondary: oklch(85% 0.1 85); /* #ead271 */
-    --color-secondary-content: #1f2937;
-
-    --color-accent: oklch(86% 0.18 90); /* #facc15 */
-
-    /* Fond principal Blanc et gris très clairs */
+    /* Fond principal Blanc */
     --color-base-100: #ffffff;
-    --color-base-200: #f9fafb;
-    --color-base-300: #f3f4f6;
-    --color-base-content: #1f2937;
+    --color-base-200: #f9fafb;        /* Gris très clair pour nuances */
+    --color-base-300: #f3f4f6;        /* Gris un peu plus foncé */
+    --color-base-content: #1f2937;    /* Texte principal (presque noir) */
 
-    /* Couleurs pour les sections sombres (header/footer) */
-    --color-neutral: #111827;
-    --color-neutral-content: #a6adbb;
+    /* Fond secondaire Noir pour Header/Footer */
+    --color-neutral: #111827;         /* Presque noir */
+    --color-neutral-focus: #1f2937;   /* Un gris anthracite (Gray-800) */
+    --color-neutral-content: #a6adbb; /* Texte gris clair sur fond noir */
 
-    /* Couleurs sémantiques */
-    --color-info: oklch(70% 0.2 220);
-    --color-success: oklch(65% 0.25 140);
-    --color-warning: oklch(80% 0.25 80);
-    --color-error: oklch(65% 0.3 30);
+    /* Couleurs sémantiques (inchangées) */
+    --color-info: #3abff8;
+    --color-success: #36d399;
+    --color-warning: #fbbd23;
+    --color-error: #f87272;
 
     /* --- BORDER RADIUS --- */
-    --radius-box: 0.75rem; /* 12px */
-    --radius-field: 0.5rem;  /* 8px */
-    --radius-selector: 9999px; /* Badges arrondis */
+    /* Rayon "moyen", entre le luxe et la modernité */
+    --radius-box: 0.75rem; /* 12px - Pour les cards, modales etc. */
+    --radius-field: 0.5rem;  /* 8px - Pour les boutons, inputs */
+    --radius-selector: 0.5rem;  /* 8px - Pour les badges, etc. */
 }
 
 [x-cloak] {
     display: none !important;
 }
 
-/*
- * Sécurité : Masquer l'overlay de chargement par défaut de WooCommerce.
-*/
-.blockUI.blockOverlay {
-    display: none !important;
-}
-
-/*a.checkout-button {*/
-/*    background-color: var(--color-primary) !important;*/
-/*    color: var(--color-primary-content) !important;*/
-/*}*/
-
-/*a.checkout-button:hover {*/
-/*    filter: brightness(0.9);*/
-/*}*/
-
-/*.woocommerce button.button {*/
-/*    background-color: var(--color-secondary) !important;*/
-/*    color: var(--color-secondary-content) !important;*/
-/*}*/
-
-/*.woocommerce button.button:hover {*/
-/*    filter: brightness(0.9);*/
-/*}*/
-
-/*.cart_totals {*/
-/*    width: 100% !important;*/
-/*}*/
-
 /* Remove focus outline from WooCommerce notices */
 .woocommerce-message:focus {
     outline: none !important;
     box-shadow: none !important;
+}
+
+/**
+ * Style pour l'astérisque des champs obligatoires de WooCommerce.
+ * On le colore avec la couleur 'error' du thème et on retire le soulignement.
+ */
+.required {
+    @apply text-error no-underline;
+}
+
+/**
+ * Style pour les titres de section de la page de paiement (Checkout).
+ * On les rend plus grands, en couleur "Or", et on ajoute un séparateur
+ * pour créer une hiérarchie visuelle claire.
+ */
+.woocommerce-billing-fields h3,
+.woocommerce-shipping-fields h3,
+.woocommerce-additional-fields h3,
+#order_review_heading {
+    @apply text-xl font-bold text-primary mb-6 pb-2 border-b border-base-300;
 }
