@@ -178,3 +178,31 @@ if ( ! function_exists( 'woocommerce_quantity_input' ) ) {
         }
     }
 }
+
+/**
+ * Autorise les attributs Alpine.js dans le système de sanitization de WordPress (wp_kses).
+ * C'est nécessaire pour que les attributs comme x-data ne soient pas supprimés.
+ */
+function trendylux_add_alpine_attributes_to_kses( $allowed_tags ) {
+    // Définit la liste des attributs Alpine.js à autoriser
+    $alpine_attributes = [
+        'x-data'                    => true,
+        'x-init'                    => true,
+        'x-show'                    => true,
+        'x-transition:enter'        => true,
+        'x-transition:enter-start'  => true,
+        'x-transition:enter-end'    => true,
+        'x-transition:leave'        => true,
+        'x-transition:leave-start'  => true,
+        'x-transition:leave-end'    => true,
+    ];
+
+    // Ajoute ces attributs à la balise 'div'
+    if ( ! isset( $allowed_tags['div'] ) ) {
+        $allowed_tags['div'] = [];
+    }
+    $allowed_tags['div'] = array_merge( $allowed_tags['div'], $alpine_attributes );
+
+    return $allowed_tags;
+}
+add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );

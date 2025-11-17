@@ -43,6 +43,13 @@
     display: none !important;
 }
 
+/*
+ * Sécurité : Masquer l'overlay de chargement par défaut de WooCommerce.
+*/
+.blockUI.blockOverlay {
+    display: none !important;
+}
+
 /*a.checkout-button {*/
 /*    background-color: var(--color-primary) !important;*/
 /*    color: var(--color-primary-content) !important;*/
@@ -64,3 +71,9 @@
 /*.cart_totals {*/
 /*    width: 100% !important;*/
 /*}*/
+
+/* Remove focus outline from WooCommerce notices */
+.woocommerce-message:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
