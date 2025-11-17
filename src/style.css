@@ -4,170 +4,63 @@
 @plugin "daisyui/theme" {
     name: "trendylux";
     default: true;
+    color-scheme: light; /* Le site est majoritairement clair */
 
     /* --- COULEURS --- */
-    /* Accentuation Or */
-    --color-primary: #D4AF37;
-    --color-primary-content: #1f2937; /* Texte sombre sur fond Or */
-    --color-secondary: #ead271;
+    /* Or, utilisé pour les actions principales */
+    --color-primary: oklch(74% 0.11 85); /* #D4AF37 */
+    --color-primary-content: #1f2937;
+
+    /* Or plus clair pour les survols ou accents secondaires */
+    --color-secondary: oklch(85% 0.1 85); /* #ead271 */
     --color-secondary-content: #1f2937;
-    --color-accent: #facc15;
 
-    /* Fond principal Blanc */
+    --color-accent: oklch(86% 0.18 90); /* #facc15 */
+
+    /* Fond principal Blanc et gris très clairs */
     --color-base-100: #ffffff;
-    --color-base-200: #f9fafb;        /* Gris très clair pour nuances */
-    --color-base-300: #f3f4f6;        /* Gris un peu plus foncé */
-    --color-base-content: #1f2937;    /* Texte principal (presque noir) */
+    --color-base-200: #f9fafb;
+    --color-base-300: #f3f4f6;
+    --color-base-content: #1f2937;
 
-    /* Fond secondaire Noir pour Header/Footer */
-    --color-neutral: #111827;         /* Presque noir */
-    --color-neutral-focus: #1f2937;   /* Un gris anthracite (Gray-800) */
-    --color-neutral-content: #a6adbb; /* Texte gris clair sur fond noir */
+    /* Couleurs pour les sections sombres (header/footer) */
+    --color-neutral: #111827;
+    --color-neutral-content: #a6adbb;
 
-    /* Couleurs sémantiques (inchangées) */
-    --color-info: #3abff8;
-    --color-success: #36d399;
-    --color-warning: #fbbd23;
-    --color-error: #f87272;
+    /* Couleurs sémantiques */
+    --color-info: oklch(70% 0.2 220);
+    --color-success: oklch(65% 0.25 140);
+    --color-warning: oklch(80% 0.25 80);
+    --color-error: oklch(65% 0.3 30);
 
     /* --- BORDER RADIUS --- */
-    /* Rayon "moyen", entre le luxe et la modernité */
-    --radius-box: 0.75rem; /* 12px - Pour les cards, modales etc. */
-    --radius-field: 0.5rem;  /* 8px - Pour les boutons, inputs */
-    --radius-selector: 0.5rem;  /* 8px - Pour les badges, etc. */
+    --radius-box: 0.75rem; /* 12px */
+    --radius-field: 0.5rem;  /* 8px */
+    --radius-selector: 9999px; /* Badges arrondis */
 }
 
 [x-cloak] {
     display: none !important;
 }
 
-@layer components {
-    /*
-    ==========================================================================
-     SYSTÈME DE DESIGN POUR LES COMPOSANTS
-    ==========================================================================
-    */
+/*a.checkout-button {*/
+/*    background-color: var(--color-primary) !important;*/
+/*    color: var(--color-primary-content) !important;*/
+/*}*/
 
-    /* --- Variantes de couleur --- */
-    .btn.btn-primary {
-        background-color: var(--color-primary) !important;
-        color: var(--color-primary-content);
-    }
-    .btn.btn-secondary {
-        background-color: var(--color-secondary) !important;
-        color: var(--color-secondary-content);
-    }
-    .btn.btn-ghost {
-        @apply border-none bg-transparent shadow-none text-current hover:bg-base-content/10;
-    }
+/*a.checkout-button:hover {*/
+/*    filter: brightness(0.9);*/
+/*}*/
 
-    .btn.join-item {
-        background-color: var(--color-secondary) !important;
-        color: var(--color-secondary-content);
-    }
+/*.woocommerce button.button {*/
+/*    background-color: var(--color-secondary) !important;*/
+/*    color: var(--color-secondary-content) !important;*/
+/*}*/
 
-    .button.btn.btn-ghost {
-        background-color: var(--color-secondary) !important;
-        color: var(--color-secondary-content);
-    }
+/*.woocommerce button.button:hover {*/
+/*    filter: brightness(0.9);*/
+/*}*/
 
-    /*
-    ==========================================================================
-     Surcharge des styles WooCommerce
-    ==========================================================================
-    */
-
-    /* On dit à tous les boutons WooCommerce d'adopter notre style .btn de base */
-    .woocommerce-page a.button,
-    .woocommerce-page button.button,
-    .woocommerce-page input.button {
-        @apply !btn !no-underline;
-    }
-
-    .woocommerce-page .button:hover {
-        filter: brightness(95%);
-    }
-
-    /* On applique les couleurs aux boutons spécifiques */
-    .woocommerce-page .button.alt,
-    .woocommerce-page a.checkout-button,
-    .woocommerce-page #payment #place_order,
-    .woocommerce-page .cart-collaterals .wc-proceed-to-checkout a.button {
-        @apply btn-primary;
-    }
-    .woocommerce-page .coupon .button,
-    .woocommerce-page .actions > .button[name="update_cart"] {
-        @apply btn-secondary;
-    }
-
-    /* === FORMULAIRES === */
-    .woocommerce-page form .form-row .input-text,
-    .woocommerce-page form select,
-    .woocommerce-page form textarea,
-    .woocommerce-page .coupon .input-text {
-        @apply w-full rounded-field border border-solid;
-        background-color: var(--color-base-200);
-        border-color: var(--color-base-300);
-        padding: 0.5rem 1rem;
-        min-height: 3rem;
-        line-height: 1.5rem;
-    }
-    .woocommerce-page form .form-row label {
-        @apply mb-2 block text-sm font-bold;
-    }
-
-    /* Espacement pour les formulaires en 2 colonnes (Prénom/Nom) */
-    .woocommerce form .form-row-first { @apply sm:pr-2; }
-    .woocommerce form .form-row-last { @apply sm:pl-2; }
-
-    /* === PAGE PANIER === */
-    .woocommerce-cart-form .coupon { @apply join; }
-    .woocommerce-cart-form .coupon .input-text { @apply join-item; }
-    .woocommerce-cart-form .coupon .button { @apply join-item; }
-    .woocommerce-page table.shop_table { @apply table; }
-    .woocommerce-page table.shop_table thead { @apply bg-base-200/50; }
-    .woocommerce-page table.shop_table td.product-remove a.remove { @apply text-error/80 hover:text-error; }
-
-    /* Bloc "Total Panier" */
-    .woocommerce-page .cart-collaterals .cart_totals {
-        @apply bg-base-200 p-6 rounded-box space-y-4;
-    }
-    .woocommerce-page .cart-collaterals .cart_totals h2 {
-        @apply mb-4 font-serif text-2xl font-bold;
-    }
-    .woocommerce-page .cart-collaterals .wc-proceed-to-checkout a.button { @apply w-full; }
-
-    /* === PAGE CHECKOUT === */
-    /* Titres de section (Détails facturation, etc.) */
-    .woocommerce-checkout #customer_details h3,
-    #order_review_heading {
-        @apply font-serif text-2xl mb-6 font-bold text-primary;
-    }
-
-    /* Bannière "Code promo" */
-    .woocommerce-info {
-        @apply alert alert-info bg-blue-100 text-blue-800 border-blue-200 mb-8;
-    }
-    .woocommerce-info::before {
-        @apply text-amber-800; /* Adapte la couleur de l'icône par défaut */
-    }
-
-    /* Tableau récapitulatif de la commande */
-    .woocommerce-checkout-review-order-table {
-        @apply table;
-    }
-
-    /* Section Paiement */
-    .woocommerce-checkout #payment {
-        @apply bg-base-200 rounded-box p-6 mt-8;
-    }
-    .woocommerce-checkout #payment ul.payment_methods {
-        @apply list-none p-0 m-0 border-b border-base-300 pb-4;
-    }
-    .woocommerce-checkout #payment div.payment_box {
-        @apply bg-base-100/50 p-4 mt-4 rounded-md text-sm text-base-content/80;
-    }
-    .woocommerce-checkout #payment div.place-order {
-        @apply mt-6 pt-6 border-t border-base-300;
-    }
-}
+/*.cart_totals {*/
+/*    width: 100% !important;*/
+/*}*/

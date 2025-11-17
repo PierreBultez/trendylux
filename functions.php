@@ -2,6 +2,38 @@
 
 require_once get_template_directory() . '/inc/class-trendylux-nav-walker.php';
 
+function trendylux_register_nav_menu(): void
+{
+    register_nav_menus( [
+        'primary_menu' => __( 'Menu Principal', 'trendylux' ),
+    ] );
+}
+add_action( 'after_setup_theme', 'trendylux_register_nav_menu' );
+
+function trendylux_add_woocommerce_support(): void
+{
+    // Déclarer le support de WooCommerce
+    add_theme_support( 'woocommerce' );
+
+    // Active le support pour les fonctionnalités de la galerie produit
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
+}
+add_action( 'after_setup_theme', 'trendylux_add_woocommerce_support' );
+
+// --- HOOK 'INIT' POUR LES CONFIGURATIONS TARDIVES ---
+function trendylux_init(): void
+{
+    // Définir les tailles d'images custom après l'initialisation de WordPress.
+    // Cela résout la notice "traduction déclenchée trop tôt".
+    add_theme_support( 'woocommerce', array(
+        'gallery_thumbnail_image_width' => 64,
+        'thumbnail_image_width'         => 64,
+    ) );
+}
+add_action( 'init', 'trendylux_init' );
+
 // Mise en file d'attente des assets Vite
 function trendylux_vite_assets(): void {
     if (defined('IS_VITE_DEVELOPMENT') && IS_VITE_DEVELOPMENT === true) {
@@ -77,42 +109,72 @@ function trendylux_add_module_type_attribute($tag, $handle, $src) {
 }
 add_filter('script_loader_tag', 'trendylux_add_module_type_attribute', 10, 3);
 
-function trendylux_register_nav_menu(): void
+// --- PERSONNALISATIONS WOOCOMMERCE ---
+
+// 1. Désactiver tous les styles par défaut de WooCommerce.
+add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+
+// 2. S'assurer que les scripts AJAX du panier sont bien chargés.
+function trendylux_enqueue_wc_cart_fragments(): void
 {
-    register_nav_menus( [
-        'primary_menu' => __( 'Menu Principal', 'trendylux' ),
-    ] );
+    wp_enqueue_script( 'wc-cart-fragments' );
 }
-add_action( 'after_setup_theme', 'trendylux_register_nav_menu' );
+add_action( 'wp_enqueue_scripts', 'trendylux_enqueue_wc_cart_fragments' );
 
-function trendylux_add_woocommerce_support(): void
-{
-    add_theme_support( 'woocommerce' );
+// 3. Faire fonctionner les boutons + et - de l'input quantité.
 
-    // Active le support pour les fonctionnalités de la galerie produit
-    add_theme_support( 'wc-product-gallery-zoom' );
-    add_theme_support( 'wc-product-gallery-lightbox' );
-    add_theme_support( 'wc-product-gallery-slider' );
+if ( ! function_exists( 'woocommerce_quantity_input' ) ) {
+    function woocommerce_quantity_input( $args = array(), $product = null, $echo = true ) {
+        if ( is_null( $product ) ) {
+            $product = $GLOBALS['product'];
+        }
+
+        $defaults = array(
+            'input_id'     => uniqid( 'quantity_' ),
+            'input_name'   => 'quantity',
+            'input_value'  => '1',
+            'max_value'    => apply_filters( 'woocommerce_quantity_input_max', -1, $product ),
+            'min_value'    => apply_filters( 'woocommerce_quantity_input_min', 0, $product ),
+            'step'         => apply_filters( 'woocommerce_quantity_input_step', 1, $product ),
+            'pattern'      => apply_filters( 'woocommerce_quantity_input_pattern', '[0-9]*' ),
+            'inputmode'    => apply_filters( 'woocommerce_quantity_input_inputmode', 'numeric' ),
+            'product_name' => $product ? $product->get_name() : '',
+            'classes'      => apply_filters( 'woocommerce_quantity_input_classes', array( 'input', 'input-bordered', 'join-item', 'w-16', 'text-center', 'qty' ), $product ),
+            // L'argument manquant qui causait l'erreur
+            'placeholder'  => apply_filters( 'woocommerce_quantity_input_placeholder', '', $product ),
+        );
+
+        $args = apply_filters( 'woocommerce_quantity_input_args', wp_parse_args( $args, $defaults ), $product );
+
+        $min_value = max( 0, (int) $args['min_value'] );
+        $input_value = max( $min_value, (int) $args['input_value'] );
+
+        ob_start();
+        ?>
+        <div class="quantity join">
+            <button type="button" class="btn join-item js-quantity-btn" data-action="minus" aria-label="<?php esc_attr_e('Decrease quantity', 'woocommerce'); ?>">-</button>
+            <input
+                type="number"
+                id="<?php echo esc_attr( $args['input_id'] ); ?>"
+                class="<?php echo esc_attr( implode( ' ', (array) $args['classes'] ) ); ?>"
+                name="<?php echo esc_attr( $args['input_name'] ); ?>"
+                value="<?php echo esc_attr( $input_value ); ?>"
+                title="<?php echo esc_attr_x( 'Qty', 'Product quantity input tooltip', 'woocommerce' ); ?>"
+                size="4"
+                min="<?php echo esc_attr( $min_value ); ?>"
+                max="<?php echo esc_attr( 0 < $args['max_value'] ? $args['max_value'] : '' ); ?>"
+                step="<?php echo esc_attr( $args['step'] ); ?>"
+                placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"
+                inputmode="<?php echo esc_attr( $args['inputmode'] ); ?>"
+                autocomplete="<?php echo esc_attr( isset( $args['autocomplete'] ) ? $args['autocomplete'] : 'on' ); ?>"
+            />
+            <button type="button" class="btn join-item js-quantity-btn" data-action="plus" aria-label="<?php esc_attr_e('Increase quantity', 'woocommerce'); ?>">+</button>
+        </div>
+        <?php
+        if ( $echo ) {
+            echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        } else {
+            return ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        }
+    }
 }
-add_action( 'after_setup_theme', 'trendylux_add_woocommerce_support' );
-
-// Remplace le <ul> de WooCommerce par une div avec nos classes de grille
-function trendylux_woocommerce_product_loop_start(): string
-{
-    return '<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">';
-}
-add_filter('woocommerce_product_loop_start', 'trendylux_woocommerce_product_loop_start');
-
-function trendylux_woocommerce_product_loop_end(): string
-{
-    return '</div>';
-}
-add_filter('woocommerce_product_loop_end', 'trendylux_woocommerce_product_loop_end');
-
-// Enlève le <li> autour de chaque produit, car notre grille n'en a pas besoin
-remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10);
-remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5);
-
-// Retire les wrappers par défaut de WooCommerce pour qu'on puisse utiliser les nôtres
-remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10 );
-remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10 );
