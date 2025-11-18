@@ -80,6 +80,7 @@
             </div>
         </div>
     </div>
+    <h1 class="bg-red-500">Test</h1>
 </footer>
 
 <?php wp_footer(); ?>
