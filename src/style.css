@@ -66,3 +66,34 @@
 #order_review_heading {
     @apply text-xl font-bold text-primary mb-6 pb-2 border-b border-base-300;
 }
+
+/**
+ * Appliquer notre style de border-radius aux images de la galerie.
+ */
+.woocommerce-product-gallery__wrapper img {
+    @apply relative rounded-box overflow-hidden;
+}
+
+/**
+ * Mettre les produits similaires en grille.
+ *    On cible spécifiquement la liste de produits DANS la section "related".
+ */
+.related.products ul.products {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10;
+}
+
+.woocommerce-Reviews-title {
+    display: none;
+}
+
+.additional-informations {
+    display: none;
+}
+
+.description-title {
+    display: none;
+}
+
+#reply-title {
+    @apply text-xl font-bold mb-4 uppercase tracking-wide;
+}

@@ -254,3 +254,187 @@ function trendylux_move_checkout_coupon_form(): void
     add_action( 'woocommerce_review_order_before_payment', 'woocommerce_checkout_coupon_form', 10 );
 }
 add_action( 'init', 'trendylux_move_checkout_coupon_form' );
+
+// =========================================================================
+// == PERSONNALISATION DE LA PAGE PRODUIT UNIQUE (single-product.php)
+// =========================================================================
+
+/**
+ * 1. Supprimer la loupe (zoom) de la galerie d'images.
+ */
+function trendylux_remove_image_zoom_support(): void
+{
+    remove_theme_support( 'wc-product-gallery-zoom' );
+}
+add_action( 'wp', 'trendylux_remove_image_zoom_support', 100 );
+
+/**
+ * Déplace la section "Produits Similaires" pour qu'elle s'affiche en pleine largeur
+ * en bas de page, au lieu d'être dans la colonne de droite.
+ */
+function trendylux_restructure_related_products(): void
+{
+    // 1. On DÉCROCHE la fonction de son emplacement d'origine (dans la colonne de droite)
+    remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+
+    // 2. On la RACCROCHE plus bas, en pleine largeur, juste avant la fin du contenu principal.
+    add_action( 'woocommerce_after_main_content', 'woocommerce_output_related_products', 5 );
+}
+add_action( 'init', 'trendylux_restructure_related_products' );
+
+/**
+ * 2. Définir le nombre de produits similaires à afficher.
+ *    Le style de la grille sera géré en CSS pour plus de fiabilité.
+ */
+function trendylux_related_products_args( $args ) {
+    $args['posts_per_page'] = 4; // Nombre de produits à afficher
+    $args['columns'] = 4;        // Indique à WooCommerce de s'attendre à 4 colonnes
+    $args['order'] = 'rand'; // ou 'date'
+    return $args;
+}
+add_filter( 'woocommerce_output_related_products_args', 'trendylux_related_products_args', 20 );
+
+/**
+ * 3. Styliser le badge "Promo !" (sale flash)
+ *    On utilise un filtre pour envelopper le badge dans un div avec les bonnes classes.
+ */
+function trendylux_style_sale_flash( $html, $post, $product ): string
+{
+    // On garde le texte par défaut mais on l'enveloppe avec nos classes Tailwind/DaisyUI
+    return '<div class="badge badge-dash badge-error mb-5 p-5 font-bold z-10">' . $html . '</div>';
+}
+add_filter( 'woocommerce_sale_flash', 'trendylux_style_sale_flash', 10, 3 );
+
+/**
+ * 4. Afficher les étoiles de notation avec des SVG et des classes DaisyUI.
+ *    Remplace la fonction par défaut de WooCommerce pour s'affranchir de leur CSS.
+ */
+function trendylux_display_star_rating(): void
+{
+    if ( ! wc_review_ratings_enabled() ) {
+        return;
+    }
+
+    global $product;
+    $rating_count = $product->get_rating_count();
+    $review_count = $product->get_review_count();
+    $average_rating = (float) $product->get_average_rating();
+
+    if ( $rating_count > 0 ) { ?>
+        <div class="flex items-center gap-2">
+            <div class="rating">
+                <?php
+                $rounded_rating = round( $average_rating ); // Arrondir à l'entier le plus proche
+                for ( $i = 1; $i <= 5; $i++ ) {
+                    // Appliquer la couleur primaire si l'étoile est dans la note, sinon gris
+                    $color_class = ( $i <= $rounded_rating ) ? 'bg-primary opacity-100' : 'bg-primary';
+                    // Les classes h-5 et w-5 sont nécessaires pour donner une taille au masque
+                    echo '<div class="mask mask-star-2 h-5 w-5 ' . $color_class . '"></div>';
+                }
+                ?>
+            </div>
+            <a href="#reviews" class="text-xs text-gray-500 hover:underline" rel="nofollow">
+                (<?php printf( _n( '%s avis', '%s avis', $review_count, 'trendylux' ), $review_count ); ?>)
+            </a>
+        </div>
+        <?php
+    }
+}
+
+// =========================================================================
+// == PERSONNALISATION DU FORMULAIRE D'AVIS PRODUIT
+// =========================================================================
+
+/**
+ * 1. Supprime le champ de notation par défaut de WooCommerce (qui est un <select>).
+ */
+function trendylux_remove_wc_rating_filter(): void
+{
+    remove_filter( 'comment_form_field_comment', 'woocommerce_comment_form_field_comment' );
+}
+add_action( 'after_setup_theme', 'trendylux_remove_wc_rating_filter' );
+
+/**
+ * 2. Ajoute un champ de notation personnalisé utilisant le composant "Rating" de DaisyUI.
+ */
+function trendylux_add_daisyui_review_rating_field(): void
+{
+    if ( ! wc_review_ratings_enabled() ) {
+        return;
+    }
+    ?>
+    <div class="comment-form-rating mb-4">
+        <label class="label">
+            <span class="label-text"><?php esc_html_e( 'Votre note', 'trendylux' ); ?><?php if ( wc_review_ratings_required() ) : ?>&nbsp;<span class="required text-error">*</span><?php endif; ?></span>
+        </label>
+        <div class="rating rating-lg">
+            <!-- Le name "rating" est ce que WooCommerce attend pour traiter la note -->
+            <input type="radio" name="rating" value="1" class="mask mask-star-2 bg-primary" required />
+            <input type="radio" name="rating" value="2" class="mask mask-star-2 bg-primary" />
+            <input type="radio" name="rating" value="3" class="mask mask-star-2 bg-primary" />
+            <input type="radio" name="rating" value="4" class="mask mask-star-2 bg-primary" />
+            <input type="radio" name="rating" value="5" class="mask mask-star-2 bg-primary" />
+        </div>
+    </div>
+    <?php
+}
+add_action( 'comment_form_top', 'trendylux_add_daisyui_review_rating_field' );
+
+/**
+ * 3. Style les champs du formulaire de commentaire (Nom, Email) avec DaisyUI.
+ */
+function trendylux_style_comment_form_fields( array $fields ): array
+{
+    $commenter = wp_get_current_commenter();
+    $req = get_option( 'require_name_email' );
+    $label_class = 'label';
+    $input_class = 'input input-bordered w-full';
+
+    $fields['author'] = sprintf(
+        '<div class="form-control w-full"><label for="author" class="%s"><span class="label-text">%s%s</span></label>%s</div>',
+        $label_class,
+        esc_html__( 'Name', 'woocommerce' ),
+        ( $req ? '&nbsp;<span class="required text-error">*</span>' : '' ),
+        sprintf(
+            '<input id="author" name="author" type="text" value="%s" class="%s" required="required" />',
+            esc_attr( $commenter['comment_author'] ),
+            $input_class
+        )
+    );
+
+    $fields['email'] = sprintf(
+        '<div class="form-control w-full"><label for="email" class="%s"><span class="label-text">%s%s</span></label>%s</div>',
+        $label_class,
+        esc_html__( 'Email', 'woocommerce' ),
+        ( $req ? '&nbsp;<span class="required text-error">*</span>' : '' ),
+        sprintf(
+            '<input id="email" name="email" type="email" value="%s" class="%s" required="required" />',
+            esc_attr( $commenter['comment_author_email'] ),
+            $input_class
+        )
+    );
+
+    // On supprime le champ URL qui est souvent inutile
+    $fields['url'] = '';
+
+    return $fields;
+}
+add_filter( 'comment_form_default_fields', 'trendylux_style_comment_form_fields' );
+
+/**
+ * 4. Style le champ de texte principal (textarea) du formulaire de commentaire.
+ */
+function trendylux_style_comment_textarea( string $comment_field ): string
+{
+    return sprintf(
+        '<div class="form-control w-full"><label for="comment" class="label"><span class="label-text">%s</span></label>%s</div>',
+        esc_html_x( 'Your review', 'noun', 'woocommerce' ),
+        '<textarea id="comment" name="comment" class="textarea textarea-bordered w-full h-24" required="required"></textarea>'
+    );
+}
+// On utilise une priorité de 20 pour s'assurer que notre filtre s'exécute APRÈS celui de WooCommerce (qui est à 10).
+add_filter( 'comment_form_field_comment', 'trendylux_style_comment_textarea', 20 );
+
+
+
+
