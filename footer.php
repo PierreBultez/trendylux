@@ -1,4 +1,4 @@
-<footer class="bg-[var(--color-neutral-focus)] text-neutral-content">
+<footer class="bg-[var(--color-neutral)] text-neutral-content border-t border-[var(--color-primary)]">
     <!-- Section Réassurance -->
     <div class="container mx-auto px-4 py-8 border-neutral-focus">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Section principale du Footer (fond plus clair) -->
-    <div class="bg-neutral text-neutral-content">
+    <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
             <aside class="md:col-span-2">
                 <a href="<?php echo home_url(); ?>" class="btn btn-ghost text-4xl font-serif text-primary uppercase tracking-wider -ml-4">TrendyLux</a>
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Section Newsletter (reste sur le même fond) -->
-    <div class="bg-neutral text-neutral-content border-t border-[var(--color-neutral-focus)]">
+    <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-around items-center">
             <h3 class="font-bold text-lg mb-4 md:mb-0">Inscrivez-vous à notre newsletter</h3>
             <div class="form-control">

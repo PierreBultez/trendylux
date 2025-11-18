@@ -20,8 +20,8 @@
     --color-base-content: #1f2937;    /* Texte principal (presque noir) */
 
     /* Fond secondaire Noir pour Header/Footer */
-    --color-neutral: #111827;         /* Presque noir */
-    --color-neutral-focus: #1f2937;   /* Un gris anthracite (Gray-800) */
+    --color-neutral: #000000;         /* Presque noir */
+    --color-neutral-focus: #212121;   /* Un gris anthracite (Gray-800) */
     --color-neutral-content: #a6adbb; /* Texte gris clair sur fond noir */
 
     /* Couleurs sémantiques (inchangées) */
