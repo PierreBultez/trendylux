@@ -428,12 +428,37 @@ function trendylux_style_comment_textarea( string $comment_field ): string
 {
     return sprintf(
         '<div class="form-control w-full"><label for="comment" class="label"><span class="label-text">%s</span></label>%s</div>',
-        esc_html_x( 'Your review', 'noun', 'woocommerce' ),
+        esc_html__( 'Votre avis', 'trendylux' ),
         '<textarea id="comment" name="comment" class="textarea textarea-bordered w-full h-24" required="required"></textarea>'
     );
 }
 // On utilise une priorité de 20 pour s'assurer que notre filtre s'exécute APRÈS celui de WooCommerce (qui est à 10).
 add_filter( 'comment_form_field_comment', 'trendylux_style_comment_textarea', 20 );
+
+// =========================================================================
+// == PERSONNALISATION DES PRODUITS VARIABLES
+// =========================================================================
+
+/**
+ * Remplace le bouton "Ajouter au panier" des produits variables pour qu'il corresponde
+ * au style des produits simples, en appelant un template personnalisé.
+ */
+function trendylux_custom_variation_add_to_cart_button(): void
+{
+    // Appelle notre template personnalisé pour afficher le bouton et le champ quantité.
+    wc_get_template( 'single-product/add-to-cart/variation-add-to-cart-button.php' );
+}
+
+/**
+ * Décroche la fonction par défaut de WooCommerce et la remplace par notre fonction personnalisée.
+ */
+function trendylux_replace_variation_add_to_cart_button(): void
+{
+    remove_action( 'woocommerce_single_variation', 'woocommerce_single_variation_add_to_cart_button', 20 );
+    add_action( 'woocommerce_single_variation', 'trendylux_custom_variation_add_to_cart_button', 20 );
+}
+add_action( 'init', 'trendylux_replace_variation_add_to_cart_button' );
+
 
 
 

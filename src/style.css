@@ -97,3 +97,28 @@
 #reply-title {
     @apply text-xl font-bold mb-4 uppercase tracking-wide;
 }
+
+/*
+ * Style pour les miniatures de la galerie produit (single product).
+ * On les affiche en ligne avec des espacements et un style arrondi.
+ */
+.woocommerce-product-gallery .flex-control-thumbs {
+    @apply flex flex-wrap gap-4 mt-4 p-0 list-none;
+}
+
+.woocommerce-product-gallery .flex-control-thumbs li {
+    @apply w-20 h-20 flex-shrink-0;
+}
+
+.woocommerce-product-gallery .flex-control-thumbs li img {
+    @apply w-full h-full object-cover rounded-md border-2 border-transparent cursor-pointer transition-colors duration-200;
+}
+
+.woocommerce-product-gallery .flex-control-thumbs li img:hover {
+    @apply border-primary;
+}
+
+/* La classe 'flex-active' est ajoutée par le JS de la galerie (FlexSlider) à la miniature active */
+.woocommerce-product-gallery .flex-control-thumbs li img.flex-active {
+    @apply border-primary shadow-lg;
+}
