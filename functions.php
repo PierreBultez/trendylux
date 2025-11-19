@@ -495,44 +495,73 @@ function trendylux_replace_variation_add_to_cart_button(): void
 add_action( 'init', 'trendylux_replace_variation_add_to_cart_button' );
 
 function trendylux_filter_products() {
-    $tax_query = [];
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        wp_send_json_error(['message' => 'Invalid JSON received.']);
+        wp_die();
+    }
+    
+    $filters = $data['filters'] ?? [];
+    $tax_query = ['relation' => 'AND'];
 
-    foreach ($_POST as $key => $value) {
+    foreach ($filters as $key => $value) {
         if (strpos($key, 'pa_') === 0 && !empty($value)) {
-            $tax_query[] = [
-                'taxonomy' => $key,
-                'field' => 'slug',
-                'terms' => $value,
+             $tax_query[] = [
+                'taxonomy' => str_replace('[]', '', $key),
+                'field'    => 'slug',
+                'terms'    => $value,
+                'operator' => 'IN',
             ];
         }
     }
+    
+    $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
 
     $args = [
-        'post_type' => 'product',
-        'posts_per_page' => -1,
-        'tax_query' => $tax_query,
+        'post_type'      => 'product',
+        'posts_per_page' => 16,
+        'paged'          => $paged,
+        'tax_query'      => $tax_query,
     ];
 
     $query = new WP_Query($args);
+    if (is_wp_error($query)) {
+        wp_send_json_error(['message' => $query->get_error_message()]);
+        wp_die();
+    }
+    
+    if ( function_exists('wc_set_loop_prop') ) {
+        wc_set_loop_prop( 'total', $query->found_posts );
+        wc_set_loop_prop( 'per_page', $query->get('posts_per_page') );
+        wc_set_loop_prop( 'current_page', $paged );
+        wc_set_loop_prop( 'total_pages', $query->max_num_pages );
+    }
 
-    ob_start(); // Start output buffering
+    $GLOBALS['wp_query'] = $query;
 
-    echo '<ul class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10">';
+    ob_start();
 
     if ($query->have_posts()) {
+        echo '<ul class="products grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10">';
         while ($query->have_posts()) {
             $query->the_post();
             wc_get_template_part('content', 'product');
         }
+        echo '</ul>';
     } else {
-        echo '<p>No products found</p>';
+        echo '<p class="woocommerce-info">' . esc_html__( 'No products were found matching your selection.', 'woocommerce' ) . '</p>';
     }
 
-    echo '</ul>';
+    $products_html = ob_get_clean();
 
-    $products_html = ob_get_clean(); // Get the buffered output
+    ob_start();
+    woocommerce_result_count();
+    $result_count_html = ob_get_clean();
 
-    echo $products_html;
+    wp_send_json_success([
+        'products'     => $products_html,
+        'result_count' => $result_count_html,
+    ]);
 
     wp_die();
 }
