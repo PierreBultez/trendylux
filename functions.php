@@ -575,7 +575,15 @@ function trendylux_localize_scripts() {
 }
 add_action('wp_enqueue_scripts', 'trendylux_localize_scripts');
 
-
+function trendylux_pre_get_posts_search_products( $query ): void {
+// Check if it's the main query and a search page, and not in the admin area.
+    if ( $query->is_main_query() && $query->is_search() && ! is_admin() ) {
+        $query->set( 'post_type', 'product' );
+        // Optionally, set posts_per_page to match your archive settings
+        $query->set( 'posts_per_page', 16 );
+    }
+}
+add_action( 'pre_get_posts', 'trendylux_pre_get_posts_search_products' );
 
 
 
