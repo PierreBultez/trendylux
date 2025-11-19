@@ -11,7 +11,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 @mouseenter="openMenu = \'menu-item-' . $this->current_item_id . '\'" 
                 @mouseleave="openMenu = null" 
                 x-transition
-                class="absolute top-full left-1/2 -translate-x-1/2 z-10 w-screen max-w-4xl overflow-hidden rounded-box bg-neutral text-neutral-content shadow-lg ring-1 ring-black/5" 
+                class="z-50 absolute top-full left-1/2 -translate-x-1/2 z-10 w-screen max-w-4xl overflow-hidden rounded-box bg-neutral text-neutral-content shadow-lg ring-1 ring-black/5" 
                 style="display: none;">';
             $output .= '<div class="p-4"><ul class="grid grid-cols-2 gap-x-8 gap-y-4">';
         } else {
