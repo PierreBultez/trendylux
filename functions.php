@@ -144,6 +144,32 @@ function trendylux_add_module_type_attribute($tag, $handle, $src) {
 }
 add_filter('script_loader_tag', 'trendylux_add_module_type_attribute', 10, 3);
 
+/**
+ * Redirige wp-login.php vers la page Mon Compte de WooCommerce
+ */
+function trendylux_redirect_wp_login(): void
+{
+    global $pagenow;
+
+    // Si on est sur la page de login par défaut ET que l'action n'est pas une déconnexion
+    if ( 'wp-login.php' == $pagenow && ! is_user_logged_in() && ! isset( $_GET['action'] ) ) {
+        wp_redirect( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) );
+        exit();
+    }
+}
+add_action( 'init', 'trendylux_redirect_wp_login' );
+
+/**
+ * Désactiver la barre d'admin pour tout le monde sauf les administrateurs
+ */
+function trendylux_disable_admin_bar(): void
+{
+    if ( ! current_user_can( 'administrator' ) && ! is_admin() ) {
+        show_admin_bar( false );
+    }
+}
+add_action( 'after_setup_theme', 'trendylux_disable_admin_bar' );
+
 // --- PERSONNALISATIONS WOOCOMMERCE ---
 
 // 1. Désactiver tous les styles par défaut de WooCommerce.
@@ -494,7 +520,8 @@ function trendylux_replace_variation_add_to_cart_button(): void
 }
 add_action( 'init', 'trendylux_replace_variation_add_to_cart_button' );
 
-function trendylux_filter_products() {
+function trendylux_filter_products(): void
+{
     $data = json_decode(file_get_contents('php://input'), true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         wp_send_json_error(['message' => 'Invalid JSON received.']);
@@ -568,7 +595,8 @@ function trendylux_filter_products() {
 add_action('wp_ajax_filter_products', 'trendylux_filter_products');
 add_action('wp_ajax_nopriv_filter_products', 'trendylux_filter_products');
 
-function trendylux_localize_scripts() {
+function trendylux_localize_scripts(): void
+{
     wp_localize_script('trendylux-filters-js', 'trendylux_ajax', [
         'ajax_url' => admin_url('admin-ajax.php'),
     ]);

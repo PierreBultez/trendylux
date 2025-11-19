@@ -21,7 +21,9 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-8">
     <div class="lg:col-span-2">
+
         <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
+
             <?php do_action( 'woocommerce_before_cart_table' ); ?>
 
             <div class="card bg-base-200 shadow-xl">
@@ -59,14 +61,20 @@ do_action( 'woocommerce_before_cart' ); ?>
                                 ?>
                                 <tr class="woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 
-                                    <td class="product-remove">
+                                    <td class="action-remove text-center">
                                         <?php
                                         echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                                 'woocommerce_cart_item_remove_link',
                                                 sprintf(
-                                                        '<a role="button" href="%s" class="remove btn btn-ghost btn-circle btn-sm" aria-label="%s" data-product_id="%s" data-product_sku="%s">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                      </a>',
+                                                /*
+                                                 * MODIFICATION :
+                                                 * J'ai retiré la classe "remove" de la balise <a>.
+                                                 * Le lien va maintenant recharger la page, le PHP va traiter la suppression,
+                                                 * et le toast s'affichera au chargement via le header.
+                                                 */
+                                                        '<a href="%s" class="btn btn-ghost btn-circle btn-sm text-error" aria-label="%s" data-product_id="%s" data-product_sku="%s">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </a>',
                                                         esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
                                                         /* translators: %s is the product name */
                                                         esc_attr( sprintf( __( 'Remove %s from cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) ),
