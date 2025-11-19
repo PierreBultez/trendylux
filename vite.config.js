@@ -30,6 +30,7 @@ export default defineConfig({
             // Spécifier les points d'entrée
             input: {
                 main: 'src/main.js',
+                filters: 'src/filters.js',
             }
         },
     },

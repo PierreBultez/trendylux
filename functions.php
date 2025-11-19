@@ -56,6 +56,16 @@ function trendylux_vite_assets(): void {
             null,
             true // true -> charger dans le footer
         );
+
+        if (is_post_type_archive('product') || is_tax('product_cat')) {
+            wp_enqueue_script(
+                'trendylux-filters-js', // Un identifiant unique
+                $vite_dev_server_url . '/src/filters.js',
+                [],
+                null,
+                true // true -> charger dans le footer
+            );
+        }
     } else {
         // --- MODE PRODUCTION / PRÉ-PRODUCTION ---
         $manifest_path = get_template_directory() . '/dist/manifest.json';
@@ -88,6 +98,31 @@ function trendylux_vite_assets(): void {
                 foreach ($entry['css'] as $key => $css_file) {
                     wp_enqueue_style(
                         'trendylux-style-' . $key, // Identifiant unique pour chaque fichier CSS
+                        get_template_directory_uri() . '/dist/' . $css_file
+                    );
+                }
+            }
+        }
+
+        if ((is_post_type_archive('product') || is_tax('product_cat')) && isset($manifest['src/filters.js'])) {
+            $entry = $manifest['src/filters.js'];
+
+            // 1. Charge le fichier JavaScript principal
+            if (isset($entry['file'])) {
+                wp_enqueue_script(
+                    'trendylux-filters-js', // Le même identifiant qu'en dev
+                    get_template_directory_uri() . '/dist/' . $entry['file'],
+                    [],
+                    null,
+                    true
+                );
+            }
+
+            // 2. Charge les fichiers CSS associés à ce point d'entrée
+            if (isset($entry['css']) && is_array($entry['css'])) {
+                foreach ($entry['css'] as $key => $css_file) {
+                    wp_enqueue_style(
+                        'trendylux-filters-style-' . $key, // Identifiant unique pour chaque fichier CSS
                         get_template_directory_uri() . '/dist/' . $css_file
                     );
                 }
@@ -458,6 +493,58 @@ function trendylux_replace_variation_add_to_cart_button(): void
     add_action( 'woocommerce_single_variation', 'trendylux_custom_variation_add_to_cart_button', 20 );
 }
 add_action( 'init', 'trendylux_replace_variation_add_to_cart_button' );
+
+function trendylux_filter_products() {
+    $tax_query = [];
+
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'pa_') === 0 && !empty($value)) {
+            $tax_query[] = [
+                'taxonomy' => $key,
+                'field' => 'slug',
+                'terms' => $value,
+            ];
+        }
+    }
+
+    $args = [
+        'post_type' => 'product',
+        'posts_per_page' => -1,
+        'tax_query' => $tax_query,
+    ];
+
+    $query = new WP_Query($args);
+
+    ob_start(); // Start output buffering
+
+    echo '<ul class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10">';
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            wc_get_template_part('content', 'product');
+        }
+    } else {
+        echo '<p>No products found</p>';
+    }
+
+    echo '</ul>';
+
+    $products_html = ob_get_clean(); // Get the buffered output
+
+    echo $products_html;
+
+    wp_die();
+}
+add_action('wp_ajax_filter_products', 'trendylux_filter_products');
+add_action('wp_ajax_nopriv_filter_products', 'trendylux_filter_products');
+
+function trendylux_localize_scripts() {
+    wp_localize_script('trendylux-filters-js', 'trendylux_ajax', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ]);
+}
+add_action('wp_enqueue_scripts', 'trendylux_localize_scripts');
 
 
 

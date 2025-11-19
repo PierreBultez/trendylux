@@ -5,6 +5,7 @@ get_header();
     <!-- Bannière catégorie (Optionnelle, style simple fond gris) -->
     <div class="bg-gray-100 py-8 mb-8">
         <div class="container mx-auto px-4 text-center">
+            <?php woocommerce_breadcrumb(); ?>
             <?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
                 <h1 class="text-2xl md:text-3xl font-black uppercase tracking-widest text-neutral mb-2"><?php woocommerce_page_title(); ?></h1>
             <?php endif; ?>
@@ -15,7 +16,29 @@ get_header();
         </div>
     </div>
 
+    <?php
+    $current_category = get_queried_object();
+    $sub_categories = get_terms([
+        'taxonomy' => 'product_cat',
+        'parent' => $current_category->term_id,
+        'hide_empty' => false,
+    ]);
+
+    if ($sub_categories) {
+        echo '<div class="container mx-auto px-4 mb-8">';
+        echo '<div class="flex flex-wrap justify-center gap-4">';
+        foreach ($sub_categories as $sub_category) {
+            echo '<a href="' . get_term_link($sub_category) . '" class="btn btn-outline">' . $sub_category->name . '</a>';
+        }
+        echo '</div>';
+        echo '</div>';
+    }
+    ?>
+
+
     <main class="container mx-auto px-2 md:px-4 pb-20">
+
+        <?php wc_get_template('includes/product-filters.php'); ?>
 
         <!-- Barre d'outils (Filtres & Tri) -->
         <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b border-gray-200">
@@ -28,6 +51,7 @@ get_header();
             </div>
         </div>
 
+        <div class="products">
         <?php
         if ( woocommerce_product_loop() ) {
 
@@ -53,6 +77,7 @@ get_header();
             do_action( 'woocommerce_no_products_found' );
         }
         ?>
+        </div>
     </main>
 
 <?php
