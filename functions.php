@@ -614,4 +614,37 @@ function trendylux_pre_get_posts_search_products( $query ): void {
 add_action( 'pre_get_posts', 'trendylux_pre_get_posts_search_products' );
 
 
+// =========================================================================
+// == PERSONNALISATION DE LA PAGE PANIER (cart.php)
+// =========================================================================
 
+/**
+ * Affiche l'adresse de livraison sur une ligne séparée dans le tableau des totaux du panier.
+ * Ceci est accroché après la ligne des méthodes de livraison.
+ */
+function trendylux_display_shipping_destination_row() {
+    if ( ! is_cart() || ! WC()->cart->needs_shipping() || ! WC()->cart->show_shipping() ) {
+        return;
+    }
+
+    $packages = WC()->cart->get_shipping_packages();
+
+    foreach ( $packages as $i => $package ) {
+        if ( isset( $package['destination'] ) ) {
+            $formatted_destination = WC()->countries->get_formatted_address( $package['destination'], ', ' );
+
+            if ( $formatted_destination ) {
+                ?>
+                <tr class="shipping-destination">
+                    <td colspan="2" class="text-sm pt-2">
+                        <?php
+                        echo 'Livraison à <strong>' . esc_html( $formatted_destination ) . '</strong>';
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            }
+        }
+    }
+}
+add_action( 'woocommerce_cart_totals_after_shipping', 'trendylux_display_shipping_destination_row' );

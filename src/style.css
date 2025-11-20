@@ -123,4 +123,21 @@
     @apply border-primary shadow-lg;
 }
 
+/*
+ * Style pour les modes de livraison (shipping methods) sur la page de paiement.
+ */
+#shipping_method {
+    @apply list-none p-0 m-0;
+}
 
+#shipping_method li {
+    @apply mb-2;
+}
+
+#shipping_method li input[type="radio"] {
+    @apply radio radio-primary mr-2;
+}
+
+#shipping_method li label {
+    @apply cursor-pointer;
+}
