@@ -112,6 +112,39 @@
         </div>
     </div>
 
+    <!-- 1b. Slider Marques (Marquee) -->
+    <div class="bg-white border-y border-base-200 overflow-hidden py-8 relative z-10">
+        <h2 class="text-center text-xl md:text-2xl font-serif uppercase tracking-widest mb-8 px-4">
+            Choisis parmi les plus grandes Marques et affirme ton style … <span class="text-primary block md:inline mt-2 md:mt-0" style="font-family: 'Mrs Saint Delafield', cursive; text-transform: none; font-size: 1.5em;">Be Trendy</span>
+        </h2>
+        <div class="animate-marquee flex items-center">
+            <?php 
+            $brand_dir = get_template_directory() . '/public/brand-slider/';
+            $brand_url = get_template_directory_uri() . '/public/brand-slider/';
+            $brand_files = glob( $brand_dir . '*.svg' );
+            
+            if ( ! $brand_files ) $brand_files = [];
+            $brand_filenames = array_map( 'basename', $brand_files );
+            
+            if ( ! empty( $brand_filenames ) ) {
+                // Mélanger pour l'aléatoire à chaque chargement
+                shuffle( $brand_filenames );
+                
+                // Doubler la liste pour la boucle infinie
+                $display_brands = array_merge( $brand_filenames, $brand_filenames );
+                
+                foreach ( $display_brands as $brand_file ): ?>
+                    <img 
+                        src="<?php echo esc_url( $brand_url . $brand_file ); ?>" 
+                        alt="<?php echo esc_attr( pathinfo( $brand_file, PATHINFO_FILENAME ) ); ?>" 
+                        class="h-10 md:h-14 w-auto mx-8 md:mx-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+                    >
+                <?php endforeach; 
+            }
+            ?>
+        </div>
+    </div>
+
     <!-- 2. Blocs Catégories Principales -->
     <div class="container mx-auto py-12 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
