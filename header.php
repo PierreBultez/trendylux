@@ -6,7 +6,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@700&display=swap" rel="stylesheet">
 
     <?php wp_head(); ?>
 </head>
@@ -22,8 +22,9 @@
         <div class="flex justify-between items-center py-3">
 
             <!-- Logo (conservé de l'original) -->
-            <div class="navbar-start">
-                <a href="<?php echo home_url(); ?>" class="text-2xl font-serif text-primary uppercase tracking-wider transition-opacity hover:opacity-80">TrendyLux</a>
+            <div class="navbar-start flex items-end gap-4">
+                <a href="<?php echo home_url(); ?>" class="text-2xl font-serif text-primary uppercase tracking-wider transition-opacity hover:opacity-80 text-glow-gold">Trendy Lux</a>
+                <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold" style="font-family: 'Mrs Saint Delafield', cursive;">Choose your style... Be trendy !</span>
             </div>
 
             <!-- Barre de recherche (nouvel élément) -->

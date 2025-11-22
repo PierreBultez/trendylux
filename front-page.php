@@ -1,15 +1,114 @@
 <?php get_header(); ?>
 
 <main>
-    <!-- 1. Section Hero -->
-    <div class="hero min-h-[60vh] bg-cover bg-center" style="background-image: url(https://picsum.photos/id/122/1600/900);">
-        <div class="hero-overlay bg-black/60"></div>
-        <div class="hero-content text-center text-neutral-content">
-            <div class="max-w-md">
-                <h1 class="mb-5 text-5xl font-bold font-serif uppercase">Best Sellers</h1>
-                <p class="mb-5 font-bold uppercase">Autumn / Winter 25</p>
-                <button class="btn btn-primary btn-outline">Voir le top ventes</button>
+    <!-- 1. HERO SECTION (Full Viewport minus Header approx) -->
+    <!-- On ajuste la hauteur pour que le bas de cette section corresponde au bas de l'écran -->
+    <!-- Header est approx 80-100px. On vise calc(100vh - 100px) pour la zone principale -->
+    <div class="flex flex-col h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] mb-12 p-4 gap-4">
+
+        <!-- Bandeau Promo Horizontal (Fixe) -->
+        <div class="relative h-12 md:h-16 flex-none w-full bg-primary text-primary-content flex items-center justify-center shadow-md rounded-box overflow-hidden">
+            <!-- Image de fond subtile pour la texture -->
+            <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/AdobeStock_607063407_Preview.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
+            
+            <div class="relative z-10 flex flex-row items-center gap-2 text-center">
+                <span class="text-xs md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">
+                    Ouverture officielle, -10% sur tout le site avec le code promo 
+                    <span class="bg-white text-primary px-2 py-1 rounded mx-1 font-serif font-black text-sm md:text-lg shadow-sm">VIP10</span>
+                </span>
             </div>
+        </div>
+
+        <!-- Grille Hero (Reste de la hauteur) -->
+        <div class="flex-grow relative grid grid-cols-[1fr_2fr_1fr] md:grid-cols-[1fr_2fr_1fr] gap-4 overflow-hidden">
+            
+            <?php
+            // Logique de récupération des images slider
+            $slider_dir = get_template_directory() . '/public/hero-slider/';
+            $slider_url = get_template_directory_uri() . '/public/hero-slider/';
+            $all_files = glob( $slider_dir . '*.{jpg,jpeg,png,webp}', GLOB_BRACE );
+            
+            if ( ! $all_files ) $all_files = [];
+            $filenames = array_map( 'basename', $all_files );
+            if ( ! empty($filenames) ) shuffle( $filenames );
+
+            // Fonction pour assurer assez d'images pour le scroll
+            $ensure_loop = function($arr) {
+                if (empty($arr)) return [];
+                // Minimum 4 pour la hauteur
+                while(count($arr) < 4) $arr = array_merge($arr, $arr); 
+                // Doubler pour le loop infini
+                return array_merge($arr, $arr); 
+            };
+
+            $half = ceil( count( $filenames ) / 2 );
+            $left_base = array_slice( $filenames, 0, $half );
+            $right_base = array_slice( $filenames, $half );
+
+            $images_left = $ensure_loop($left_base);
+            $images_right = $ensure_loop($right_base);
+            ?>
+
+            <!-- Colonne Gauche : Défilement VERS LE HAUT -->
+            <div class="relative overflow-hidden h-full hidden md:block">
+                <div class="animate-scroll-up w-full">
+                    <?php foreach($images_left as $img): ?>
+                        <div class="w-full aspect-[3/4] relative rounded-box overflow-hidden mb-4">
+                            <img src="<?php echo esc_url( $slider_url . $img ); ?>" class="w-full h-full object-cover block" alt="Mode">
+                            <div class="absolute inset-0 bg-black/20"></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+             <!-- Version mobile colonne gauche -->
+             <div class="relative overflow-hidden h-full md:hidden rounded-box">
+                 <?php if (!empty($images_left)): ?>
+                    <img src="<?php echo esc_url( $slider_url . $images_left[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
+                 <?php endif; ?>
+             </div>
+
+
+            <!-- Colonne Centrale : Image Fixe + CTA -->
+            <div class="relative h-full w-full overflow-hidden group flex items-end justify-center pb-20 rounded-box">
+                <img src="<?php echo get_template_directory_uri(); ?>/public/hero.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-105" alt="Nouvelle Collection">
+                
+                <!-- Overlay Gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30"></div>
+
+                <!-- Contenu Central -->
+                <div class="relative z-10 text-center px-4 max-w-2xl mx-auto">
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-2 uppercase tracking-tighter drop-shadow-2xl">
+                        Trendy Lux
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-200 mb-8 font-light tracking-[0.2em] uppercase border-t border-b border-white/30 py-2 inline-block">
+                        Élégance Intemporelle
+                    </p>
+                    <div>
+                        <a href="<?php echo get_permalink( wc_get_page_id( 'shop' ) ); ?>" class="btn btn-primary btn-lg rounded-full px-10 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
+                            Découvrir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colonne Droite : Défilement VERS LE BAS -->
+            <div class="relative overflow-hidden h-full hidden md:block">
+                <div class="animate-scroll-down w-full -translate-y-1/2"> 
+                     <?php foreach($images_right as $img): ?>
+                        <div class="w-full aspect-[3/4] relative rounded-box overflow-hidden mb-4">
+                            <img src="<?php echo esc_url( $slider_url . $img ); ?>" class="w-full h-full object-cover block" alt="Accessoires">
+                            <div class="absolute inset-0 bg-black/20"></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <!-- Version mobile colonne droite -->
+             <div class="relative overflow-hidden h-full md:hidden rounded-box">
+                 <?php if (!empty($images_right)): ?>
+                    <img src="<?php echo esc_url( $slider_url . $images_right[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
+                 <?php endif; ?>
+             </div>
+
         </div>
     </div>
 

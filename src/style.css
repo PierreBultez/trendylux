@@ -141,3 +141,41 @@
 #shipping_method li label {
     @apply cursor-pointer;
 }
+
+/* --- ANIMATIONS ACCUEIL --- */
+@layer utilities {
+    .animate-scroll-up {
+        animation: scrollUp 40s linear infinite;
+    }
+    .animate-scroll-down {
+        animation: scrollDown 40s linear infinite;
+    }
+
+    @keyframes scrollUp {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+    }
+    @keyframes scrollDown {
+        0% { transform: translateY(-50%); }
+        100% { transform: translateY(0); }
+    }
+}
+
+/* Fix pour le conteneur de notifications qui pourrait briser le layout flex */
+body.home .toast-container {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 90%;
+    z-index: 60;
+    pointer-events: none;
+}
+body.home .toast-container > * {
+    pointer-events: auto;
+}
+
+.text-glow-gold {
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.6), 0 0 10px rgba(212, 175, 55, 0.3);
+}
