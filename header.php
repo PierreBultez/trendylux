@@ -17,14 +17,18 @@
         x-data="{ openMenu: null }"
         @keydown.escape.window="openMenu = null"
 >
+    <!-- Logo (Overlay Absolute) -->
+    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-4 z-50 flex items-center transition-opacity hover:opacity-80 py-2">
+        <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-full w-auto object-contain">
+    </a>
+
     <!-- Section principale du header : Logo, Recherche, Icônes -->
     <div class="container mx-auto">
         <div class="flex justify-between items-center py-3">
 
-            <!-- Logo (conservé de l'original) -->
-            <div class="navbar-start flex items-end gap-4">
-                <a href="<?php echo home_url(); ?>" class="text-2xl font-serif text-primary uppercase tracking-wider transition-opacity hover:opacity-80 text-glow-gold">Trendy Lux</a>
-                <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold" style="font-family: 'Mrs Saint Delafield', cursive;">Choose your style... Be trendy !</span>
+            <!-- Navbar Start : Tagline uniquement (Logo en absolute) -->
+            <div class="navbar-start">
+                <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold xl:ml-48" style="font-family: 'Mrs Saint Delafield', cursive;">Choose your style... Be trendy !</span>
             </div>
 
             <!-- Barre de recherche (nouvel élément) -->
