@@ -36,10 +36,10 @@
             </aside>
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary">Catégories</header>
-                <a class="link link-hover">Vêtements</a>
-                <a class="link link-hover">Chaussures</a>
-                <a class="link link-hover">Sacs à mains</a>
-                <a class="link link-hover">Promos</a>
+                <a class="link link-hover" href="/categorie-produit/homme/">Univers Homme</a>
+                <a class="link link-hover" href="/categorie-produit/femme/">Univers Femme</a>
+                <a class="link link-hover" href="/categorie-produit/homme/chaussures-homme/">Chaussures Homme</a>
+                <a class="link link-hover" href="/categorie-produit/homme/chaussures-femme/">Chaussures Femme</a>
             </nav>
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary">Informations</header>
