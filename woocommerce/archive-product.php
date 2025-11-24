@@ -51,10 +51,52 @@ get_header();
                 }
 
                 if ($attributes) {
+                    $current_object = get_queried_object();
+                    $current_category_id = 0;
+                    $filter_object_ids = null;
+    
+                    if ( isset($current_object->term_id) && isset($current_object->taxonomy) && $current_object->taxonomy === 'product_cat' ) {
+                        $current_category_id = $current_object->term_id;
+                        
+                        // Get all product IDs in this category to filter terms
+                         $product_ids_args = [
+                            'post_type' => 'product',
+                            'posts_per_page' => -1,
+                            'fields' => 'ids',
+                            'tax_query' => [
+                                [
+                                    'taxonomy' => 'product_cat',
+                                    'field'    => 'term_id',
+                                    'terms'    => $current_category_id,
+                                    'include_children' => true, 
+                                ]
+                            ]
+                        ];
+                        $filter_object_ids = get_posts($product_ids_args);
+                    }
+
                     echo '<form id="product-filters" class="flex flex-wrap gap-4 items-center">';
+
+                    if ($current_category_id) {
+                        echo '<input type="hidden" name="current_category_id" id="current_category_id" value="' . esc_attr($current_category_id) . '">';
+                    }
+
                     foreach ($attributes as $attribute) {
-                        $terms = get_terms($attribute);
-                        if ($terms) {
+                        $term_args = ['taxonomy' => $attribute];
+                        
+                        // Only add object_ids if we are in a category context.
+                        if (is_array($filter_object_ids)) {
+                            if (empty($filter_object_ids)) {
+                                $terms = []; 
+                            } else {
+                                $term_args['object_ids'] = $filter_object_ids;
+                                $terms = get_terms($term_args);
+                            }
+                        } else {
+                             $terms = get_terms($term_args);
+                        }
+
+                        if ($terms && !is_wp_error($terms)) {
                             echo '<div class="dropdown z-20">';
                             echo '<div tabindex="0" role="button" class="btn m-1">' . wc_attribute_label($attribute) . '</div>';
                             echo '<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">';

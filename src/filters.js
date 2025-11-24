@@ -16,7 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyFilters = () => {
         const formData = new FormData(filterForm);
         const filters = {};
+        let categoryId = null;
+
         for (const [name, value] of formData.entries()) {
+            if (name === 'current_category_id') {
+                categoryId = value;
+                continue;
+            }
             if (!filters[name]) {
                 filters[name] = [];
             }
@@ -29,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                filters: filters
+                filters: filters,
+                category_id: categoryId
             }),
         })
             .then((response) => response.json())

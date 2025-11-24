@@ -529,7 +529,17 @@ function trendylux_filter_products(): void
     }
     
     $filters = $data['filters'] ?? [];
+    $category_id = $data['category_id'] ?? null;
+
     $tax_query = ['relation' => 'AND'];
+
+    if ($category_id) {
+        $tax_query[] = [
+            'taxonomy' => 'product_cat',
+            'field'    => 'term_id',
+            'terms'    => $category_id,
+        ];
+    }
 
     foreach ($filters as $key => $value) {
         if (strpos($key, 'pa_') === 0 && !empty($value)) {
