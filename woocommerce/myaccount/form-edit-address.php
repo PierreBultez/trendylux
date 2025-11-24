@@ -22,7 +22,7 @@ $page_title = ( 'billing' === $load_address ) ? __( 'Billing address', 'woocomme
 do_action( 'woocommerce_before_edit_account_address_form' ); ?>
 
 <?php if ( ! $load_address ) : ?>
-	<?php wc_get_template( 'myaccount/lost-password.php' ); ?>
+	<?php wc_get_template( 'myaccount/addresses.php' ); ?>
 <?php else : ?>
 
 	<form method="post" class="form-control w-full max-w-lg">
@@ -34,12 +34,8 @@ do_action( 'woocommerce_before_edit_account_address_form' ); ?>
 
 			<div class="woocommerce-address-fields__field-wrapper space-y-4">
 				<?php
-				foreach ( $address_fields as $key => $field ) {
-					$field['class'][] = 'input input-bordered w-full';
-					if ( isset( $field['label'] ) && $field['type'] !== 'checkbox' ) {
-						echo '<label class="label">' . $field['label'] . '</label>';
-					}
-					woocommerce_form_field( $key, $field, wc_get_post_data_by_key( $key, $field['value'] ) );
+				foreach ( $address as $key => $field ) {
+					woocommerce_form_field( $key, $field, wc_get_post_data_by_key( $key, $field['value'] ?? $field['default'] ?? '' ) );
 				}
 				?>
 			</div>

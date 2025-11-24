@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 $customer_id = get_current_user_id();
 
-if ( ! wc_payers_exist() && wc_shipping_enabled() ) {
+if ( ! wc_ship_to_billing_address_only() && wc_shipping_enabled() ) {
 	$get_addresses = array(
 		'billing'  => __( 'Billing address', 'woocommerce' ),
 		'shipping' => __( 'Shipping address', 'woocommerce' ),
@@ -72,11 +72,3 @@ $old_addresses = array(
 	<?php endforeach; ?>
 
 </div>
-
-<?php
-	if ( ! wc_payers_exist() && wc_shipping_enabled() ) {
-		echo '<div class="col-1">';
-		woocommerce_account_orders_endpoint();
-		echo '</div>';
-	}
-?>

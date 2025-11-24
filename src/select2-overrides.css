@@ -1,0 +1,47 @@
+.select2-container .select2-selection--single {
+    height: 3rem !important; /* h-12 equivalent */
+    border-radius: var(--radius-field) !important;
+    border-color: #e5e7eb !important; /* border-base-300 approx */
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 3rem !important;
+    top: 0 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 3rem !important;
+    padding-left: 1rem !important;
+}
+
+/* Focus state for Select2 to match DaisyUI */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: var(--color-primary) !important;
+    outline: none !important;
+}
+
+/* Hide default Select2 search box if inside a modal/small container to prevent overflow issues, 
+   though usually we want it. Just styling the dropdown. */
+.select2-dropdown {
+    border-radius: var(--radius-box) !important;
+    border-color: #e5e7eb !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.select2-search__field {
+    border-radius: var(--radius-field) !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 0.5rem !important;
+}
+.select2-search__field:focus {
+    border-color: var(--color-primary) !important;
+    outline: none !important;
+}
+
+/* Highlight color in dropdown */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--color-primary) !important;
+    color: var(--color-primary-content) !important;
+}

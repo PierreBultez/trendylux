@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./select2-overrides.css";
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
@@ -42,7 +43,9 @@
 }
 
 /* Remove focus outline from WooCommerce notices */
-.woocommerce-message:focus {
+.woocommerce-message:focus,
+.toast:focus, .toast:active, .toast:hover,
+.alert:focus, .alert:active, .alert:hover {
     outline: none !important;
     box-shadow: none !important;
 }

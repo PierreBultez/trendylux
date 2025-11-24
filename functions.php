@@ -274,27 +274,29 @@ add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
  */
 function trendylux_checkout_field_args( $args, $key, $value ) {
     // Classes pour le conteneur du champ. Ajout de 'mb-4' pour l'espacement vertical.
-    $args['class'][] = 'form-control w-full mb-10';
+    $args['class'][] = 'form-control w-full mb-6';
 
     // Classes pour le label
     $args['label_class'] = array('label');
 
     // Classes pour l'input lui-même
-    $args['input_class'] = array('input', 'input-bordered', 'w-full');
+    // focus:outline-none supprime la bordure noire par défaut du navigateur
+    // focus:border-primary applique la couleur dorée au focus
+    $args['input_class'] = array('input', 'input-bordered', 'w-full', 'focus:outline-none', 'focus:border-primary');
 
     // Adapter les classes pour les types de champs spécifiques
-    if ( 'select' === $args['type'] ) {
-        $args['input_class'] = array('select', 'select-bordered', 'w-full');
+    if ( in_array( $args['type'], ['select', 'country', 'state'] ) ) {
+        $args['input_class'] = array('select', 'select-bordered', 'w-full', 'focus:outline-none', 'focus:border-primary');
     }
 
     if ( 'textarea' === $args['type'] ) {
-        $args['input_class'] = array('textarea', 'textarea-bordered', 'w-full', 'h-24');
+        $args['input_class'] = array('textarea', 'textarea-bordered', 'w-full', 'h-24', 'focus:outline-none', 'focus:border-primary');
     }
 
     // Enveloppe le texte du label dans un span avec la classe DaisyUI.
     // On retire la logique qui ajoutait un deuxième astérisque.
-    if ( $args['label'] ) {
-        $args['label'] = '<span class="label-text">' . $args['label'] . '</span>';
+    if ( isset($args['label']) && $args['label'] ) {
+        $args['label'] = '<span class="label-text font-semibold">' . $args['label'] . '</span>';
     }
 
     return $args;
@@ -668,3 +670,15 @@ function trendylux_display_shipping_destination_row() {
     }
 }
 add_action( 'woocommerce_cart_totals_after_shipping', 'trendylux_display_shipping_destination_row' );
+
+/**
+ * Remove "Downloads" link from My Account menu.
+ *
+ * @param array $items
+ * @return array
+ */
+function trendylux_remove_my_account_downloads_link( $items ) {
+    unset( $items['downloads'] );
+    return $items;
+}
+add_filter( 'woocommerce_account_menu_items', 'trendylux_remove_my_account_downloads_link' );

@@ -11,12 +11,12 @@
             <div class="flex flex-col items-center">
                 <svg class="h-8 w-8 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" /></svg>
                 <h3 class="font-bold">Livraison Gratuite</h3>
-                <p class="text-xs text-neutral-content/70">Dès 150€ d'achat</p>
+                <p class="text-xs text-neutral-content/70">Dès 90€ d'achat</p>
             </div>
             <div class="flex flex-col items-center">
                 <svg class="h-8 w-8 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <h3 class="font-bold">Livraison Rapide</h3>
-                <p class="text-xs text-neutral-content/70">Expédié en 24/48h</p>
+                <p class="text-xs text-neutral-content/70">3 à 5 jours ouvrés</p>
             </div>
             <div class="flex flex-col items-center">
                 <svg class="h-8 w-8 text-primary mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
