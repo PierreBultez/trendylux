@@ -43,10 +43,10 @@
             </nav>
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary">Informations</header>
-                <a class="link link-hover">À propos</a>
-                <a class="link link-hover">Contact</a>
-                <a class="link link-hover">CGV</a>
-                <a class="link link-hover">Mentions légales</a>
+                <a class="link link-hover" href="/mentions-legales/">Mentions légales</a>
+                <a class="link link-hover" href="/politique-en-matiere-de-confidentialite/">Confidentialité</a>
+                <a class="link link-hover" href="/conditions-generales-de-vente/">Conditions Générales de Vente</a>
+                <a class="link link-hover" href="/politique-en-matiere-de-remboursements-et-de-retours/">Retours et remboursements</a>
             </nav>
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary">Réseaux Sociaux</header>
