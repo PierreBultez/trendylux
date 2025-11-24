@@ -177,19 +177,52 @@
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Catégories</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
             <?php
-            $cat_args = array(
-                'taxonomy'   => 'product_cat',
-                'hide_empty' => false,
-                'number'     => 6,
-                'parent'     => 0,
-                'orderby'    => 'count',
-                'order'      => 'DESC',
-            );
-            $product_cats = get_terms( $cat_args );
+            // DÉFINITION MANUELLE DES CATÉGORIES (SLUGS)
+            // Modifiez les valeurs ci-dessous avec les identifiants (slugs) exacts de vos catégories
+            $target_slugs = [
+                'femme',                    // #0: Grande largeur haut (Top Full Width)
+                'chaussures-femme',         // #1: Large gauche (Middle Left Wide)
+                'homme',                    // #2: Carré centre (Middle Center Square)
+                'chaussures-homme',         // #3: Vertical droite (Right Vertical Tall)
+                'accessoires-femme',        // #4: Carré bas gauche (Bottom Left Square)
+                'accessoires-homme',        // #5: Large bas centre (Bottom Center Wide)
+            ];
 
-            if ( ! empty( $product_cats ) && ! is_wp_error( $product_cats ) ) :
+            // On récupère les objets catégories correspondants
+            // Note: On préserve l'ordre du tableau $target_slugs
+            $bento_cats = [];
+            foreach ($target_slugs as $slug) {
+                $term = get_term_by('slug', $slug, 'product_cat');
+                if ($term) {
+                    $bento_cats[] = $term;
+                }
+            }
+
+            // Fallback: Si on a moins de 6 catégories valides, on complète avec des catégories populaires
+            if (count($bento_cats) < 6) {
+                $needed = 6 - count($bento_cats);
+                // On exclut ceux déjà trouvés
+                $exclude_ids = array_map(function($t) { return $t->term_id; }, $bento_cats);
+                
+                $extras = get_terms([
+                    'taxonomy'   => 'product_cat',
+                    'number'     => $needed,
+                    'exclude'    => $exclude_ids,
+                    'hide_empty' => true,
+                    'orderby'    => 'count',
+                    'order'      => 'DESC'
+                ]);
+                
+                if (!is_wp_error($extras) && !empty($extras)) {
+                    $bento_cats = array_merge($bento_cats, $extras);
+                }
+            }
+
+            if ( ! empty( $bento_cats ) ) :
                 $i = 0;
-                foreach ( $product_cats as $cat ) :
+                foreach ( $bento_cats as $cat ) :
+                    if ($i >= 6) break; // Sécurité max 6 items
+
                     $thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
                     $image_url = wp_get_attachment_url( $thumbnail_id );
                     if ( ! $image_url ) {
