@@ -71,7 +71,7 @@
     <!-- Section Newsletter (reste sur le même fond) -->
     <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-around items-center">
-            <h3 class="font-bold text-lg mb-4 md:mb-0">Inscrivez-vous à notre newsletter</h3>
+            <h3 class="font-bold text-lg mb-4 md:mb-0">Inscrivez-vous à notre newsletter et profitez de la livraison gratuite</h3>
             <div class="form-control">
                 <div class="join">
                     <input type="email" placeholder="votre.email@exemple.com" class="input input-bordered join-item text-base-content" />

@@ -13,8 +13,9 @@
             
             <div class="relative z-10 flex flex-row items-center gap-2 text-center">
                 <span class="text-xs md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">
-                    Ouverture officielle, -10% sur tout le site avec le code promo 
+                    Ouverture officielle : livraison offerte et -10% sur tout le site avec le code promo
                     <span class="bg-white text-primary px-2 py-1 rounded mx-1 font-serif font-black text-sm md:text-lg shadow-sm">VIP10</span>
+                    (du 1er au 15 décembre )
                 </span>
             </div>
         </div>

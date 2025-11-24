@@ -19,57 +19,72 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_edit_account_form' ); ?>
 
-<form class="woocommerce-EditAccountForm edit-account form-control w-full max-w-lg" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?> >
+<form class="woocommerce-EditAccountForm edit-account w-full max-w-3xl mx-auto" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?> >
 
 	<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
 
-	<p class="form-row form-row-first">
-		<label for="account_first_name" class="label"><?php esc_html_e( 'First name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
-		<input type="text" class="input input-bordered w-full" name="account_first_name" id="account_first_name" autocomplete="given-name" value="<?php echo esc_attr( $user->first_name ); ?>" />
-	</p>
-	<p class="form-row form-row-last">
-		<label for="account_last_name" class="label"><?php esc_html_e( 'Last name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
-		<input type="text" class="input input-bordered w-full" name="account_last_name" id="account_last_name" autocomplete="family-name" value="<?php echo esc_attr( $user->last_name ); ?>" />
-	</p>
-	<div class="clear"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="form-control w-full">
+            <label for="account_first_name" class="label">
+                <span class="label-text font-semibold"><?php esc_html_e( 'First name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></span>
+            </label>
+            <input type="text" class="input input-bordered w-full focus:outline-none focus:border-primary" name="account_first_name" id="account_first_name" autocomplete="given-name" value="<?php echo esc_attr( $user->first_name ); ?>" />
+        </div>
+        <div class="form-control w-full">
+            <label for="account_last_name" class="label">
+                <span class="label-text font-semibold"><?php esc_html_e( 'Last name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></span>
+            </label>
+            <input type="text" class="input input-bordered w-full focus:outline-none focus:border-primary" name="account_last_name" id="account_last_name" autocomplete="family-name" value="<?php echo esc_attr( $user->last_name ); ?>" />
+        </div>
+    </div>
 
-	<p class="form-row form-row-wide">
-		<label for="account_display_name" class="label"><?php esc_html_e( 'Display name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
-		<input type="text" class="input input-bordered w-full" name="account_display_name" id="account_display_name" value="<?php echo esc_attr( $user->display_name ); ?>" />
-		<span class="label-text-alt"><?php esc_html_e( 'This will be how your name will be displayed in the account section and in reviews', 'woocommerce' ); ?></span>
-	</p>
-	<div class="clear"></div>
+	<div class="form-control w-full mb-6">
+		<label for="account_display_name" class="label">
+            <span class="label-text font-semibold"><?php esc_html_e( 'Display name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></span>
+        </label>
+		<input type="text" class="input input-bordered w-full focus:outline-none focus:border-primary" name="account_display_name" id="account_display_name" value="<?php echo esc_attr( $user->display_name ); ?>" />
+        <label class="label">
+		    <span class="label-text-alt text-gray-500"><?php esc_html_e( 'This will be how your name will be displayed in the account section and in reviews', 'woocommerce' ); ?></span>
+        </label>
+	</div>
 
-	<p class="form-row form-row-wide">
-		<label for="account_email" class="label"><?php esc_html_e( 'Email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
-		<input type="email" class="input input-bordered w-full" name="account_email" id="account_email" autocomplete="email" value="<?php echo esc_attr( $user->user_email ); ?>" />
-	</p>
+	<div class="form-control w-full mb-10">
+		<label for="account_email" class="label">
+            <span class="label-text font-semibold"><?php esc_html_e( 'Email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></span>
+        </label>
+		<input type="email" class="input input-bordered w-full focus:outline-none focus:border-primary" name="account_email" id="account_email" autocomplete="email" value="<?php echo esc_attr( $user->user_email ); ?>" />
+	</div>
 
-	<fieldset>
-		<legend class="text-lg font-bold my-4"><?php esc_html_e( 'Password change', 'woocommerce' ); ?></legend>
+	<fieldset class="border border-base-300 p-6 rounded-box bg-base-100 shadow-sm">
+		<legend class="text-lg font-bold px-2 text-primary"><?php esc_html_e( 'Password change', 'woocommerce' ); ?></legend>
 
-		<p class="form-row form-row-wide">
-			<label for="password_current" class="label"><?php esc_html_e( 'Current password (leave blank to leave unchanged)', 'woocommerce' ); ?></label>
-			<input type="password" class="input input-bordered w-full" name="password_current" id="password_current" autocomplete="off" />
-		</p>
-		<p class="form-row form-row-wide">
-			<label for="password_1" class="label"><?php esc_html_e( 'New password (leave blank to leave unchanged)', 'woocommerce' ); ?></label>
-			<input type="password" class="input input-bordered w-full" name="password_1" id="password_1" autocomplete="off" />
-		</p>
-		<p class="form-row form-row-wide">
-			<label for="password_2" class="label"><?php esc_html_e( 'Confirm new password', 'woocommerce' ); ?></label>
-			<input type="password" class="input input-bordered w-full" name="password_2" id="password_2" autocomplete="off" />
-		</p>
+		<div class="form-control w-full mb-4">
+			<label for="password_current" class="label">
+                <span class="label-text font-semibold"><?php esc_html_e( 'Current password (leave blank to leave unchanged)', 'woocommerce' ); ?></span>
+            </label>
+			<input type="password" class="input input-bordered w-full focus:outline-none focus:border-primary" name="password_current" id="password_current" autocomplete="off" />
+		</div>
+		<div class="form-control w-full mb-4">
+			<label for="password_1" class="label">
+                <span class="label-text font-semibold"><?php esc_html_e( 'New password (leave blank to leave unchanged)', 'woocommerce' ); ?></span>
+            </label>
+			<input type="password" class="input input-bordered w-full focus:outline-none focus:border-primary" name="password_1" id="password_1" autocomplete="off" />
+		</div>
+		<div class="form-control w-full mb-4">
+			<label for="password_2" class="label">
+                <span class="label-text font-semibold"><?php esc_html_e( 'Confirm new password', 'woocommerce' ); ?></span>
+            </label>
+			<input type="password" class="input input-bordered w-full focus:outline-none focus:border-primary" name="password_2" id="password_2" autocomplete="off" />
+		</div>
 	</fieldset>
-	<div class="clear"></div>
 
 	<?php do_action( 'woocommerce_edit_account_form' ); ?>
 
-	<p class="mt-6">
+	<div class="mt-8 flex justify-end">
 		<?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
-		<button type="submit" class="btn btn-primary" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+		<button type="submit" class="btn btn-primary min-w-[200px]" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
 		<input type="hidden" name="action" value="save_account_details" />
-	</p>
+	</div>
 
 	<?php do_action( 'woocommerce_edit_account_form_end' ); ?>
 </form>
