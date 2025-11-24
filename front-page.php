@@ -182,8 +182,8 @@
             $category_config = [
                 'femme'             => 'Tout l\'univers pour dames',            // #0: Grande largeur haut
                 'chaussures-femme'  => 'Les chaussures de Madame',            // #1: Large gauche
-                'homme'             => 'Le repère des hommes',            // #2: Carré centre
-                'chaussures-homme'  => 'Sneakers & Chaussures',   // #3: Vertical droite
+                'homme'             => 'L\'univers des hommes',            // #2: Carré centre
+                'chaussures-homme'  => 'Sneakers & Chaussures homme',   // #3: Vertical droite
                 'accessoires-femme' => 'Accessoires Femme',      // #4: Carré bas gauche
                 'accessoires-homme' => 'Accessoires Homme',                    // #5: Large bas centre (Titre par défaut)
             ];
