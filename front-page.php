@@ -151,21 +151,20 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <a href="#" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="https://picsum.photos/id/1025/800/600" alt="Nouveautés" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    <div class="hero-overlay bg-black/40 group-hover:bg-black/50 transition-colors"></div>
+                    <img src="<?php echo get_template_directory_uri(); ?>/public/home-news.jpeg" alt="Nouveautés" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
-                        <h2 class="text-4xl font-bold font-serif uppercase">Nouveautés</h2>
+                        <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary">Nouveautés</h2>
+                        </div>
                     </div>
                 </div>
             </a>
             <a href="#" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="https://picsum.photos/id/237/800/600" alt="Promos" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    <div class="hero-overlay bg-red-800/40 group-hover:bg-red-800/50 transition-colors"></div>
+                    <img src="<?php echo get_template_directory_uri(); ?>/public/home-promo.jpeg" alt="Nouveautés" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
-                        <div>
-                            <h2 class="text-4xl font-bold font-serif uppercase">Promos</h2>
-                            <p class="text-2xl font-bold">Jusqu'à -50%</p>
+                        <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary">Promos</h2>
                         </div>
                     </div>
                 </div>
@@ -174,17 +173,67 @@
     </div>
 
     <!-- 3. Grille de Catégories Secondaires -->
-    <div class="container mx-auto py-12 px-4">
+    <div class="container mx-auto py-12 px-4 max-w-7xl">
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Catégories</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <?php for ($i = 0; $i < 8; $i++): ?>
-                <a href="#" class="group relative block">
-                    <img src="https://picsum.photos/id/<?php echo 100 + $i; ?>/400/400" alt="Catégorie" class="w-full h-full object-cover rounded-box">
-                    <div class="absolute inset-0 bg-black/40 rounded-box flex items-center justify-center group-hover:bg-black/20 transition-colors">
-                        <h3 class="text-white font-bold text-xl uppercase">Catégorie <?php echo $i + 1; ?></h3>
-                    </div>
-                </a>
-            <?php endfor; ?>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
+            <?php
+            $cat_args = array(
+                'taxonomy'   => 'product_cat',
+                'hide_empty' => false,
+                'number'     => 6,
+                'parent'     => 0,
+                'orderby'    => 'count',
+                'order'      => 'DESC',
+            );
+            $product_cats = get_terms( $cat_args );
+
+            if ( ! empty( $product_cats ) && ! is_wp_error( $product_cats ) ) :
+                $i = 0;
+                foreach ( $product_cats as $cat ) :
+                    $thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
+                    $image_url = wp_get_attachment_url( $thumbnail_id );
+                    if ( ! $image_url ) {
+                        $image_url = wc_placeholder_img_src();
+                    }
+                    $cat_link = get_term_link( $cat );
+
+                    // Bento Grid Classes based on 4-column layout
+                    $bento_class = 'md:col-span-1 md:row-span-1'; // Default
+                    
+                    switch ($i) {
+                        case 0:
+                            $bento_class = 'md:col-span-4 md:row-span-1'; // Top Full Width
+                            break;
+                        case 1:
+                            $bento_class = 'md:col-span-2 md:row-span-1'; // Middle Left Wide
+                            break;
+                        case 2:
+                            $bento_class = 'md:col-span-1 md:row-span-1'; // Middle Center Square
+                            break;
+                        case 3:
+                            $bento_class = 'md:col-span-1 md:row-span-2'; // Right Vertical Tall
+                            break;
+                        case 4:
+                            $bento_class = 'md:col-span-1 md:row-span-1'; // Bottom Left Square
+                            break;
+                        case 5:
+                            $bento_class = 'md:col-span-2 md:row-span-1'; // Bottom Center Wide
+                            break;
+                    }
+                    ?>
+                    <a href="<?php echo esc_url( $cat_link ); ?>" class="group relative block overflow-hidden rounded-box <?php echo $bento_class; ?> h-full">
+                        <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $cat->name ); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 transition-colors">
+                            <h3 class="text-white font-bold text-2xl uppercase drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"><?php echo esc_html( $cat->name ); ?></h3>
+                        </div>
+                    </a>
+                <?php 
+                $i++;
+                endforeach;
+            else :
+                echo '<p class="col-span-full text-center">Aucune catégorie trouvée.</p>';
+            endif;
+            ?>
         </div>
     </div>
 
