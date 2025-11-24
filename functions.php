@@ -682,3 +682,12 @@ function trendylux_remove_my_account_downloads_link( $items ) {
     return $items;
 }
 add_filter( 'woocommerce_account_menu_items', 'trendylux_remove_my_account_downloads_link' );
+
+/**
+ * Allow SVG uploads
+ */
+function trendylux_allow_svg_uploads($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    return $mimes;
+}
+add_filter('upload_mimes', 'trendylux_allow_svg_uploads');
