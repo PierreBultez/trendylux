@@ -585,6 +585,13 @@ function trendylux_filter_products(): void
             wc_get_template_part('content', 'product');
         }
         echo '</ul>';
+
+        echo '<div class="mt-12 flex justify-center">';
+        wc_get_template( 'loop/pagination.php', array(
+             'total' => $query->max_num_pages,
+             'current' => $paged,
+        ));
+        echo '</div>';
     } else {
         echo '<p class="woocommerce-info">' . esc_html__( 'No products were found matching your selection.', 'woocommerce' ) . '</p>';
     }
