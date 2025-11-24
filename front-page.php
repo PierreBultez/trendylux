@@ -177,20 +177,21 @@
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Catégories</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
             <?php
-            // DÉFINITION MANUELLE DES CATÉGORIES (SLUGS)
-            // Modifiez les valeurs ci-dessous avec les identifiants (slugs) exacts de vos catégories
-            $target_slugs = [
-                'femme',                    // #0: Grande largeur haut (Top Full Width)
-                'chaussures-femme',         // #1: Large gauche (Middle Left Wide)
-                'homme',                    // #2: Carré centre (Middle Center Square)
-                'chaussures-homme',         // #3: Vertical droite (Right Vertical Tall)
-                'accessoires-femme',        // #4: Carré bas gauche (Bottom Left Square)
-                'accessoires-homme',        // #5: Large bas centre (Bottom Center Wide)
+            // DÉFINITION MANUELLE DES CATÉGORIES (SLUGS + TITRES PERSONNALISÉS)
+            // Format: 'slug' => 'Titre personnalisé' (ou null pour utiliser le nom de la catégorie par défaut)
+            $category_config = [
+                'femme'             => 'Tout l\'univers pour dames',            // #0: Grande largeur haut
+                'chaussures-femme'  => 'Les chaussures de Madame',            // #1: Large gauche
+                'homme'             => 'Le repère des hommes',            // #2: Carré centre
+                'chaussures-homme'  => 'Sneakers & Chaussures',   // #3: Vertical droite
+                'accessoires-femme' => 'Accessoires Femme',      // #4: Carré bas gauche
+                'accessoires-homme' => 'Accessoires Homme',                    // #5: Large bas centre (Titre par défaut)
             ];
 
             // On récupère les objets catégories correspondants
-            // Note: On préserve l'ordre du tableau $target_slugs
+            $target_slugs = array_keys($category_config);
             $bento_cats = [];
+            
             foreach ($target_slugs as $slug) {
                 $term = get_term_by('slug', $slug, 'product_cat');
                 if ($term) {
@@ -230,6 +231,12 @@
                     }
                     $cat_link = get_term_link( $cat );
 
+                    // Détermination du nom à afficher
+                    $display_name = $cat->name;
+                    if ( isset($category_config[$cat->slug]) && !empty($category_config[$cat->slug]) ) {
+                        $display_name = $category_config[$cat->slug];
+                    }
+
                     // Bento Grid Classes based on 4-column layout
                     $bento_class = 'md:col-span-1 md:row-span-1'; // Default
                     
@@ -255,9 +262,9 @@
                     }
                     ?>
                     <a href="<?php echo esc_url( $cat_link ); ?>" class="group relative block overflow-hidden rounded-box <?php echo $bento_class; ?> h-full">
-                        <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $cat->name ); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $display_name ); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 transition-colors">
-                            <h3 class="text-white font-bold text-2xl uppercase drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"><?php echo esc_html( $cat->name ); ?></h3>
+                            <h3 class="text-white font-bold text-2xl uppercase drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"><?php echo esc_html( $display_name ); ?></h3>
                         </div>
                     </a>
                 <?php 
