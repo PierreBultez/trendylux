@@ -36,6 +36,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<table border="0" cellpadding="10" cellspacing="0" width="100%">
 										<tr>
 											<td colspan="2" valign="middle" id="credit">
+                                                <?php
+                                                if ( $img = get_option( 'woocommerce_email_header_image' ) ) {
+                                                    echo '<div style="text-align:center; margin-bottom: 20px;">';
+                                                    echo '<img src="' . esc_url( $img ) . '" alt="' . get_bloginfo( 'name', 'display' ) . '" width="150" style="max-width:150px; height:auto; display:inline-block; vertical-align:middle; border:0;" />';
+                                                    echo '</div>';
+                                                }
+                                                ?>
 												<?php echo wp_kses_post( wpautop( wptexturize( apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) ) ) ) ); ?>
                                                 <br/>
                                                 <span style="color: #9ca3af; font-size: 10px;">TRENDY LUX © <?php echo date('Y'); ?></span>
