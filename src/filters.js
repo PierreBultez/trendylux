@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const applyFilters = () => {
+    const applyFilters = (page = 1) => {
         const formData = new FormData(filterForm);
         const filters = {};
         let categoryId = null;
@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
             filters[name].push(value);
         }
 
+        // Remove page number from current URL to use as base
+        const currentUrl = window.location.href.replace(/\/page\/\d+\/?/, '/');
+
         fetch(trendylux_ajax.ajax_url + '?action=filter_products', {
             method: 'POST',
             headers: {
@@ -36,7 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({
                 filters: filters,
-                category_id: categoryId
+                category_id: categoryId,
+                page: page,
+                page_url: currentUrl
             }),
         })
             .then((response) => response.json())
@@ -44,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     productArchiveContainer.querySelector('.products').innerHTML = data.data.products;
                     resultCount.innerHTML = data.data.result_count;
+                    // Scroll to top of products
+                    productArchiveContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         
@@ -53,11 +60,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Use event delegation for the filter form and reset button
     document.body.addEventListener('change', function(event) {
         if (event.target.closest('#product-filters')) {
-            applyFilters();
+            applyFilters(1); // Reset to page 1 on filter change
         }
     });
 
+    // Handle pagination clicks
     document.body.addEventListener('click', function(event) {
+        // Target links inside our pagination container (assuming it's inside product-archive-container or we can target the class)
+        // Our pagination uses .join-item.btn or standard WP classes if fallback.
+        // We should target the <a> tag specifically.
+        const paginationLink = event.target.closest('.woocommerce-pagination a, .join a, .page-numbers');
+        
+        if (paginationLink) {
+            event.preventDefault();
+            const href = paginationLink.getAttribute('href');
+            if (href) {
+                // Extract page number from URL. Supports /page/2/ and ?paged=2
+                let page = 1;
+                const matchPath = href.match(/\/page\/(\d+)/);
+                const matchQuery = href.match(/paged=(\d+)/);
+
+                if (matchPath) {
+                    page = parseInt(matchPath[1]);
+                } else if (matchQuery) {
+                    page = parseInt(matchQuery[1]);
+                }
+                
+                applyFilters(page);
+            }
+        }
+
         if (event.target.matches('#reset-filters')) {
             window.location.href = window.location.pathname;
         }

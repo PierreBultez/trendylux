@@ -29,7 +29,7 @@ function trendylux_init(): void
     // Cela résout la notice "traduction déclenchée trop tôt".
     add_theme_support( 'woocommerce', array(
         'gallery_thumbnail_image_width' => 64,
-        'thumbnail_image_width'         => 64,
+        'thumbnail_image_width'         => 450,
     ) );
 }
 add_action( 'init', 'trendylux_init' );
@@ -530,6 +530,7 @@ function trendylux_filter_products(): void
     
     $filters = $data['filters'] ?? [];
     $category_id = $data['category_id'] ?? null;
+    $page_url = $data['page_url'] ?? '';
 
     $tax_query = ['relation' => 'AND'];
 
@@ -552,7 +553,7 @@ function trendylux_filter_products(): void
         }
     }
     
-    $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
+    $paged = isset($data['page']) ? intval($data['page']) : 1;
 
     $args = [
         'post_type'      => 'product',
@@ -587,9 +588,11 @@ function trendylux_filter_products(): void
         echo '</ul>';
 
         echo '<div class="mt-12 flex justify-center">';
+        $base = $page_url ? $page_url . 'page/%#%/' : esc_url_raw( str_replace( 999999999, '%#%', remove_query_arg( 'add-to-cart', get_pagenum_link( 999999999, false ) ) ) );
         wc_get_template( 'loop/pagination.php', array(
              'total' => $query->max_num_pages,
              'current' => $paged,
+             'base'    => $base,
         ));
         echo '</div>';
     } else {
