@@ -160,7 +160,7 @@
                     </div>
                 </div>
             </a>
-            <a href="#" class="group relative block">
+            <a href="/ventes-flash" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
                     <img src="<?php echo get_template_directory_uri(); ?>/public/home-flash-sales.jpeg" alt="Ventes Flash" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
