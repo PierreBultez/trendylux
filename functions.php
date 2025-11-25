@@ -368,6 +368,21 @@ function trendylux_style_sale_flash( $html, $post, $product ): string
 }
 add_filter( 'woocommerce_sale_flash', 'trendylux_style_sale_flash', 10, 3 );
 
+function trendylux_show_destock_badge_single(): void
+{
+    global $product;
+    if ( ! $product ) return;
+
+    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
+    // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
+    // on essaie de le décaler un peu (top-12 ou top-14).
+    // Le z-index doit être élevé.
+    echo '<div class="badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';
+    }
+}
+    // On le hook avec une priorité qui le place probablement au début du conteneur images
+add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
+
 /**
  * 4. Afficher les étoiles de notation avec des SVG et des classes DaisyUI.
  *    Remplace la fonction par défaut de WooCommerce pour s'affranchir de leur CSS.
@@ -691,3 +706,213 @@ function trendylux_allow_svg_uploads($mimes) {
     return $mimes;
 }
 add_filter('upload_mimes', 'trendylux_allow_svg_uploads');
+
+/**
+ * ==============================================================================
+ * GESTION DESTOCKAGE AUTOMATIQUE (STOCK = 1)
+ * ==============================================================================
+ */
+
+// 1. MARQUAGE : Ajouter/Retirer le tag "Dernière Chance" sur le PARENT
+// On écoute plus d'événements pour être sûr de ne rien rater
+add_action('woocommerce_product_set_stock', 'trendylux_update_destock_status');
+add_action('woocommerce_variation_set_stock', 'trendylux_update_destock_status');
+add_action('save_post_product', 'trendylux_update_destock_status');
+add_action('woocommerce_save_product_variation', 'trendylux_update_destock_status');
+
+function trendylux_update_destock_status($product_id): void
+{
+    // Évite les boucles infinies ou les autosaves
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    
+    // Récupération de l'objet produit
+    $product = wc_get_product($product_id);
+    if (!$product) return;
+
+    // Si c'est une variation, on remonte au parent
+    $parent_id = $product->get_parent_id();
+    if ($parent_id) {
+        $parent_product = wc_get_product($parent_id);
+    } else {
+        $parent_product = $product;
+        $parent_id = $product->get_id();
+    }
+
+    // Vérification : Est-ce qu'une des variations (ou le produit simple) a un stock de 1 ?
+    $has_last_item = false;
+
+    if ($parent_product->is_type('variable')) {
+        $variations = $parent_product->get_children();
+        foreach ($variations as $variation_id) {
+            $variation = wc_get_product($variation_id);
+            if ($variation && $variation->get_stock_quantity() == 1) {
+                $has_last_item = true;
+                break; 
+            }
+        }
+    } else {
+        if ($parent_product->get_stock_quantity() == 1) {
+            $has_last_item = true;
+        }
+    }
+
+    // Gestion du Tag "destockage"
+    $term_slug = 'destockage';
+    
+    // Créer le tag s'il n'existe pas
+    if (!term_exists($term_slug, 'product_tag')) {
+        wp_insert_term('Dernière Chance', 'product_tag', array('slug' => $term_slug));
+    }
+
+    // Appliquer ou retirer le tag
+    if ($has_last_item) {
+        if (!has_term($term_slug, 'product_tag', $parent_id)) {
+            wp_set_object_terms($parent_id, $term_slug, 'product_tag', true);
+        }
+    } else {
+        if (has_term($term_slug, 'product_tag', $parent_id)) {
+            wp_remove_object_terms($parent_id, $term_slug, 'product_tag');
+        }
+    }
+}
+
+// 2. PRIX : Appliquer -15% dans le panier
+add_action('woocommerce_before_calculate_totals', 'trendylux_apply_last_item_discount', 10, 1);
+
+function trendylux_apply_last_item_discount($cart) {
+    if (is_admin() && !defined('DOING_AJAX')) return;
+
+    foreach ($cart->get_cart() as $cart_item) {
+        $product = $cart_item['data'];
+        $stock = $product->get_stock_quantity();
+
+        if ($stock == 1) {
+            // FIX : Toujours repartir du prix régulier pour éviter la double réduction
+            $base_price = (float) $product->get_regular_price();
+            $new_price = $base_price * 0.85; 
+            $product->set_price($new_price);
+        }
+    }
+}
+
+// 3. DISPLAY (Panier) : Badge textuel
+add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10, 3);
+
+function trendylux_add_discount_badge_cart($name, $cart_item, $cart_item_key) {
+    $product = $cart_item['data'];
+    if ($product->get_stock_quantity() == 1) {
+        $name .= ' <span style="color:#e74c3c; font-size:0.85em; font-weight:bold;">(Dernière pièce : -15% appliqués !)</span>';
+    }
+    return $name;
+}
+
+// 4. DISPLAY (Liste produits) : Badge visuel sur l'image
+add_action('woocommerce_before_shop_loop_item_title', 'trendylux_show_last_chance_badge', 10);
+
+function trendylux_show_last_chance_badge(): void
+{
+    global $product;
+    if (has_term('destockage', 'product_tag', $product->get_id())) {
+        echo '<div class="absolute top-2 right-2 z-10 badge badge-error font-bold shadow-md">Dernière chance</div>';
+    }
+}
+
+// 5. DISPLAY (Fiche Produit) : Script JS pour gérer le prix dynamique
+add_action('wp_footer', 'trendylux_product_page_last_chance_script');
+
+function trendylux_product_page_last_chance_script(): void
+{
+    if (!is_product()) return;
+
+    global $product;
+    
+    // On construit une liste JS des variations qui sont en stock = 1
+    $last_chance_variations = [];
+    if ($product->is_type('variable')) {
+        $variations = $product->get_available_variations();
+        foreach ($variations as $variation) {
+            // On doit re-vérifier le stock "réel" car get_available_variations retourne parfois max_qty
+            $var_obj = wc_get_product($variation['variation_id']);
+            if ($var_obj && $var_obj->get_stock_quantity() == 1) {
+                $last_chance_variations[] = $variation['variation_id'];
+            }
+        }
+    } elseif ($product->get_stock_quantity() == 1) {
+        // Produit simple
+        $last_chance_variations[] = $product->get_id();
+    }
+
+    // Si aucune variation concernée, on n'injecte pas de JS inutile
+    if (empty($last_chance_variations)) return;
+    ?>
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const lastChanceIds = <?php echo json_encode($last_chance_variations); ?>;
+        const $form = jQuery('form.variations_form');
+
+        $form.on('found_variation', function(event, variation) {
+            const priceContainer = document.querySelector('.price'); // Sélecteur standard Woo
+            const singleVarWrap = document.querySelector('.woocommerce-variation-price');
+            
+            // On cherche où afficher le message (soit prix principal, soit prix variation)
+            let targetPrice = singleVarWrap && singleVarWrap.innerHTML !== "" ? singleVarWrap : priceContainer;
+
+            // Nettoyage des anciens messages
+            const existingMsg = document.querySelector('.trendylux-last-chance-msg');
+            if(existingMsg) existingMsg.remove();
+
+            if (lastChanceIds.includes(variation.variation_id)) {
+                // Calcul du prix remisé (simulation visuelle)
+                const originalPrice = variation.display_price;
+                const discountedPrice = (originalPrice * 0.85).toFixed(2);
+                
+                // On injecte un message visuel fort
+                const msg = document.createElement('div');
+                msg.className = 'trendylux-last-chance-msg alert alert-error mt-2 py-2 text-sm';
+                msg.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span><b>Dernière pièce !</b> <br/>Une remise de 15% sera appliquée au panier.</span>
+                `;
+                
+                // Insertion après le bouton d'ajout au panier ou le prix
+                const addToCartBtn = document.querySelector('.single_add_to_cart_button');
+                if(addToCartBtn) {
+                    addToCartBtn.parentNode.insertBefore(msg, addToCartBtn);
+                }
+            }
+        });
+
+        // Réinitialisation quand on désélectionne
+        $form.on('reset_data', function() {
+            const existingMsg = document.querySelector('.trendylux-last-chance-msg');
+            if(existingMsg) existingMsg.remove();
+        });
+    });
+    </script>
+    <?php
+}
+
+// 5. DISPLAY (Panier/Mini-Panier) : Afficher le prix remisé visuellement dans la colonne prix
+add_filter( 'woocommerce_cart_item_price', 'trendylux_display_discounted_price_in_cart', 10, 3 );
+
+function trendylux_display_discounted_price_in_cart( $price, $cart_item, $cart_item_key ) {
+    $product = $cart_item['data'];
+
+    // Si stock = 1, on applique visuellement la remise
+    if ( $product->get_stock_quantity() == 1 ) {
+        // Prix régulier (le prix barré)
+        $regular_price = (float) $product->get_regular_price();
+        
+        // Prix actuel (le prix soldé, déjà calculé par nos autres fonctions)
+        $current_price = (float) $product->get_price();
+
+        // Si jamais le prix n'a pas encore été réduit (cas limite), on force le calcul pour l'affichage
+        if ( $current_price == $regular_price ) {
+             $current_price = $regular_price * 0.85;
+        }
+        
+        return wc_format_sale_price( $regular_price, $current_price );
+    }
+
+    return $price;
+}

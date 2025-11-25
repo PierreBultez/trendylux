@@ -38,6 +38,10 @@ if ( $terms && ! is_wp_error( $terms ) ) {
                 <?php if ( $product->is_featured() ) : ?>
                     <span class="badge bg-black text-white text-[10px] font-bold uppercase tracking-wider border-0">TOP VENTES</span>
                 <?php endif; ?>
+
+                <?php if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) : ?>
+                    <span class="badge badge-warning text-white text-[10px] font-bold uppercase tracking-wider border-0">DERNIÈRE CHANCE -15% SUR CERTAINES TAILLES</span>
+                <?php endif; ?>
             </div>
 
             <button class="absolute top-2 right-2 z-10 p-2 text-gray-400 hover:text-red-500 transition-colors" aria-label="Ajouter aux favoris">
