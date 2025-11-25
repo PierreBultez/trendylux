@@ -278,38 +278,24 @@
         </div>
     </div>
 
-    <!-- 4. Section "Les Styles Du Moment" -->
+    <!-- 4. Section "Carte Cadeau" -->
     <div class="container mx-auto py-12 px-4">
-        <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Les Styles Du Moment</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Style 1 -->
-            <a href="#" class="group card card-compact image-full shadow-xl">
-                <figure class="overflow-hidden">
-                    <img src="https://picsum.photos/id/1084/800/600" alt="Style 1" class="transition-transform duration-500 group-hover:scale-110" />
-                </figure>
-                <div class="card-body justify-end items-center text-center">
-                    <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box mb-10">
-                        <h3 class="card-title text-3xl font-serif uppercase">Streetwear</h3>
-                        <div class="card-actions mt-4 justify-center">
-                            <button class="btn btn-primary btn-outline btn-sm">Découvrir</button>
-                        </div>
-                    </div>
+        <div class="hero rounded-box overflow-hidden min-h-[500px] relative group shadow-2xl">
+            <img src="<?php echo get_template_directory_uri(); ?>/public/gift-card-section.jpg" alt="Carte Cadeau Trendy Lux" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <div class="hero-overlay bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
+            <div class="hero-content text-neutral-content text-center md:text-left w-full justify-start px-6 md:px-16">
+                <div class="max-w-xl bg-black/40 backdrop-blur-sm p-8 rounded-box border border-white/10">
+                    <h2 class="mb-6 text-4xl md:text-6xl font-bold font-serif text-white uppercase drop-shadow-lg leading-tight">
+                        Le Plaisir <br><span class="text-primary">D'offrir</span>
+                    </h2>
+                    <p class="mb-8 text-lg md:text-xl font-light tracking-wider text-gray-100 border-l-4 border-primary pl-4">
+                        Faites plaisir à coup sûr avec la Carte Cadeau Trendy Lux. Laissez-les choisir leur style parmi nos collections exclusives.
+                    </p>
+                    <a href="/produit/carte-cadeau-exclusive-trendy-lux/" class="btn btn-primary btn-lg rounded-full px-8 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
+                        Acheter une Carte Cadeau
+                    </a>
                 </div>
-            </a>
-            <!-- Style 2 -->
-            <a href="#" class="group card card-compact image-full shadow-xl">
-                <figure class="overflow-hidden">
-                    <img src="https://picsum.photos/id/155/800/600" alt="Style 2" class="transition-transform duration-500 group-hover:scale-110" />
-                </figure>
-                <div class="card-body justify-end items-center text-center">
-                    <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box mb-10">
-                        <h3 class="card-title text-3xl font-serif uppercase">Casual Chic</h3>
-                        <div class="card-actions mt-4 justify-center">
-                            <button class="btn btn-primary btn-outline btn-sm">Découvrir</button>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            </div>
         </div>
     </div>
 
