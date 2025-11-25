@@ -18,7 +18,7 @@
         @keydown.escape.window="openMenu = null"
 >
     <!-- Logo (Overlay Absolute) -->
-    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-4 z-50 flex items-center transition-opacity hover:opacity-80 py-2">
+    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-4 z-50 flex items-center py-2 transition duration-300 logo-glow-gold">
         <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-full w-auto object-contain">
     </a>
 

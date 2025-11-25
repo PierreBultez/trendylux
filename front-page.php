@@ -7,16 +7,17 @@
     <div class="flex flex-col h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] mb-12 p-4 gap-4">
 
         <!-- Bandeau Promo Horizontal (Fixe) -->
-        <div class="relative h-12 md:h-16 flex-none w-full bg-primary text-primary-content flex items-center justify-center shadow-md rounded-box overflow-hidden">
+        <div class="relative py-4 flex-none w-full bg-primary text-primary-content flex flex-col items-center justify-center shadow-md rounded-box overflow-hidden">
             <!-- Image de fond subtile pour la texture -->
             <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/AdobeStock_607063407_Preview.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
             
-            <div class="relative z-10 flex flex-row items-center gap-2 text-center">
-                <span class="text-xs md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">
-                    Ouverture officielle : livraison offerte et -10% sur tout le site avec le code promo
-                    <span class="bg-white text-primary px-2 py-1 rounded mx-1 font-serif font-black text-sm md:text-lg shadow-sm">VIP10</span>
-                    (du 1er au 15 décembre )
+            <div class="relative z-10 flex flex-col items-center text-center gap-1">
+                <span class="text-base md:text-lg font-bold uppercase tracking-wider text-white drop-shadow-md">Ouverture officielle</span>
+                <span class="text-sm md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">
+                    -10% sur tout le site avec le code promo 
+                    <span class="bg-white text-primary px-2 py-1 rounded mx-1 font-serif font-black text-sm md:text-lg shadow-sm">VIP10</span>*
                 </span>
+                <span class="text-sm md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">Livraison offerte**</span>
             </div>
         </div>
 

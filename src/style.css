@@ -23,7 +23,7 @@
     /* Fond secondaire Noir pour Header/Footer */
     --color-neutral: #000000;         /* Presque noir */
     --color-neutral-focus: #212121;   /* Un gris anthracite (Gray-800) */
-    --color-neutral-content: #a6adbb; /* Texte gris clair sur fond noir */
+    --color-neutral-content: #ffffff; /* Texte gris clair sur fond noir */
 
     /* Couleurs sémantiques (inchangées) */
     --color-info: #3abff8;
@@ -193,4 +193,41 @@ body.home .toast-container > * {
 
 .text-glow-gold {
     text-shadow: 0 0 5px rgba(212, 175, 55, 0.6), 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.logo-glow-gold:hover {
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8)) drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+}
+
+/* --- NOUVEAU STYLE POUR LES ICONES RESEAUX SOCIAUX --- */
+.social-icon-gold {
+    /* Dégradé #705525 -> #FBDFBE -> #705525 (Bas-Gauche vers Haut-Droite) */
+    background: linear-gradient(45deg, #705525, #FBDFBE, #705525);
+    /* Pastille pleine (cercle) */
+    border-radius: 50%;
+    /* Centrage de l'icône */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Taille de la pastille */
+    width: 40px;
+    height: 40px;
+    /* Transition douce */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-icon-gold:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Style pour le SVG à l'intérieur (Outline Noir) */
+.social-icon-gold svg {
+    width: 25px;
+    height: 25px;
+    fill: none;       /* Pas de remplissage */
+    stroke: #000000;  /* Contour noir */
+    stroke-width: 1.5;  /* Épaisseur du contour */
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
