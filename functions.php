@@ -129,6 +129,12 @@ function trendylux_vite_assets(): void {
             }
         }
     }
+    
+    // Localize script for AJAX (applies to both dev and prod handles if they share the name or we target both)
+    wp_localize_script('trendylux-main-js', 'trendylux_ajax', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('trendylux_newsletter_nonce')
+    ]);
 }
 add_action('wp_enqueue_scripts', 'trendylux_vite_assets');
 
@@ -916,3 +922,76 @@ function trendylux_display_discounted_price_in_cart( $price, $cart_item, $cart_i
 
     return $price;
 }
+
+/**
+ * AJAX Handler for Brevo Newsletter Subscription
+ */
+function trendylux_subscribe_newsletter() {
+    // 1. Vérification du nonce pour la sécurité
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'trendylux_newsletter_nonce')) {
+        wp_send_json_error('Erreur de sécurité. Veuillez recharger la page.');
+        wp_die();
+    }
+
+    // 2. Validation de l'email
+    $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
+    if (!is_email($email)) {
+        wp_send_json_error('Adresse email invalide.');
+        wp_die();
+    }
+
+    // 3. Récupération des clés API (définies dans wp-config.php de préférence)
+    $api_key = defined('BREVO_API_KEY') ? BREVO_API_KEY : '';
+    $list_id = defined('BREVO_LIST_ID') ? (int)BREVO_LIST_ID : 0;
+
+    if (empty($api_key) || empty($list_id)) {
+        wp_send_json_error('Erreur de configuration du service newsletter.');
+        wp_die();
+    }
+
+    // 4. Appel à l'API Brevo v3
+    $url = 'https://api.brevo.com/v3/contacts';
+    $body = json_encode([
+        'email' => $email,
+        'listIds' => [$list_id],
+        'updateEnabled' => true // Met à jour si le contact existe déjà
+    ]);
+
+    $response = wp_remote_post($url, [
+        'headers' => [
+            'api-key' => $api_key,
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ],
+        'body' => $body,
+        'timeout' => 15
+    ]);
+
+    if (is_wp_error($response)) {
+        wp_send_json_error('Erreur de connexion au service newsletter.');
+        wp_die();
+    }
+
+    $status_code = wp_remote_retrieve_response_code($response);
+    $response_body = json_decode(wp_remote_retrieve_body($response), true);
+
+    // 201 = Créé, 204 = Mis à jour (selon endpoint, ici souvent 201 ou 204)
+    // Brevo renvoie parfois 400 si l'utilisateur est déjà dans la liste mais sans updateEnabled
+    if ($status_code >= 200 && $status_code < 300) {
+        wp_send_json_success('Merci ! Votre inscription est validée.');
+    } else {
+        // Gestion des erreurs spécifiques Brevo
+        $error_msg = isset($response_body['message']) ? $response_body['message'] : 'Une erreur est survenue.';
+        
+        // Traduction user-friendly de certaines erreurs courantes
+        if (strpos($error_msg, 'Contact already exist') !== false) {
+            wp_send_json_success('Vous êtes déjà inscrit à notre newsletter !');
+        } else {
+            wp_send_json_error('Erreur : ' . $error_msg);
+        }
+    }
+
+    wp_die();
+}
+add_action('wp_ajax_nopriv_subscribe_newsletter', 'trendylux_subscribe_newsletter');
+add_action('wp_ajax_subscribe_newsletter', 'trendylux_subscribe_newsletter');
