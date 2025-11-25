@@ -278,7 +278,8 @@ add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
  * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
  * pour y ajouter les classes de DaisyUI et Tailwind. (Version corrigée)
  */
-function trendylux_checkout_field_args( $args, $key, $value ) {
+function trendylux_checkout_field_args( $args, $key, $value ): array
+{
     // Classes pour le conteneur du champ. Ajout de 'mb-4' pour l'espacement vertical.
     $args['class'][] = 'form-control w-full mb-6';
 
@@ -297,6 +298,11 @@ function trendylux_checkout_field_args( $args, $key, $value ) {
 
     if ( 'textarea' === $args['type'] ) {
         $args['input_class'] = array('textarea', 'textarea-bordered', 'w-full', 'h-24', 'focus:outline-none', 'focus:border-primary');
+    }
+
+    if ( 'checkbox' === $args['type'] ) {
+        $args['input_class'] = array('checkbox', 'checkbox-primary');
+        $args['label_class'] = array('label', 'cursor-pointer', 'justify-start', 'gap-3');
     }
 
     // Enveloppe le texte du label dans un span avec la classe DaisyUI.
