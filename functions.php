@@ -314,15 +314,15 @@ add_filter( 'woocommerce_form_field_args', 'trendylux_checkout_field_args', 10, 
  * On le retire de sa position par défaut (en haut) pour le réinsérer
  * juste avant la section des moyens de paiement.
  */
-function trendylux_move_checkout_coupon_form(): void
-{
-    // 1. On le "décroche" de son emplacement d'origine.
-    remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
-
-    // 2. On le "raccroche" juste avant le bloc de paiement.
-    add_action( 'woocommerce_review_order_before_payment', 'woocommerce_checkout_coupon_form', 10 );
-}
-add_action( 'init', 'trendylux_move_checkout_coupon_form' );
+//function trendylux_move_checkout_coupon_form(): void
+//{
+//    // 1. On le "décroche" de son emplacement d'origine.
+//    remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+//
+//    // 2. On le "raccroche" juste avant le bloc de paiement.
+//    add_action( 'woocommerce_after_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+//}
+//add_action( 'init', 'trendylux_move_checkout_coupon_form' );
 
 // =========================================================================
 // == PERSONNALISATION DE LA PAGE PRODUIT UNIQUE (single-product.php)

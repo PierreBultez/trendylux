@@ -16,7 +16,7 @@ if ( ! wc_coupons_enabled() ) {
 
 ?>
 <!-- On retire complètement l'ancien système de "toggle" -->
-<form class="checkout_coupon woocommerce-form-coupon my-6" method="post">
+<form class="checkout_coupon woocommerce-form-coupon my-6 !block w-1/3" method="post">
 
     <p class="label-text mb-5 mt-10"><?php esc_html_e( 'Si vous possédez un code promo, veuillez l\'appliquer ci-dessous.', 'woocommerce' ); ?></p>
 

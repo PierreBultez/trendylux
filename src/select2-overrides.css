@@ -45,3 +45,8 @@
     background-color: var(--color-primary) !important;
     color: var(--color-primary-content) !important;
 }
+
+.input:focus {
+    border-color: var(--color-primary) !important;
+    outline: none !important;
+}
