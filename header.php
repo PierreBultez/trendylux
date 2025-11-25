@@ -47,7 +47,7 @@
                                 <path d="m21 21-4.3-4.3"></path>
                             </g>
                         </svg>
-                        <input type="search" class="grow" placeholder="Rechercher" name="s" value="<?php echo get_search_query(); ?>" />
+                        <input type="search" class="grow text-primary-content" placeholder="Rechercher" name="s" value="<?php echo get_search_query(); ?>" />
                         <button type="submit" class="hidden" aria-label="Lancer la recherche"></button>
                     </label>
                 </form>
