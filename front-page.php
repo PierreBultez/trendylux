@@ -162,10 +162,10 @@
             </a>
             <a href="#" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo get_template_directory_uri(); ?>/public/home-promo.jpeg" alt="Nouveautés" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img src="<?php echo get_template_directory_uri(); ?>/public/home-flash-sales.jpeg" alt="Ventes Flash" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
                         <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
-                            <h2 class="text-5xl font-bold font-serif uppercase text-primary">Promos</h2>
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary">Ventes Flash</h2>
                         </div>
                     </div>
                 </div>
