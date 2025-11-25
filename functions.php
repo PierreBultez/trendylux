@@ -949,13 +949,26 @@ function trendylux_subscribe_newsletter() {
         wp_die();
     }
 
+    // 3b. Génération du code promo unique
+    $promo_code = trendylux_create_welcome_coupon($email);
+
     // 4. Appel à l'API Brevo v3
     $url = 'https://api.brevo.com/v3/contacts';
-    $body = json_encode([
+    
+    $payload = [
         'email' => $email,
         'listIds' => [$list_id],
-        'updateEnabled' => true // Met à jour si le contact existe déjà
-    ]);
+        'updateEnabled' => true, // Met à jour si le contact existe déjà
+    ];
+
+    // On n'envoie l'attribut que si un code a été généré
+    if ($promo_code) {
+        $payload['attributes'] = [
+            'CODE_PROMO_BIENVENUE' => $promo_code
+        ];
+    }
+
+    $body = json_encode($payload);
 
     $response = wp_remote_post($url, [
         'headers' => [
@@ -978,7 +991,7 @@ function trendylux_subscribe_newsletter() {
     // 201 = Créé, 204 = Mis à jour (selon endpoint, ici souvent 201 ou 204)
     // Brevo renvoie parfois 400 si l'utilisateur est déjà dans la liste mais sans updateEnabled
     if ($status_code >= 200 && $status_code < 300) {
-        wp_send_json_success('Merci ! Votre inscription est validée.');
+        wp_send_json_success('Merci ! Votre inscription est validée. Vous allez recevoir votre code promo par email.');
     } else {
         // Gestion des erreurs spécifiques Brevo
         $error_msg = isset($response_body['message']) ? $response_body['message'] : 'Une erreur est survenue.';
@@ -995,3 +1008,28 @@ function trendylux_subscribe_newsletter() {
 }
 add_action('wp_ajax_nopriv_subscribe_newsletter', 'trendylux_subscribe_newsletter');
 add_action('wp_ajax_subscribe_newsletter', 'trendylux_subscribe_newsletter');
+
+/**
+ * Crée un code promo unique pour la livraison gratuite (limité à 1 usage par cet email)
+ */
+function trendylux_create_welcome_coupon(string $email): ?string
+{
+    // Vérifier si l'email a déjà un code attribué (optionnel, pour éviter les doublons)
+    // Pour simplifier ici, on en génère un nouveau à chaque fois ou on laisse WooCommerce gérer.
+    // On génère un suffixe aléatoire de 6 caractères
+    $code = 'WELCOME-' . strtoupper(wp_generate_password(6, false));
+
+    // Création du coupon WooCommerce
+    $coupon = new WC_Coupon();
+    $coupon->set_code($code);
+    $coupon->set_description('Offre de bienvenue - Livraison offerte pour ' . $email);
+    $coupon->set_free_shipping(true); // Active la livraison gratuite
+    $coupon->set_usage_limit(1); // Utilisable 1 seule fois au total
+    $coupon->set_usage_limit_per_user(1); // Utilisable 1 seule fois par utilisateur
+    $coupon->set_email_restrictions([$email]); // Restreint à cet email uniquement
+    
+    // Sauvegarde
+    $coupon->save();
+
+    return $code;
+}
