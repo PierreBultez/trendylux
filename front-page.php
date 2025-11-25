@@ -150,9 +150,9 @@
     <!-- 2. Blocs Catégories Principales -->
     <div class="container mx-auto py-12 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <a href="#" class="group relative block">
+            <a href="<?php echo site_url('/collab-makai'); ?>" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo get_template_directory_uri(); ?>/public/home-news.jpeg" alt="Collaborations" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img src="<?php echo get_template_directory_uri(); ?>/public/makai.jpeg" alt="Collab Makaï x Trendy Lux" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
                         <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
                             <h2 class="text-5xl font-bold font-serif uppercase text-primary">Collab's</h2>
