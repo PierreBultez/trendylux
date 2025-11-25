@@ -71,7 +71,9 @@
                 <a class="link link-hover" href="/politique-en-matiere-de-remboursements-et-de-retours/">Retours et remboursements</a>
             </nav>
             <nav class="flex flex-col gap-2">
-                <header class="footer-title text-primary opacity-100">Réseaux Sociaux</header>
+                <header class="footer-title text-primary opacity-100">Pratique</header>
+                <a class="link link-hover" href="/guide-des-tailles/">Guide des tailles</a>
+                <header class="footer-title text-primary opacity-100 mt-4">Réseaux Sociaux</header>
                                 <div class="flex align-center justify-start gap-6">
                     <!-- Facebook -->
                     <a href="https://www.facebook.com/profile.php?id=61583318666684&locale=fr_FR" target="_blank" rel="noopener" class="social-icon-gold">
