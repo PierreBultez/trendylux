@@ -336,6 +336,16 @@
         </div>
     </div>
 
+    <!-- Section Publicitaire Sacs -->
+    <div class="container mx-auto py-12 px-4 w-2/3">
+        <a href="/categorie-produit/femme/accessoires-femme/femme-sacs/" class="block relative overflow-hidden rounded-box shadow-lg group">
+            <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-bags.jpg" alt="Collection Sacs" class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end justify-center p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span class="text-3xl md:text-5xl font-bold uppercase tracking-widest text-white drop-shadow-lg">Découvrir les Sacs</span>
+            </div>
+        </a>
+    </div>
+
     <!-- 5. Carousel de Produits (Top Ventes) -->
     <div class="container mx-auto py-12 px-4">
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Ventes</h2>
