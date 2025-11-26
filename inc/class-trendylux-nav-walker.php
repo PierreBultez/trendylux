@@ -54,7 +54,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 3 : Image horizontale en bas à droite (2 colonnes, 1 rangée)
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/accessoires-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'homme-3.jpg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires.jpeg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                  $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</a>';
