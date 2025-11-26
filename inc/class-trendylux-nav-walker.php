@@ -18,7 +18,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $output .= '<div class="p-6 flex gap-8">';
 
             // Ajustement de la largeur si on a des visuels (pour l'instant seulement pour Homme)
-            $is_homme = stripos( $this->current_parent_title, 'vêtements hommes' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false;
+            $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false;
             $ul_class = $is_homme ? 'w-1/4 min-w-[250px]' : 'w-full';
 
             $output .= '<ul class="grid grid-cols-1 gap-x-8 gap-y-2 ' . $ul_class . ' text-sm">';
@@ -33,7 +33,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $output .= '</ul>';
 
             // Injection du Bento Grid pour la catégorie Homme
-            if ( stripos( $this->current_parent_title, 'vêtements hommes' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false ) {
+            if ( stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/homme/';
                 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
