@@ -388,16 +388,24 @@
                     
                     <?php while ( $loop->have_posts() ) : $loop->the_post(); global $product; ?>
                         <div class="flex-none w-[280px] md:w-[320px] snap-center">
-                            <div class="card bg-base-100 w-full shadow-sm hover:shadow-2xl transition-all duration-500 group rounded-none overflow-hidden border border-transparent hover:border-base-200">
+                            <div class="card bg-base-100 w-full shadow-sm hover:shadow-2xl transition-all duration-500 group rounded-box overflow-hidden border border-transparent hover:border-base-200">
                                 <!-- Image Wrapper -->
                                 <figure class="relative aspect-[3/4] overflow-hidden bg-gray-100">
                                     <?php 
                                     // Badge Promo
-                                    if ( $product->is_on_sale() ) : ?>
-                                        <div class="absolute top-4 left-4 z-10">
-                                            <span class="badge badge-error text-white font-bold uppercase text-xs tracking-wider rounded-none px-3 py-3">-<?php echo round( ( ( $product->get_regular_price() - $product->get_sale_price() ) / $product->get_regular_price() ) * 100 ); ?>%</span>
-                                        </div>
-                                    <?php endif; ?>
+                                    if ( $product->is_on_sale() ) : 
+                                        $regular_price = (float) $product->get_regular_price();
+                                        $sale_price = (float) $product->get_sale_price();
+                                        
+                                        if ( $regular_price > 0 ) {
+                                            $percentage = round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 );
+                                        ?>
+                                            <div class="absolute top-4 left-4 z-10">
+                                                <span class="badge badge-error text-white font-bold uppercase text-xs tracking-wider px-3 py-3 shadow-md">-<?php echo $percentage; ?>%</span>
+                                            </div>
+                                        <?php 
+                                        }
+                                    endif; ?>
 
                                     <!-- Image Produit -->
                                     <a href="<?php the_permalink(); ?>" class="block w-full h-full">
@@ -412,7 +420,7 @@
 
                                     <!-- Actions Overlay (Slide Up) -->
                                     <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out bg-white/95 backdrop-blur-sm border-t border-base-200 p-4 flex flex-col gap-2">
-                                        <a href="?add-to-cart=<?php echo $product->get_id(); ?>" class="btn btn-primary btn-block rounded-none text-white hover:scale-105 transition-transform ajax_add_to_cart add_to_cart_button" data-product_id="<?php echo $product->get_id(); ?>" aria-label="Ajouter au panier">
+                                        <a href="?add-to-cart=<?php echo $product->get_id(); ?>" class="btn btn-primary btn-block rounded-full text-white hover:scale-105 transition-transform ajax_add_to_cart add_to_cart_button shadow-lg" data-product_id="<?php echo $product->get_id(); ?>" aria-label="Ajouter au panier">
                                             Ajouter au panier
                                         </a>
                                     </div>
