@@ -81,7 +81,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 
                 // Image 1 : Grande image verticale à gauche
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/vetements-femme/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . '251027_HBME_112_BOSS_WI25_OUTWEAR_Women_01_088_066_797x1300.webp" alt="Mode Femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'vetements.webp" alt="Mode Femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Vêtements</div>';
                 $output .= '</a>';
