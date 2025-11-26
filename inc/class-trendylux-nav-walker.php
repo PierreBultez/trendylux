@@ -17,9 +17,12 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             
             $output .= '<div class="p-6 flex gap-8 min-h-[500px]">';
 
-            // Ajustement : Pour Homme, on masque la liste (hidden). Pour les autres, affichage normal.
-            $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false;
-            $ul_class = $is_homme ? 'hidden' : 'grid grid-cols-1 gap-x-8 gap-y-2 w-full text-sm';
+            // Ajustement : Pour Univers Homme ou Univers Femme, on masque la liste (hidden).
+            $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false;
+            $is_femme = stripos( $this->current_parent_title, 'univers femme' ) !== false;
+            $is_bento_menu = $is_homme || $is_femme;
+            
+            $ul_class = $is_bento_menu ? 'hidden' : 'grid grid-cols-1 gap-x-8 gap-y-2 w-full text-sm';
 
             $output .= '<ul class="' . $ul_class . '">';
         } else {
@@ -32,34 +35,64 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
         if ( $depth === 0 && $this->is_mega_menu ) {
             $output .= '</ul>';
 
-            // Injection du Bento Grid pour la catégorie Homme
+            // Injection du Bento Grid pour la catégorie Univers Homme
             if ( stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/homme/';
                 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
                 
-                // Image 1 : Grande image verticale à gauche (2 colonnes, 2 rangées)
+                // Image 1 : Grande image verticale à gauche
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/vetements/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'vetements.webp" alt="Mode Homme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Vêtements</div>';
                 $output .= '</a>';
 
-                // Image 2 : Image horizontale en haut à droite (2 colonnes, 1 rangée)
+                // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'sneakers.jpg" alt="Streetwear" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                  $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures et sneakers</div>';
                 $output .= '</a>';
 
-                // Image 3 : Image horizontale en bas à droite (2 colonnes, 1 rangée)
+                // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/accessoires-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'accessoires.jpeg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                  $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</a>';
 
-                $output .= '</div>'; // Fin Grid
+                $output .= '</div>'; // Fin Grid Homme
+            }
+
+            // Injection du Bento Grid pour la catégorie Univers Femme
+            if ( stripos( $this->current_parent_title, 'univers femme' ) !== false ) {
+                $img_base = get_template_directory_uri() . '/public/mega-menu/femme/';
+                
+                $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
+                
+                // Image 1 : Grande image verticale à gauche
+                $output .= '<a href="' . home_url( '/categorie-produit/femme/vetements-femme/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<img src="' . $img_base . 'vetements.webp" alt="Mode Femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Vêtements</div>';
+                $output .= '</a>';
+
+                // Image 2 : Image horizontale en haut à droite
+                $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<img src="' . $img_base . 'sneakers.jpg" alt="Chaussures" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures et sneakers</div>';
+                $output .= '</a>';
+
+                // Image 3 : Image horizontale en bas à droite
+                $output .= '<a href="' . home_url( '/categorie-produit/femme/accessoires-femme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<img src="' . $img_base . 'accessoires.jpg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
+                $output .= '</a>';
+
+                $output .= '</div>'; // Fin Grid Femme
             }
 
             $output .= '</div></div>'; // Fin Flex + Fin Mega Menu Wrapper
