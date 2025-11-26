@@ -299,6 +299,43 @@
         </div>
     </div>
 
+    <!-- 4b. Section Top Marques -->
+    <div class="container mx-auto py-12 px-4">
+        <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Marques</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <?php 
+            // Configuration des marques : Assurez-vous que l'ordre correspond aux images top-marques-1.jpg à top-marques-12.jpg
+            $top_brands = [
+                'Calvin klein Jeans',
+                'Blauer',
+                'Desigual',
+                'Guess',
+                'Icon',
+                'Lacoste',
+                'The North Face',
+                'Alviero Martini Prima Classe',
+                'Only',
+                'Tommy Hilfiger',
+                'Superdry',
+                'Yos'
+            ];
+
+            for ($i = 1; $i <= 12; $i++): 
+                // Récupération du nom de la marque ou fallback
+                $brand_name = isset($top_brands[$i-1]) ? $top_brands[$i-1] : 'Marque ' . $i;
+                // Création de l'URL de recherche
+                $search_link = home_url( '/?s=' . urlencode($brand_name) );
+            ?>
+                <a href="<?php echo esc_url($search_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
+                    <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-<?php echo $i; ?>.jpg" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
+                        <span class="text-sm font-bold uppercase tracking-widest text-white">Voir <?php echo esc_html($brand_name); ?></span>
+                    </div>
+                </a>
+            <?php endfor; ?>
+        </div>
+    </div>
+
     <!-- 5. Carousel de Produits (Top Ventes) -->
     <div class="container mx-auto py-12 px-4">
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Ventes</h2>
