@@ -29,6 +29,8 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 $ul_class = 'hidden';
             } elseif ( $is_chaussures_homme ) {
                  $ul_class = 'w-1/5 min-w-[200px] flex-shrink-0 grid grid-cols-1 gap-x-8 gap-y-2 text-sm border-r border-base-200 pr-6';
+            } elseif ( $is_chaussures_femme ) {
+                $ul_class = 'w-1/5 min-w-[200px] flex-shrink-0 grid grid-cols-1 gap-x-8 gap-y-2 text-sm border-r border-base-200 pr-6';
             } else {
                 $ul_class = 'grid grid-cols-1 gap-x-8 gap-y-2 w-full text-sm';
             }
@@ -120,14 +122,14 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/homme/chaussures-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'chaussures-homme-2.jpg" alt="Chaussures de ville" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
-                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Toutes les chaussures</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/homme-baskets/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'chaussures-homme-1.jpg" alt="Sport & Running" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
-                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Baskets</div>';
                 $output .= '</a>';
 
