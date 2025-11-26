@@ -21,6 +21,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false;
             $is_femme = stripos( $this->current_parent_title, 'univers femme' ) !== false;
             $is_chaussures_homme = stripos( $this->current_parent_title, 'chaussures homme' ) !== false;
+            $is_chaussures_femme = stripos( $this->current_parent_title, 'chaussures femme' ) !== false;
 
             $is_bento_menu = $is_homme || $is_femme;
             
@@ -131,6 +132,36 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 $output .= '</a>';
 
                 $output .= '</div>'; // Fin Grid Chaussures Homme
+            }
+
+            // Injection du Bento Grid pour Chaussures Femme
+            if ( stripos( $this->current_parent_title, 'chaussures femme' ) !== false ) {
+                $img_base = get_template_directory_uri() . '/public/mega-menu/chaussures-femme/';
+
+                $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
+
+                // Image 1 : Grande image verticale à gauche
+                $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/femme-bottes/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<img src="' . $img_base . 'chaussures-femme-1.jpg" alt="chaussure de femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Bottes</div>';
+                $output .= '</a>';
+
+                // Image 2 : Image horizontale en haut à droite
+                $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/femme-chaussures-basses/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<img src="' . $img_base . 'chaussures-femme-2.jpg" alt="chaussure basse pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures basses</div>';
+                $output .= '</a>';
+
+                // Image 3 : Image horizontale en bas à droite
+                $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/femme-baskets/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<img src="' . $img_base . 'chaussures-femme-3.jpg" alt="basket pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
+                $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Sneakers</div>';
+                $output .= '</a>';
+
+                $output .= '</div>'; // Fin Grid Chaussures Femme
             }
 
             $output .= '</div></div>'; // Fin Flex + Fin Mega Menu Wrapper
