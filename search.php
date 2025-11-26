@@ -34,11 +34,45 @@ get_header();
             </ul>
         </div>
 
-        <?php the_posts_pagination( array(
-            'prev_text' => '<span class="icon-arrow-left"></span>',
-            'next_text' => '<span class="icon-arrow-right"></span>',
-            'before_page_number' => '<span class="meta-nav screen-reader-text">' . esc_html__( 'Page', 'trendylux' ) . ' </span>',
-        ) ); ?>
+        <div class="mt-12 flex justify-center">
+            <div class="join">
+                <?php
+                global $wp_query;
+                $total   = $wp_query->max_num_pages;
+                $current = max( 1, get_query_var( 'paged' ) );
+
+                if ( $total > 1 ) {
+                    $pages = paginate_links( array(
+                        'base'      => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
+                        'format'    => '?paged=%#%',
+                        'current'   => $current,
+                        'total'     => $total,
+                        'prev_text' => '«',
+                        'next_text' => '»',
+                        'type'      => 'array',
+                        'end_size'  => 3,
+                        'mid_size'  => 3,
+                    ) );
+
+                    if ( is_array( $pages ) ) {
+                        foreach ( $pages as $page ) {
+                            $page = str_replace( 'page-numbers', 'join-item btn', $page );
+                            
+                            if ( strpos( $page, 'current' ) !== false ) {
+                                $page = str_replace( 'join-item btn', 'join-item btn btn-active btn-primary', $page );
+                            }
+                            
+                            if ( strpos( $page, 'dots' ) !== false ) {
+                                $page = str_replace( 'join-item btn', 'join-item btn btn-disabled', $page );
+                            }
+
+                            echo $page;
+                        }
+                    }
+                }
+                ?>
+            </div>
+        </div>
 
     <?php else : ?>
         <p class="woocommerce-info"><?php esc_html_e( 'Aucun produit trouvé correspondant à votre recherche.', 'trendylux' ); ?></p>
