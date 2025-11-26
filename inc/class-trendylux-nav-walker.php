@@ -15,13 +15,13 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 class="auto-cols-auto z-50 absolute top-full left-1/2 -translate-x-1/2 z-10 w-screen max-w-7xl overflow-hidden rounded-box bg-neutral text-neutral-content shadow-lg ring-1 ring-black/5" 
                 style="display: none;">';
             
-            $output .= '<div class="p-6 flex gap-8">';
+            $output .= '<div class="p-6 flex gap-8 min-h-[500px]">';
 
-            // Ajustement de la largeur si on a des visuels (pour l'instant seulement pour Homme)
+            // Ajustement : Pour Homme, on masque la liste (hidden). Pour les autres, affichage normal.
             $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false;
-            $ul_class = $is_homme ? 'w-1/4 min-w-[250px]' : 'w-full';
+            $ul_class = $is_homme ? 'hidden' : 'grid grid-cols-1 gap-x-8 gap-y-2 w-full text-sm';
 
-            $output .= '<ul class="grid grid-cols-1 gap-x-8 gap-y-2 ' . $ul_class . ' text-sm">';
+            $output .= '<ul class="' . $ul_class . '">';
         } else {
             $output .= '<ul class="p-2 bg-base-100 rounded-box">';
         }
@@ -40,21 +40,21 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 
                 // Image 1 : Grande image verticale à gauche (2 colonnes, 2 rangées)
                 $output .= '<div class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg">';
-                $output .= '<img src="' . $img_base . 'homme-3.jpg" alt="Mode Homme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'homme-1.jpg" alt="Mode Homme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
-                $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Nouvelle Collection</div>';
+                $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Vêtements</div>';
                 $output .= '</div>';
 
                 // Image 2 : Image horizontale en haut à droite (2 colonnes, 1 rangée)
                 $output .= '<div class="col-span-2 relative rounded-box overflow-hidden group shadow-lg">';
                 $output .= '<img src="' . $img_base . 'homme-2.webp" alt="Streetwear" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                  $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
-                $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Streetwear</div>';
+                $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures et sneakers</div>';
                 $output .= '</div>';
 
                 // Image 3 : Image horizontale en bas à droite (2 colonnes, 1 rangée)
                 $output .= '<div class="col-span-2 relative rounded-box overflow-hidden group shadow-lg">';
-                $output .= '<img src="' . $img_base . 'homme-1.jpg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'homme-3.jpg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                  $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</div>';
