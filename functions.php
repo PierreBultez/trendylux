@@ -823,7 +823,8 @@ function trendylux_update_destock_status($product_id): void
     $product = wc_get_product($product_id);
     if (!$product) return;
 
-    // Si c'est une variation, on remonte au parent
+    // Si c'est une variation, on remonte au parent pour traiter l'ensemble
+    // (C'est important pour vérifier la condition "Seule variation restante")
     $parent_id = $product->get_parent_id();
     if ($parent_id) {
         $parent_product = wc_get_product($parent_id);
@@ -832,41 +833,82 @@ function trendylux_update_destock_status($product_id): void
         $parent_id = $product->get_id();
     }
 
-    // Vérification : Est-ce que le produit respecte les nouvelles conditions strictes ?
     $has_last_item = false;
+
+    // --- TRAITEMENT DES PRIX (Sauvegarde en BDD) ---
 
     if ($parent_product->is_type('variable')) {
         $children = $parent_product->get_children();
-        $variations_in_stock = 0;
-        $potential_last_item = null;
-
+        
+        // On doit d'abord déterminer si le PARENT est éligible au tag
+        // Pour cela, on vérifie s'il y a une variation "gagnante"
+        
         foreach ($children as $child_id) {
              $child = wc_get_product($child_id);
-             if ($child && $child->get_stock_quantity() > 0) {
-                 $variations_in_stock++;
-                 $potential_last_item = $child;
+             if (!$child) continue;
+
+             // Vérifie la condition stricte : Stock=1 ET seule déclinaison restante
+             if (trendylux_is_last_chance_product($child)) {
+                 $has_last_item = true;
+
+                 // CALCUL ET SAUVEGARDE DU PRIX PROMO
+                 $regular_price = (float) $child->get_regular_price();
+                 if ($regular_price > 0) {
+                     $sale_price = $regular_price * 0.85; // -15%
+                     
+                     // On ne sauvegarde que si ça change pour éviter de surcharger la BDD
+                     if ((float)$child->get_sale_price() !== $sale_price) {
+                         $child->set_sale_price((string)$sale_price);
+                         $child->set_price((string)$sale_price); // Important: met à jour le prix actif
+                         $child->save();
+                     }
+                 }
+
+             } else {
+                 // NETTOYAGE : Si ce n'est PAS un article dernière chance, on retire la promo
+                 // (Seulement si une promo est définie, pour ne pas écraser d'autres promos manuelles si besoin, 
+                 // mais ici on part du principe que le script gère ce type de promo).
+                 // Pour être prudent : on retire le prix promo s'il correspond à notre calcul ou s'il existe tout court.
+                 if ($child->get_sale_price()) {
+                     $child->set_sale_price('');
+                     $child->set_price($child->get_regular_price());
+                     $child->save();
+                 }
              }
         }
 
-        // S'il reste 1 seule variation ET que son stock est à 1 -> BINGO
-        if ($variations_in_stock === 1 && $potential_last_item && $potential_last_item->get_stock_quantity() == 1) {
-            $has_last_item = true;
-        }
     } else {
-        if ($parent_product->get_stock_quantity() == 1) {
+        // Produit Simple
+        if (trendylux_is_last_chance_product($parent_product)) {
             $has_last_item = true;
+            
+            $regular_price = (float) $parent_product->get_regular_price();
+            if ($regular_price > 0) {
+                $sale_price = $regular_price * 0.85;
+                
+                if ((float)$parent_product->get_sale_price() !== $sale_price) {
+                    $parent_product->set_sale_price((string)$sale_price);
+                    $parent_product->set_price((string)$sale_price);
+                    $parent_product->save();
+                }
+            }
+        } else {
+            // Nettoyage produit simple
+            if ($parent_product->get_sale_price()) {
+                $parent_product->set_sale_price('');
+                $parent_product->set_price($parent_product->get_regular_price());
+                $parent_product->save();
+            }
         }
     }
 
-    // Gestion du Tag "destockage"
-    $term_slug = 'destockage';
+    // --- GESTION DU TAG SUR LE PARENT ---
     
-    // Créer le tag s'il n'existe pas
+    $term_slug = 'destockage';
     if (!term_exists($term_slug, 'product_tag')) {
         wp_insert_term('Dernière Chance', 'product_tag', array('slug' => $term_slug));
     }
 
-    // Appliquer ou retirer le tag
     if ($has_last_item) {
         if (!has_term($term_slug, 'product_tag', $parent_id)) {
             wp_set_object_terms($parent_id, $term_slug, 'product_tag', true);
@@ -878,23 +920,9 @@ function trendylux_update_destock_status($product_id): void
     }
 }
 
-// 2. PRIX : Appliquer -15% dans le panier
-add_action('woocommerce_before_calculate_totals', 'trendylux_apply_last_item_discount', 10, 1);
+// 2. PRIX : Appliquer -15% dans le panier (OBSOLÈTE : Le prix est maintenant stocké en base via update_destock_status)
+// add_action('woocommerce_before_calculate_totals', 'trendylux_apply_last_item_discount', 10, 1);
 
-function trendylux_apply_last_item_discount($cart) {
-    if (is_admin() && !defined('DOING_AJAX')) return;
-
-    foreach ($cart->get_cart() as $cart_item) {
-        $product = $cart_item['data'];
-
-        if (trendylux_is_last_chance_product($product)) {
-            // FIX : Toujours repartir du prix régulier pour éviter la double réduction
-            $base_price = (float) $product->get_regular_price();
-            $new_price = $base_price * 0.85; 
-            $product->set_price($new_price);
-        }
-    }
-}
 
 // 3. DISPLAY (Panier) : Badge textuel
 add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10, 3);
@@ -989,7 +1017,7 @@ function trendylux_product_page_last_chance_script(): void
                 msg.className = 'trendylux-last-chance-msg alert alert-error mt-2 py-2 text-sm';
                 msg.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                    <span><b>Dernière pièce !</b> <br/>Une remise de 15% sera appliquée au panier.</span>
+                    <span><b>Dernière pièce !</b> <br/>Une remise de 15% est appliquée.</span>
                 `;
                 
                 // Insertion après le bouton d'ajout au panier ou le prix
@@ -1014,24 +1042,9 @@ function trendylux_product_page_last_chance_script(): void
 add_filter( 'woocommerce_cart_item_price', 'trendylux_display_discounted_price_in_cart', 10, 3 );
 
 function trendylux_display_discounted_price_in_cart( $price, $cart_item, $cart_item_key ) {
-    $product = $cart_item['data'];
-
-    // Si stock = 1, on applique visuellement la remise
-    if ( trendylux_is_last_chance_product($product) ) {
-        // Prix régulier (le prix barré)
-        $regular_price = (float) $product->get_regular_price();
-        
-        // Prix actuel (le prix soldé, déjà calculé par nos autres fonctions)
-        $current_price = (float) $product->get_price();
-
-        // Si jamais le prix n'a pas encore été réduit (cas limite), on force le calcul pour l'affichage
-        if ( $current_price == $regular_price ) {
-             $current_price = $regular_price * 0.85;
-        }
-        
-        return wc_format_sale_price( $regular_price, $current_price );
-    }
-
+    // WooCommerce gère automatiquement l'affichage du prix barré si un sale_price est défini en BDD.
+    // Cette fonction n'est plus nécessaire pour le calcul, mais on peut la garder si on veut surcharger le formatage.
+    // Pour l'instant, on retourne le prix standard.
     return $price;
 }
 
