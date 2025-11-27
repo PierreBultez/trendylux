@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Get sort order
         const orderby = document.querySelector('.woocommerce-ordering .orderby')?.value || new URLSearchParams(window.location.search).get('orderby');
 
+        // Get search query
+        const searchQuery = new URLSearchParams(window.location.search).get('s') || '';
+
         fetch(trendylux_ajax.ajax_url + '?action=filter_products', {
             method: 'POST',
             headers: {
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({
                 filters: filters,
                 category_id: categoryId,
+                search: searchQuery,
                 page: page,
                 page_url: currentUrl,
                 orderby: orderby

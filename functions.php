@@ -57,7 +57,7 @@ function trendylux_vite_assets(): void {
             true // true -> charger dans le footer
         );
 
-        if (is_post_type_archive('product') || is_tax('product_cat')) {
+        if (is_post_type_archive('product') || is_tax('product_cat') || is_search()) {
             wp_enqueue_script(
                 'trendylux-filters-js', // Un identifiant unique
                 $vite_dev_server_url . '/src/filters.js',
@@ -104,7 +104,7 @@ function trendylux_vite_assets(): void {
             }
         }
 
-        if ((is_post_type_archive('product') || is_tax('product_cat')) && isset($manifest['src/filters.js'])) {
+        if ((is_post_type_archive('product') || is_tax('product_cat') || is_search()) && isset($manifest['src/filters.js'])) {
             $entry = $manifest['src/filters.js'];
 
             // 1. Charge le fichier JavaScript principal
@@ -559,6 +559,7 @@ function trendylux_filter_products(): void
     
     $filters = $data['filters'] ?? [];
     $category_id = $data['category_id'] ?? null;
+    $search_query = $data['search'] ?? '';
     $page_url = $data['page_url'] ?? '';
 
     $tax_query = ['relation' => 'AND'];
@@ -572,9 +573,22 @@ function trendylux_filter_products(): void
     }
 
     foreach ($filters as $key => $value) {
-        if (strpos($key, 'pa_') === 0 && !empty($value)) {
+        if (empty($value)) {
+            continue;
+        }
+
+        $clean_key = str_replace('[]', '', $key);
+
+        if ($clean_key === 'product_cat') {
+            $tax_query[] = [
+                'taxonomy' => 'product_cat',
+                'field'    => 'slug',
+                'terms'    => $value,
+                'operator' => 'IN',
+            ];
+        } elseif (strpos($clean_key, 'pa_') === 0) {
              $tax_query[] = [
-                'taxonomy' => str_replace('[]', '', $key),
+                'taxonomy' => $clean_key,
                 'field'    => 'slug',
                 'terms'    => $value,
                 'operator' => 'IN',
@@ -591,6 +605,10 @@ function trendylux_filter_products(): void
         'paged'          => $paged,
         'tax_query'      => $tax_query,
     ];
+
+    if (!empty($search_query)) {
+        $args['s'] = sanitize_text_field($search_query);
+    }
 
     switch ($orderby_value) {
         case 'date':
