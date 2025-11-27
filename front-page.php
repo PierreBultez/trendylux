@@ -355,23 +355,29 @@
         </div>
 
         <?php
-        // 1. Récupération des produits (Best Sellers)
+        // 1. Récupération des produits (Mis en avant / Featured)
         $args = [
             'post_type'      => 'product',
             'posts_per_page' => 10,
-            'meta_key'       => 'total_sales',
-            'orderby'        => 'meta_value_num',
-            'order'          => 'DESC',
             'post_status'    => 'publish',
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'product_visibility',
+                    'field'    => 'name',
+                    'terms'    => 'featured',
+                ],
+            ],
         ];
         $loop = new WP_Query( $args );
 
-        // Fallback : Si pas assez de données de vente, on prend des produits aléatoires
+        // Fallback : Si moins de 4 produits mis en avant, on prend les meilleures ventes
         if ( $loop->post_count < 4 ) {
             $args = [
                 'post_type'      => 'product',
                 'posts_per_page' => 10,
-                'orderby'        => 'rand',
+                'meta_key'       => 'total_sales',
+                'orderby'        => 'meta_value_num',
+                'order'          => 'DESC',
                 'post_status'    => 'publish',
             ];
             $loop = new WP_Query( $args );
