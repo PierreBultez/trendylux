@@ -40,7 +40,7 @@ if ( $terms && ! is_wp_error( $terms ) ) {
                 <?php endif; ?>
 
                 <?php if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) : ?>
-                    <span class="badge badge-warning text-white text-[10px] font-bold uppercase tracking-wider border-0">DERNIÈRE CHANCE -15% SUR CERTAINES TAILLES</span>
+                    <span class="badge badge-warning text-white text-[10px] font-bold uppercase tracking-wider border-0">DERNIÈRE CHANCE -15%</span>
                 <?php endif; ?>
             </div>
 
