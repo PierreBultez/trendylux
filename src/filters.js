@@ -133,7 +133,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (event.target.matches('#reset-filters')) {
-            window.location.href = window.location.pathname;
+            const url = new URL(window.location);
+            const params = new URLSearchParams(url.search);
+            
+            const searchQuery = params.get('s'); // Get the current search query
+            
+            // Clear all params except 's'
+            for (const key of Array.from(params.keys())) {
+                if (key !== 's') { // Keep the search query
+                    params.delete(key);
+                }
+            }
+            
+            url.search = params.toString(); // Set the modified search params
+            
+            // If there's no search query, then default to pathname
+            if (!searchQuery && params.toString() === '') {
+                 window.location.href = window.location.pathname;
+            } else {
+                 window.location.href = url.toString();
+            }
         }
     });
 
