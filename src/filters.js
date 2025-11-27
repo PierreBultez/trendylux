@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Remove page number from current URL to use as base
         const currentUrl = window.location.href.replace(/\/page\/\d+\/?/, '/');
+        
+        // Get sort order
+        const orderby = document.querySelector('.woocommerce-ordering .orderby')?.value || new URLSearchParams(window.location.search).get('orderby');
 
         fetch(trendylux_ajax.ajax_url + '?action=filter_products', {
             method: 'POST',
@@ -41,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 filters: filters,
                 category_id: categoryId,
                 page: page,
-                page_url: currentUrl
+                page_url: currentUrl,
+                orderby: orderby
             }),
         })
             .then((response) => response.json())
@@ -51,6 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     resultCount.innerHTML = data.data.result_count;
                     // Scroll to top of products
                     productArchiveContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Update URL with new state (optional but good for UX)
+                     const url = new URL(window.location);
+                     url.searchParams.set('orderby', orderby);
+                     // We might want to update page in URL too, but let's stick to basics first
+                     // history.pushState({}, '', url);
                 }
             });
         
@@ -61,6 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('change', function(event) {
         if (event.target.closest('#product-filters')) {
             applyFilters(1); // Reset to page 1 on filter change
+        }
+        
+        if (event.target.matches('.woocommerce-ordering .orderby')) {
+            applyFilters(1);
+        }
+    });
+    
+    // Prevent standard form submission for sorting
+    document.body.addEventListener('submit', function(event) {
+        if (event.target.matches('.woocommerce-ordering')) {
+            event.preventDefault();
         }
     });
 

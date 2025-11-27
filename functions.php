@@ -583,6 +583,7 @@ function trendylux_filter_products(): void
     }
     
     $paged = isset($data['page']) ? intval($data['page']) : 1;
+    $orderby_value = $data['orderby'] ?? 'menu_order';
 
     $args = [
         'post_type'      => 'product',
@@ -590,6 +591,42 @@ function trendylux_filter_products(): void
         'paged'          => $paged,
         'tax_query'      => $tax_query,
     ];
+
+    switch ($orderby_value) {
+        case 'date':
+            $args['orderby'] = 'date';
+            $args['order']   = 'DESC';
+            break;
+        case 'price':
+            $args['meta_key'] = '_price';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'ASC';
+            break;
+        case 'price-desc':
+            $args['meta_key'] = '_price';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'DESC';
+            break;
+        case 'popularity':
+            $args['meta_key'] = 'total_sales';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'DESC';
+            break;
+        case 'rating':
+            $args['meta_key'] = '_wc_average_rating';
+            $args['orderby']  = 'meta_value_num';
+            $args['order']    = 'DESC';
+            break;
+        case 'title':
+            $args['orderby'] = 'title';
+            $args['order']   = 'ASC';
+            break;
+        case 'menu_order':
+        default:
+            $args['orderby'] = 'menu_order title';
+            $args['order']   = 'ASC';
+            break;
+    }
 
     $query = new WP_Query($args);
     if (is_wp_error($query)) {
