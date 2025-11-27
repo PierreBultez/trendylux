@@ -414,6 +414,10 @@ body.home .toast-container > * {
     color: #fff !important;
 }
 
+#tarteaucitronCloseCross {
+    color: #eee !important;
+}
+
 /* Petit bouton cookie en bas à droite */
 #tarteaucitronIcon {
     background-color: #D4AF37 !important;
