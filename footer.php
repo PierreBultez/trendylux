@@ -1,20 +1,7 @@
-<footer class="bg-black text-neutral-content border-t border-[var(--color-primary)] relative overflow-hidden">
-    <!-- Video Background with Fallback -->
-    <div class="absolute inset-0 z-0 overflow-hidden">
-        <div class="absolute inset-0 bg-black"></div> <!-- Fallback color -->
-        <video autoplay muted loop playsinline class="w-full h-full object-cover mix-blend-plus-lighter">
-            <source src="<?php echo get_template_directory_uri(); ?>/public/bg-footer-video.mov" type="video/mp4">
-        </video>
-        <!-- Overlay for readability (Gradient + Darken) -->
-<!--        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40"></div>-->
-    </div>
-
-    <!-- Content Wrapper (z-index fix) -->
-    <div class="relative z-10">
-
+<footer class="bg-[var(--color-neutral)] text-neutral-content border-t border-[var(--color-primary)] relative">
     
     <!-- Section Réassurance -->
-    <div class="backdrop-blur-xs container mx-auto px-4 py-8 border-neutral-focus">
+    <div class="container mx-auto px-4 py-8 border-neutral-focus">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <!-- ... Le contenu de la réassurance reste inchangé ... -->
             <div class="flex flex-col items-center">
@@ -41,7 +28,7 @@
     </div>
 
     <!-- Section principale du Footer -->
-    <div class="backdrop-blur-xs text-neutral-content border-t border-[var(--color-primary)]">
+    <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
             <aside class="md:col-span-2 flex flex-col justify-center">
                 <div class="flex flex-row items-center gap-24 mb-2">
@@ -97,7 +84,7 @@
     </div>
 
     <!-- Section Newsletter (reste sur le même fond) -->
-    <div class="backdrop-blur-xs text-neutral-content border-t border-[var(--color-primary)]">
+    <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-around items-center">
             <h3 class="font-bold text-lg mb-4 md:mb-0">Inscrivez-vous à notre newsletter pour profiter de la livraison offerte sur votre première commande</h3>
             <div class="form-control">
@@ -110,13 +97,11 @@
         </div>
     </div>
     <!-- Mentions Légales pour les promotions -->
-    <div class="backdrop-blur-xs text-neutral-content border-t border-[var(--color-primary)]">
+    <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto px-4 py-4 text-xs text-neutral-content/60">
             <p class="mb-1">*: du 1er au 15 décembre</p>
             <p>**: livraison offerte sur votre 1ère commande pour l’inscription à la newsletter</p>
         </div>
-    </div>
-
     </div>
 </footer>
 
