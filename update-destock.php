@@ -1,7 +1,13 @@
 <?php
 /**
  * Script de mise à jour massive des statuts de destockage.
- * À lancer via WP-CLI : wp eval-file wp-content/themes/trendylux/update-destock.php
+ * 
+ * Utilisation :
+ * - Nettoyer les produits marqués "destockage" (par défaut) :
+ *   wp eval-file wp-content/themes/trendylux/update-destock.php
+ * 
+ * - Vérifier TOUS les produits (plus long, pour trouver des oublis) :
+ *   wp eval-file wp-content/themes/trendylux/update-destock.php --all
  */
 
 if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
@@ -9,22 +15,47 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
     exit;
 }
 
-WP_CLI::line( 'Début de la mise à jour des statuts de destockage...' );
+// Vérification des arguments pour le flag --all
+$process_all = false;
+if ( isset( $args ) && in_array( '--all', $args ) ) {
+    $process_all = true;
+}
 
-// 1. Récupérer tous les produits (Simples et Variables)
-// On ne prend que les parents, car la fonction trendylux_update_destock_status gère les enfants.
-$args = array(
+WP_CLI::line( '------------------------------------------------' );
+if ( $process_all ) {
+    WP_CLI::line( 'Mode : SCAN COMPLET (Tous les produits publiés)' );
+} else {
+    WP_CLI::line( 'Mode : NETTOYAGE (Uniquement les produits déjà taggués "destockage")' );
+    WP_CLI::line( 'Astuce : Utilisez "--all" pour scanner tout le catalogue.' );
+}
+WP_CLI::line( '------------------------------------------------' );
+
+// 1. Construction de la requête
+$query_args = array(
     'post_type'      => 'product',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
-    'fields'         => 'ids', // On a juste besoin des IDs pour être léger
+    'fields'         => 'ids',
 );
 
-$query = new WP_Query( $args );
+// Si on ne scanne pas tout, on filtre sur le tag 'destockage'
+if ( ! $process_all ) {
+    $query_args['tax_query'] = array(
+        array(
+            'taxonomy' => 'product_tag',
+            'field'    => 'slug',
+            'terms'    => 'destockage',
+        ),
+    );
+}
+
+WP_CLI::line( 'Récupération des produits...' );
+
+$query = new WP_Query( $query_args );
 $product_ids = $query->posts;
 $count = count( $product_ids );
 
-WP_CLI::line( sprintf( '%d produits trouvés.', $count ) );
+WP_CLI::line( sprintf( '%d produits trouvés à traiter.', $count ) );
 
 if ( $count === 0 ) {
     WP_CLI::success( 'Aucun produit à traiter.' );
@@ -53,7 +84,7 @@ foreach ( $product_ids as $product_id ) {
 
     $progress->tick();
     
-    // Petit nettoyage mémoire tous les 100 items pour éviter les fuites sur 9000 produits
+    // Petit nettoyage mémoire tous les 100 items
     if ( $updated % 100 === 0 ) {
         if ( function_exists( 'wp_cache_flush' ) ) {
             wp_cache_flush();
@@ -63,5 +94,5 @@ foreach ( $product_ids as $product_id ) {
 
 $progress->finish();
 
-WP_CLI::success( sprintf( 'Terminé ! %d produits traités. %d erreurs.', $updated, $errors ) );
+WP_CLI::success( sprintf( 'Terminé ! %d produits vérifiés et mis à jour. %d erreurs.', $updated, $errors ) );
 

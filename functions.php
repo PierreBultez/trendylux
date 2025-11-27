@@ -769,6 +769,51 @@ add_action('woocommerce_variation_set_stock', 'trendylux_update_destock_status')
 add_action('save_post_product', 'trendylux_update_destock_status');
 add_action('woocommerce_save_product_variation', 'trendylux_update_destock_status');
 
+/**
+ * Helper: Vérifie si un produit est éligible à la promo "Dernière Chance".
+ * Conditions :
+ * 1. Le stock est exactement de 1.
+ * 2. C'est la SEULE déclinaison restante (pour les produits variables).
+ */
+function trendylux_is_last_chance_product($product) {
+    if ( ! $product || $product->get_stock_quantity() != 1 ) {
+        return false;
+    }
+
+    // Si c'est un produit simple, c'est bon (le stock est à 1)
+    if ( $product->is_type('simple') ) {
+        return true;
+    }
+
+    // Si c'est une variation, on doit vérifier ses "frères et sœurs"
+    if ( $product->is_type('variation') ) {
+        $parent_id = $product->get_parent_id();
+        $parent = wc_get_product( $parent_id );
+        
+        if ( ! $parent ) return false;
+
+        // On compte combien de variations ont du stock
+        $children = $parent->get_children();
+        $variations_in_stock = 0;
+        
+        foreach ( $children as $child_id ) {
+            // Si on dépasse 1, on arrête tout de suite : pas de promo
+            if ( $variations_in_stock > 1 ) return false; 
+            
+            $child = wc_get_product( $child_id );
+            // On considère une variation comme "présente" si elle a du stock > 0
+            if ( $child && $child->get_stock_quantity() > 0 ) {
+                $variations_in_stock++;
+            }
+        }
+        
+        // La promo ne s'applique que s'il reste EXACTEMENT 1 déclinaison (celle-ci)
+        return ( $variations_in_stock === 1 );
+    }
+
+    return false;
+}
+
 function trendylux_update_destock_status($product_id): void
 {
     // Évite les boucles infinies ou les autosaves
@@ -787,17 +832,25 @@ function trendylux_update_destock_status($product_id): void
         $parent_id = $product->get_id();
     }
 
-    // Vérification : Est-ce qu'une des variations (ou le produit simple) a un stock de 1 ?
+    // Vérification : Est-ce que le produit respecte les nouvelles conditions strictes ?
     $has_last_item = false;
 
     if ($parent_product->is_type('variable')) {
-        $variations = $parent_product->get_children();
-        foreach ($variations as $variation_id) {
-            $variation = wc_get_product($variation_id);
-            if ($variation && $variation->get_stock_quantity() == 1) {
-                $has_last_item = true;
-                break; 
-            }
+        $children = $parent_product->get_children();
+        $variations_in_stock = 0;
+        $potential_last_item = null;
+
+        foreach ($children as $child_id) {
+             $child = wc_get_product($child_id);
+             if ($child && $child->get_stock_quantity() > 0) {
+                 $variations_in_stock++;
+                 $potential_last_item = $child;
+             }
+        }
+
+        // S'il reste 1 seule variation ET que son stock est à 1 -> BINGO
+        if ($variations_in_stock === 1 && $potential_last_item && $potential_last_item->get_stock_quantity() == 1) {
+            $has_last_item = true;
         }
     } else {
         if ($parent_product->get_stock_quantity() == 1) {
@@ -833,9 +886,8 @@ function trendylux_apply_last_item_discount($cart) {
 
     foreach ($cart->get_cart() as $cart_item) {
         $product = $cart_item['data'];
-        $stock = $product->get_stock_quantity();
 
-        if ($stock == 1) {
+        if (trendylux_is_last_chance_product($product)) {
             // FIX : Toujours repartir du prix régulier pour éviter la double réduction
             $base_price = (float) $product->get_regular_price();
             $new_price = $base_price * 0.85; 
@@ -849,7 +901,7 @@ add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10
 
 function trendylux_add_discount_badge_cart($name, $cart_item, $cart_item_key) {
     $product = $cart_item['data'];
-    if ($product->get_stock_quantity() == 1) {
+    if (trendylux_is_last_chance_product($product)) {
         $name .= ' <span style="color:#e74c3c; font-size:0.85em; font-weight:bold;">(Dernière pièce : -15% appliqués !)</span>';
     }
     return $name;
@@ -876,16 +928,33 @@ function trendylux_product_page_last_chance_script(): void
     global $product;
     
     // On construit une liste JS des variations qui sont en stock = 1
+    // NOUVELLE LOGIQUE : Seulement si c'est la SEULE variation restante
     $last_chance_variations = [];
+    
     if ($product->is_type('variable')) {
         $variations = $product->get_available_variations();
+        
+        // 1. Compter combien de variations sont réellement en stock > 0
+        $variations_in_stock = 0;
+        $potential_last_id = null;
+        
         foreach ($variations as $variation) {
-            // On doit re-vérifier le stock "réel" car get_available_variations retourne parfois max_qty
+            // get_available_variations filtre déjà beaucoup, mais on vérifie le stock réel
             $var_obj = wc_get_product($variation['variation_id']);
-            if ($var_obj && $var_obj->get_stock_quantity() == 1) {
-                $last_chance_variations[] = $variation['variation_id'];
+            if ($var_obj && $var_obj->get_stock_quantity() > 0) {
+                $variations_in_stock++;
+                $potential_last_id = $variation['variation_id'];
             }
         }
+
+        // 2. Si le compteur est à 1, on vérifie si cette variation unique a un stock de 1
+        if ($variations_in_stock === 1 && $potential_last_id) {
+            $var_obj = wc_get_product($potential_last_id);
+            if ($var_obj && $var_obj->get_stock_quantity() == 1) {
+                $last_chance_variations[] = $potential_last_id;
+            }
+        }
+
     } elseif ($product->get_stock_quantity() == 1) {
         // Produit simple
         $last_chance_variations[] = $product->get_id();
@@ -948,7 +1017,7 @@ function trendylux_display_discounted_price_in_cart( $price, $cart_item, $cart_i
     $product = $cart_item['data'];
 
     // Si stock = 1, on applique visuellement la remise
-    if ( $product->get_stock_quantity() == 1 ) {
+    if ( trendylux_is_last_chance_product($product) ) {
         // Prix régulier (le prix barré)
         $regular_price = (float) $product->get_regular_price();
         
