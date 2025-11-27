@@ -231,3 +231,196 @@ body.home .toast-container > * {
     stroke-linecap: round;
     stroke-linejoin: round;
 }
+
+/* ==========================================================================
+   TARTEAUCITRON CUSTOM STYLES - TRENDYLUX
+   ========================================================================== */
+
+/* Bandeau principal en bas de page */
+#tarteaucitronAlertBig {
+    background-color: #111 !important; /* Noir profond */
+    color: #fff !important;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.5) !important;
+    border-top: 1px solid #333 !important;
+    font-family: 'Noto Sans', sans-serif !important;
+}
+
+/* Texte du bandeau */
+#tarteaucitronDisclaimerAlert,
+#tarteaucitronDisclaimerAlert b {
+    font-size: 14px !important;
+    color: #eee !important;
+}
+
+/* Boutons dans le bandeau */
+#tarteaucitronPersonalize2,
+#tarteaucitronCloseAlert2 {
+    background-color: transparent !important;
+    color: #D4AF37 !important; /* Or */
+    border: 1px solid #D4AF37 !important;
+    border-radius: 8px !important; /* Rounded */
+    font-weight: bold !important;
+    padding: 8px 16px !important;
+    margin-right: 10px !important;
+    transition: all 0.3s ease !important;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+}
+
+#tarteaucitronPersonalize2:hover,
+#tarteaucitronCloseAlert2:hover {
+    background-color: rgba(212, 175, 55, 0.1) !important;
+}
+
+.tarteaucitronPartnersList {
+    background-color: #111 !important; /* Noir profond */
+}
+
+#tarteaucitron #tarteaucitronInfo {
+    color: #eee !important;
+    background-color: #111 !important; /* Noir profond */
+}
+
+.tarteaucitronLine {
+    background-color: #111 !important; /* Noir profond */
+}
+
+#tarteaucitronSave {
+    background-color: #111 !important; /* Noir profond */
+}
+
+.tarteaucitronH3 {
+    color: #eee !important;
+}
+
+.tarteaucitronName span {
+    color: #eee !important;
+}
+
+.tarteaucitronName a {
+    color: #eee !important;
+}
+
+.tarteaucitronCross::before {
+    color: #eee !important;
+}
+
+.tarteaucitronCheck::before {
+    color: #eee !important;
+}
+
+#tarteaucitronRoot span {
+    font-family: 'Noto Sans', sans-serif !important;
+}
+
+.tarteaucitron-toggle-group {
+    color: #eee !important;
+}
+
+#tarteaucitron #tarteaucitronClosePanel {
+    background: unset !important;
+}
+
+#tarteaucitron #tarteaucitronPrivacyUrlDialog {
+    color: #eee !important;
+    background-color: #111 !important; /* Noir profond */
+}
+
+#tarteaucitron #tarteaucitronServices .tarteaucitronMainLine {
+    background-color: #111 !important; /* Noir profond */
+}
+
+#tarteaucitronAlertBig #tarteaucitronDisclaimerAlert .tarteaucitronPartnersList * {
+    color: #eee !important;
+}
+
+#tarteaucitronPrivacyUrl {
+    color: #eee !important;
+}
+
+/* Bouton "Tout Accepter" (Mis en avant) */
+#tarteaucitronAllAllowed2 {
+    background-color: #D4AF37 !important; /* Or */
+    color: #000 !important; /* Texte noir */
+    border: 1px solid #D4AF37 !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    padding: 8px 16px !important;
+    transition: all 0.3s ease !important;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+}
+
+#tarteaucitronAllAllowed2:hover {
+    background-color: #C5A028 !important; /* Or un peu plus foncé */
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5) !important;
+}
+
+/* Bouton "Tout Refuser" */
+#tarteaucitronAllDenied2 {
+    background-color: #333 !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    padding: 8px 16px !important;
+    margin-right: 10px !important;
+    transition: all 0.3s ease !important;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+}
+
+#tarteaucitronAllDenied2:hover {
+    background-color: #444 !important;
+    border-color: #777 !important;
+}
+
+/* --- PANNEAU DE CONFIGURATION (MODALE) --- */
+
+/* Fond de la modale */
+#tarteaucitron {
+    background-color: rgba(0, 0, 0, 0.8) !important; /* Overlay plus sombre */
+}
+
+#tarteaucitronPercentage {
+    color: #D4AF37 !important;
+    border-left-color: #D4AF37 !important;
+    border-bottom-color: #D4AF37 !important;
+}
+
+/* Titres dans le panneau */
+.tarteaucitronTitle,
+.tarteaucitronH1,
+.tarteaucitronH2 {
+    color: #D4AF37 !important;
+    font-family: 'Noto Serif', serif !important;
+    text-transform: uppercase !important;
+}
+
+/* Texte des services */
+.tarteaucitronName {
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+/* Boutons d'activation individuels (Switchs) */
+.tarteaucitronAllow {
+    background-color: #D4AF37 !important;
+    color: #eee !important;
+}
+.tarteaucitronDeny {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+/* Petit bouton cookie en bas à droite */
+#tarteaucitronIcon {
+    background-color: #D4AF37 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
+}
+
+#tarteaucitronIcon .tarteaucitron-cookie-text {
+    display: none !important; /* On cache le texte, on garde juste le cookie */
+}
