@@ -29,8 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
             filters[name].push(value);
         }
 
-        // Remove page number from current URL to use as base
-        const currentUrl = window.location.href.replace(/\/page\/\d+\/?/, '/');
+        // Get base URL without query parameters or pagination to ensure clean links
+        let currentUrl = window.location.origin + window.location.pathname;
+        currentUrl = currentUrl.replace(/\/page\/\d+\/?/, '/');
+        // Ensure trailing slash for consistency with WP pagination
+        if (!currentUrl.endsWith('/')) {
+            currentUrl += '/';
+        }
         
         // Get sort order
         const orderby = document.querySelector('.woocommerce-ordering .orderby')?.value || new URLSearchParams(window.location.search).get('orderby');
