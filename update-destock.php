@@ -15,19 +15,10 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
     exit;
 }
 
-// Vérification des arguments pour le flag --all
-$process_all = false;
-if ( isset( $args ) && in_array( '--all', $args ) ) {
-    $process_all = true;
-}
-
 WP_CLI::line( '------------------------------------------------' );
-if ( $process_all ) {
-    WP_CLI::line( 'Mode : SCAN COMPLET (Tous les produits publiés)' );
-} else {
-    WP_CLI::line( 'Mode : NETTOYAGE (Uniquement les produits déjà taggués "destockage")' );
-    WP_CLI::line( 'Astuce : Utilisez "--all" pour scanner tout le catalogue.' );
-}
+
+WP_CLI::line( 'Mode : SCAN COMPLET (Tous les produits publiés)' );
+
 WP_CLI::line( '------------------------------------------------' );
 
 // 1. Construction de la requête
@@ -37,17 +28,6 @@ $query_args = array(
     'posts_per_page' => -1,
     'fields'         => 'ids',
 );
-
-// Si on ne scanne pas tout, on filtre sur le tag 'destockage'
-if ( ! $process_all ) {
-    $query_args['tax_query'] = array(
-        array(
-            'taxonomy' => 'product_tag',
-            'field'    => 'slug',
-            'terms'    => 'destockage',
-        ),
-    );
-}
 
 WP_CLI::line( 'Récupération des produits...' );
 
