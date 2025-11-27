@@ -107,6 +107,11 @@ defined( 'ABSPATH' ) || exit;
 			</tr>
 
 			<?php do_action( 'woocommerce_review_order_after_order_total' ); ?>
+            <tr class="tva-notice">
+                <td colspan="2" class="text-sm pt-2">
+                    TVA non applicable, article 293 B du CGI
+                </td>
+            </tr>
 		</tfoot>
 	</table>
 </div>
