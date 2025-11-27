@@ -57,7 +57,7 @@ function trendylux_vite_assets(): void {
             true // true -> charger dans le footer
         );
 
-        if (is_post_type_archive('product') || is_tax('product_cat') || is_search()) {
+        if (is_post_type_archive('product') || is_tax() || is_search()) {
             wp_enqueue_script(
                 'trendylux-filters-js', // Un identifiant unique
                 $vite_dev_server_url . '/src/filters.js',
@@ -104,7 +104,7 @@ function trendylux_vite_assets(): void {
             }
         }
 
-        if ((is_post_type_archive('product') || is_tax('product_cat') || is_search()) && isset($manifest['src/filters.js'])) {
+        if ((is_post_type_archive('product') || is_tax() || is_search()) && isset($manifest['src/filters.js'])) {
             $entry = $manifest['src/filters.js'];
 
             // 1. Charge le fichier JavaScript principal
@@ -558,17 +558,23 @@ function trendylux_filter_products(): void
     }
     
     $filters = $data['filters'] ?? [];
+    // Support backward compatibility or specific category_id if still sent
     $category_id = $data['category_id'] ?? null;
+    
+    // New generic taxonomy support
+    $current_term_id = $data['current_term_id'] ?? $category_id;
+    $current_taxonomy = $data['current_taxonomy'] ?? ($category_id ? 'product_cat' : '');
+
     $search_query = $data['search'] ?? '';
     $page_url = $data['page_url'] ?? '';
 
     $tax_query = ['relation' => 'AND'];
 
-    if ($category_id) {
+    if ($current_term_id && $current_taxonomy) {
         $tax_query[] = [
-            'taxonomy' => 'product_cat',
+            'taxonomy' => $current_taxonomy,
             'field'    => 'term_id',
-            'terms'    => $category_id,
+            'terms'    => $current_term_id,
         ];
     }
 

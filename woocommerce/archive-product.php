@@ -52,22 +52,24 @@ get_header();
 
                 if ($attributes) {
                     $current_object = get_queried_object();
-                    $current_category_id = 0;
+                    $current_term_id = 0;
+                    $current_taxonomy = '';
                     $filter_object_ids = null;
     
-                    if ( isset($current_object->term_id) && isset($current_object->taxonomy) && $current_object->taxonomy === 'product_cat' ) {
-                        $current_category_id = $current_object->term_id;
+                    if ( isset($current_object->term_id) && isset($current_object->taxonomy) ) {
+                        $current_term_id = $current_object->term_id;
+                        $current_taxonomy = $current_object->taxonomy;
                         
-                        // Get all product IDs in this category to filter terms
+                        // Get all product IDs in this taxonomy term to filter available attributes
                          $product_ids_args = [
                             'post_type' => 'product',
                             'posts_per_page' => -1,
                             'fields' => 'ids',
                             'tax_query' => [
                                 [
-                                    'taxonomy' => 'product_cat',
+                                    'taxonomy' => $current_taxonomy,
                                     'field'    => 'term_id',
-                                    'terms'    => $current_category_id,
+                                    'terms'    => $current_term_id,
                                     'include_children' => true, 
                                 ]
                             ]
@@ -77,8 +79,9 @@ get_header();
 
                     echo '<form id="product-filters" class="flex flex-wrap gap-4 items-center">';
 
-                    if ($current_category_id) {
-                        echo '<input type="hidden" name="current_category_id" id="current_category_id" value="' . esc_attr($current_category_id) . '">';
+                    if ($current_term_id && $current_taxonomy) {
+                        echo '<input type="hidden" name="current_term_id" value="' . esc_attr($current_term_id) . '">';
+                        echo '<input type="hidden" name="current_taxonomy" value="' . esc_attr($current_taxonomy) . '">';
                     }
 
                     foreach ($attributes as $attribute) {

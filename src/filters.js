@@ -17,10 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(filterForm);
         const filters = {};
         let categoryId = null;
+        let currentTermId = null;
+        let currentTaxonomy = null;
 
         for (const [name, value] of formData.entries()) {
             if (name === 'current_category_id') {
                 categoryId = value;
+                continue;
+            }
+            if (name === 'current_term_id') {
+                currentTermId = value;
+                continue;
+            }
+            if (name === 'current_taxonomy') {
+                currentTaxonomy = value;
                 continue;
             }
             if (!filters[name]) {
@@ -50,7 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({
                 filters: filters,
-                category_id: categoryId,
+                category_id: categoryId, // Keep for backward compat if needed, but prefer below
+                current_term_id: currentTermId,
+                current_taxonomy: currentTaxonomy,
                 search: searchQuery,
                 page: page,
                 page_url: currentUrl,
