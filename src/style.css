@@ -428,3 +428,51 @@ body.home .toast-container > * {
 #tarteaucitronIcon .tarteaucitron-cookie-text {
     display: none !important; /* On cache le texte, on garde juste le cookie */
 }
+
+/* ==========================================================================
+   TI WOOCOMMERCE WISHLIST INTEGRATION
+   ========================================================================== */
+
+/* Reset du bouton plugin pour correspondre au style du thème */
+.trendylux-wishlist-btn .tinvwl_add_to_wishlist_button,
+.trendylux-wishlist-btn .tinvwl_add_to_wishlist_button.button {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.5rem !important;
+    color: #9ca3af !important; /* text-gray-400 */
+    font-size: 0 !important;   /* Cache le texte "Add to Wishlist" */
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+    width: auto !important;
+    height: auto !important;
+    min-width: unset !important;
+    margin: 0 !important;
+}
+
+/* Style de l'icône (souvent insérée via :before ou un tag <i>) */
+.trendylux-wishlist-btn .tinvwl_add_to_wishlist_button:before,
+.trendylux-wishlist-btn .tinvwl_add_to_wishlist_button i {
+    font-size: 1.5rem !important; /* 24px ~ w-6 h-6 */
+    line-height: 1 !important;
+    margin: 0 !important;
+    font-family: inherit !important; /* Essaie d'éviter la surcharge de police si possible, sinon le plugin gagne */
+}
+
+/* Hover state */
+.trendylux-wishlist-btn .tinvwl_add_to_wishlist_button:hover {
+    color: #ef4444 !important; /* text-red-500 */
+    background: transparent !important;
+}
+
+/* State: Product Added (Active) */
+.trendylux-wishlist-btn .tinvwl_add_to_wishlist_button.tinvwl-product-in-list {
+    color: #ef4444 !important;
+}
+
+/* Masquer le loader/spinner qui peut apparaitre et décaler le layout */
+.trendylux-wishlist-btn .tinv-wraper.tinv-wishlist .tinv-modal .tinv-modal-inner {
+    /* Optionnel: Style la modale si nécessaire */
+}
