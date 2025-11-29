@@ -75,7 +75,7 @@
         (tarteaucitron.job = tarteaucitron.job || []).push('googlefonts');
 
         // 2. Google Analytics (GA4)
-        tarteaucitron.user.gtagUa = 'G-XXXXXXXXXX'; // <--- REMPLACEZ PAR VOTRE ID GA4 ICI
+        tarteaucitron.user.gtagUa = 'G-VXT1FWF15V'; // <--- REMPLACEZ PAR VOTRE ID GA4 ICI
         tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
         (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
 
