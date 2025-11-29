@@ -670,7 +670,7 @@ function trendylux_filter_products(): void
     ob_start();
 
     if ($query->have_posts()) {
-        echo '<ul class="products grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10">';
+        echo '<ul class="products grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">';
         while ($query->have_posts()) {
             $query->the_post();
             wc_get_template_part('content', 'product');
