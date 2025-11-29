@@ -90,8 +90,8 @@ foreach ( $product_ids as $parent_id ) {
 
         // --- LOGIQUE DE PRIX ---
         if ( $old_price > 50 ) {
-            $new_price = round( $old_price * 1.18, 2 );
-            $rule_label = '* 1.18';
+            $new_price = round( $old_price * 0.82, 2 );
+            $rule_label = '* 0.82';
         } else {
             // On ignore les produits <= 50€
             continue;
