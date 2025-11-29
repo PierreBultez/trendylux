@@ -28,8 +28,8 @@ function trendylux_init(): void
     // Définir les tailles d'images custom après l'initialisation de WordPress.
     // Cela résout la notice "traduction déclenchée trop tôt".
     add_theme_support( 'woocommerce', array(
-        'gallery_thumbnail_image_width' => 64,
-        'thumbnail_image_width'         => 450,
+        'gallery_thumbnail_image_width' => 100,
+        'thumbnail_image_width'         => 800,
     ) );
 }
 add_action( 'init', 'trendylux_init' );
