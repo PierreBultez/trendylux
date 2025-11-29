@@ -30,6 +30,7 @@ function trendylux_init(): void
     add_theme_support( 'woocommerce', array(
         'gallery_thumbnail_image_width' => 100,
         'thumbnail_image_width'         => 800,
+        'woocommerce_thumbnail'         => 600,
     ) );
 }
 add_action( 'init', 'trendylux_init' );
