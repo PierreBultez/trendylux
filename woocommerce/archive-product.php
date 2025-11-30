@@ -169,8 +169,8 @@ get_header();
                     <?php
                     if ( woocommerce_product_loop() ) {
 
-                        // GRILLE PRODUITS : 2 colonnes mobile, 3 colonnes desktop, gap confortable
-                        echo '<ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">';
+                        // GRILLE PRODUITS : 1 colonnes mobile, 3 colonnes desktop, gap confortable
+                        echo '<ul class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">';
 
                         if ( wc_get_loop_prop( 'total' ) ) {
                             while ( have_posts() ) {

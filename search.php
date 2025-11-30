@@ -178,8 +178,8 @@ get_header();
                     <?php
                     if ( have_posts() ) {
 
-                        // GRILLE PRODUITS : 2 colonnes mobile, 3 colonnes en mode grille sidebar (ou 4 si écran très large)
-                        echo '<ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">';
+                        // GRILLE PRODUITS : 1 colonnes mobile, 3 colonnes en mode grille sidebar (ou 4 si écran très large)
+                        echo '<ul class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">';
 
                         while ( have_posts() ) {
                             the_post();
