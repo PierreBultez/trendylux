@@ -417,7 +417,7 @@
                                     <a href="<?php the_permalink(); ?>" class="block w-full h-full">
                                         <?php 
                                         if ( has_post_thumbnail() ) {
-                                            the_post_thumbnail( 'woocommerce_thumbnail', ['class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out'] );
+                                            the_post_thumbnail( 'large', ['class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out'] );
                                         } else {
                                             echo '<img src="' . wc_placeholder_img_src() . '" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out" alt="Placeholder" />';
                                         }
