@@ -86,7 +86,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                                         ?>
                                     </td>
 
-                                    <td class="product-thumbnail block md:table-cell w-full md:w-auto text-center md:text-left mb-4 md:mb-0">
+                                    <td class="block md:table-cell w-full md:w-auto text-center md:text-left mb-4 md:mb-0">
                                         <?php
                                         /**
                                          * Filter the product thumbnail displayed in the WooCommerce cart.
@@ -109,9 +109,10 @@ do_action( 'woocommerce_before_cart' ); ?>
                                             printf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $thumbnail ); // PHPCS: XSS ok.
                                         }
                                         ?>
+                                        </div>
                                     </td>
 
-                                    <td scope="row" role="rowheader" class="product-name block md:table-cell w-full md:w-auto text-center md:text-left mb-2 md:mb-0 font-bold md:font-normal" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
+                                    <td scope="row" role="rowheader" class="product-name block md:table-cell w-full md:w-auto text-center md:text-left mb-2 md:mb-0 font-bold md:font-normal">
                                         <?php
                                         if ( ! $product_permalink ) {
                                             echo wp_kses_post( $product_name . '&nbsp;' );
@@ -136,13 +137,13 @@ do_action( 'woocommerce_before_cart' ); ?>
                                         ?>
                                     </td>
 
-                                    <td class="product-price flex justify-between md:table-cell w-full md:w-auto mb-2 md:mb-0" data-title="<?php esc_attr_e( 'Price', 'woocommerce' ); ?>">
+                                    <td class="product-price flex justify-between md:table-cell w-full md:w-auto mb-2 md:mb-0">
                                         <?php
                                         echo apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
                                         ?>
                                     </td>
 
-                                    <td class="product-quantity flex justify-between items-center md:table-cell w-full md:w-auto mb-2 md:mb-0" data-title="<?php esc_attr_e( 'Quantity', 'woocommerce' ); ?>">
+                                    <td class="product-quantity flex justify-between items-center md:table-cell w-full md:w-auto mb-2 md:mb-0">
                                         <?php
                                         if ( $_product->is_sold_individually() ) {
                                             $min_quantity = 1;
