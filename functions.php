@@ -382,19 +382,19 @@ function trendylux_style_sale_flash( $html, $post, $product ): string
 }
 add_filter( 'woocommerce_sale_flash', 'trendylux_style_sale_flash', 10, 3 );
 
-function trendylux_show_destock_badge_single(): void
-{
-    global $product;
-    if ( ! $product ) return;
-
-    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
-    // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
-    // on essaie de le décaler un peu (top-12 ou top-14).
-    // Le z-index doit être élevé.
-            echo '<div class="hidden md:block badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';    }
-}
-    // On le hook avec une priorité qui le place probablement au début du conteneur images
-add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
+//function trendylux_show_destock_badge_single(): void
+//{
+//    global $product;
+//    if ( ! $product ) return;
+//
+//    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
+//    // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
+//    // on essaie de le décaler un peu (top-12 ou top-14).
+//    // Le z-index doit être élevé.
+//            echo '<div class="hidden md:block badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';    }
+//}
+//    // On le hook avec une priorité qui le place probablement au début du conteneur images
+//add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
 
 /**
  * 4. Afficher les étoiles de notation avec des SVG et des classes DaisyUI.
