@@ -950,15 +950,15 @@ function trendylux_update_destock_status($product_id): void
 
 
 // 3. DISPLAY (Panier) : Badge textuel
-add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10, 3);
-
-function trendylux_add_discount_badge_cart($name, $cart_item, $cart_item_key) {
-    $product = $cart_item['data'];
-    if (trendylux_is_last_chance_product($product)) {
-        $name .= ' <span style="color:#e74c3c; font-size:0.85em; font-weight:bold;">(Dernière pièce : -15% appliqués !)</span>';
-    }
-    return $name;
-}
+//add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10, 3);
+//
+//function trendylux_add_discount_badge_cart($name, $cart_item, $cart_item_key) {
+//    $product = $cart_item['data'];
+//    if (trendylux_is_last_chance_product($product)) {
+//        $name .= ' <span style="color:#e74c3c; font-size:0.85em; font-weight:bold;">(Dernière pièce : -15% appliqués !)</span>';
+//    }
+//    return $name;
+//}
 
 // 4. DISPLAY (Liste produits) : Badge visuel sur l'image
 add_action('woocommerce_before_shop_loop_item_title', 'trendylux_show_last_chance_badge', 10);

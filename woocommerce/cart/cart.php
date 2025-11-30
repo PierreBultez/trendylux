@@ -30,7 +30,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                 <div class="card-body">
                     <table class="table w-full my-orders-table" cellspacing="0">
                         <!-- Le thead de votre tableau -->
-                        <thead>
+                        <thead class="hidden md:table-header-group">
                         <tr>
                             <th class="w-16"><span class="sr-only"><?php esc_html_e( 'Remove item', 'woocommerce' ); ?></span></th>
                             <th colspan="2"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
@@ -59,9 +59,9 @@ do_action( 'woocommerce_before_cart' ); ?>
                             if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
                                 $product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
                                 ?>
-                                <tr class="woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
+                                <tr class="woocommerce-cart-form__cart-item block md:table-row relative mb-4 border md:border-none rounded-box md:rounded-none p-4 md:p-0 <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 
-                                    <td class="action-remove text-center">
+                                    <td class="action-remove text-center absolute top-2 right-2 md:static md:table-cell z-10">
                                         <?php
                                         echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                                 'woocommerce_cart_item_remove_link',
@@ -86,7 +86,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                                         ?>
                                     </td>
 
-                                    <td class="product-thumbnail">
+                                    <td class="product-thumbnail block md:table-cell w-full md:w-auto text-center md:text-left mb-4 md:mb-0">
                                         <?php
                                         /**
                                          * Filter the product thumbnail displayed in the WooCommerce cart.
@@ -111,7 +111,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                                         ?>
                                     </td>
 
-                                    <td scope="row" role="rowheader" class="product-name" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
+                                    <td scope="row" role="rowheader" class="product-name block md:table-cell w-full md:w-auto text-center md:text-left mb-2 md:mb-0 font-bold md:font-normal" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
                                         <?php
                                         if ( ! $product_permalink ) {
                                             echo wp_kses_post( $product_name . '&nbsp;' );
@@ -136,13 +136,13 @@ do_action( 'woocommerce_before_cart' ); ?>
                                         ?>
                                     </td>
 
-                                    <td class="product-price" data-title="<?php esc_attr_e( 'Price', 'woocommerce' ); ?>">
+                                    <td class="product-price flex justify-between md:table-cell w-full md:w-auto mb-2 md:mb-0" data-title="<?php esc_attr_e( 'Price', 'woocommerce' ); ?>">
                                         <?php
                                         echo apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
                                         ?>
                                     </td>
 
-                                    <td class="product-quantity" data-title="<?php esc_attr_e( 'Quantity', 'woocommerce' ); ?>">
+                                    <td class="product-quantity flex justify-between items-center md:table-cell w-full md:w-auto mb-2 md:mb-0" data-title="<?php esc_attr_e( 'Quantity', 'woocommerce' ); ?>">
                                         <?php
                                         if ( $_product->is_sold_individually() ) {
                                             $min_quantity = 1;
@@ -168,7 +168,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                                         ?>
                                     </td>
 
-                                    <td class="product-subtotal" data-title="<?php esc_attr_e( 'Subtotal', 'woocommerce' ); ?>">
+                                    <td class="product-subtotal flex justify-between md:table-cell w-full md:w-auto" data-title="<?php esc_attr_e( 'Subtotal', 'woocommerce' ); ?>">
                                         <?php
                                         echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
                                         ?>
@@ -181,8 +181,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 
                         <?php do_action( 'woocommerce_cart_contents' ); ?>
 
-                        <tr>
-                            <td colspan="6" class="actions">
+                        <tr class="block md:table-row">
+                            <td colspan="6" class="actions block md:table-cell">
                                 <div class="flex flex-col lg:flex-row justify-between items-center gap-4 py-4">
 
                                     <div class="w-full lg:w-auto">
@@ -190,7 +190,7 @@ do_action( 'woocommerce_before_cart' ); ?>
                                             <div class="coupon">
                                                 <div class="join">
                                                     <input type="text" name="coupon_code" class="input input-bordered join-item" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" />
-                                                    <button type="submit" class="btn btn-secondary join-item" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply coupon', 'woocommerce' ); ?></button>
+                                                    <button type="submit" class="btn btn-secondary join-item" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>">Appliquer</button>
                                                 </div>
                                                 <?php do_action( 'woocommerce_cart_coupon' ); ?>
                                             </div>
