@@ -99,7 +99,7 @@
     <!-- Mentions Légales pour les promotions -->
     <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto px-4 py-4 text-xs text-neutral-content/60">
-            <p class="mb-1">*: du 1er au 15 décembre</p>
+            <p class="mb-1">*: du 1er au 15 décembre hors promotions</p>
             <p>**: livraison offerte sur votre 1ère commande pour l’inscription à la newsletter</p>
         </div>
     </div>
