@@ -150,7 +150,7 @@
                                     <span class="badge badge-xs badge-primary indicator-item border border-base-100"></span>
                                 </div>
                             </div>
-                            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-200 text-base-content">
+                            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow-lg bg-base-100 rounded-box fixed inset-x-4 top-28 w-auto !translate-x-0 md:absolute md:inset-auto md:right-0 md:top-full md:w-52 border border-base-200 text-base-content">
                                 <!-- AJOUT DE 'text-base-content' ci-dessus pour forcer le texte sombre -->
 
                                 <li>
@@ -214,7 +214,7 @@
                         </div>
 
                         <!-- Le contenu du Dropdown (Mini Cart) -->
-                        <div tabindex="0" class="card card-compact dropdown-content bg-base-100 z-[50] mt-3 w-96 shadow-xl border border-base-200 text-base-content">
+                        <div tabindex="0" class="card card-compact dropdown-content bg-base-100 z-[50] mt-3 shadow-xl border border-base-200 text-base-content fixed inset-x-4 top-28 w-auto !translate-x-0 md:absolute md:inset-auto md:right-0 md:top-full md:w-96">
                             <div class="card-body">
                                 <div class="widget_shopping_cart_content">
                                     <?php

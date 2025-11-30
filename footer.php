@@ -31,12 +31,12 @@
     <div class="bg-neutral text-neutral-content border-t border-[var(--color-primary)]">
         <div class="container mx-auto p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
             <aside class="md:col-span-2 flex flex-col justify-center">
-                <div class="flex flex-row items-center gap-24 mb-2">
+                <div class="flex flex-col items-center gap-y-4 mb-2 md:flex-row md:items-center md:gap-24">
                     <a href="<?php echo home_url(); ?>" class="logo-glow-gold transition duration-300 shrink-0">
                         <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-32 w-auto object-contain">
                     </a>
-                    <div class="relative">
-                        <p class="text-4xl text-primary -rotate-12 transform origin-bottom-left text-glow-gold leading-tight" style="font-family: 'Mrs Saint Delafield', cursive;">
+                    <div class="relative hidden md:block">
+                        <p class="md:text-xl lg:text-2xl xl:text-4xl text-primary -rotate-12 transform origin-bottom-left text-glow-gold leading-tight" style="font-family: 'Mrs Saint Delafield', cursive;">
                             Choose your style … <br>
                             <span class="ml-8">Be Trendy</span>
                         </p>
@@ -44,24 +44,24 @@
                 </div>
             </aside>
             <nav class="flex flex-col gap-2">
-                <header class="footer-title text-primary opacity-100">Catégories</header>
-                <a class="link link-hover" href="/categorie-produit/homme/">Univers Homme</a>
-                <a class="link link-hover" href="/categorie-produit/femme/">Univers Femme</a>
-                <a class="link link-hover" href="/categorie-produit/homme/chaussures-homme/">Chaussures Homme</a>
-                <a class="link link-hover" href="/categorie-produit/homme/chaussures-femme/">Chaussures Femme</a>
+                <header class="footer-title text-primary opacity-100 text-3xl md:text-xl">Catégories</header>
+                <a class="link link-hover text-xl md:text-sm" href="/categorie-produit/homme/">Univers Homme</a>
+                <a class="link link-hover text-xl md:text-sm" href="/categorie-produit/femme/">Univers Femme</a>
+                <a class="link link-hover text-xl md:text-sm" href="/categorie-produit/homme/chaussures-homme/">Chaussures Homme</a>
+                <a class="link link-hover text-xl md:text-sm" href="/categorie-produit/homme/chaussures-femme/">Chaussures Femme</a>
             </nav>
             <nav class="flex flex-col gap-2">
-                <header class="footer-title text-primary opacity-100">Informations</header>
-                <a class="link link-hover" href="/mentions-legales/">Mentions légales</a>
-                <a class="link link-hover" href="/politique-en-matiere-de-confidentialite/">Confidentialité</a>
-                <a class="link link-hover" href="/conditions-generales-de-vente/">Conditions Générales de Vente</a>
-                <a class="link link-hover" href="/politique-en-matiere-de-remboursements-et-de-retours/">Retours et remboursements</a>
+                <header class="footer-title text-primary opacity-100 text-3xl md:text-xl">Informations</header>
+                <a class="link link-hover text-xl md:text-sm" href="/mentions-legales/">Mentions légales</a>
+                <a class="link link-hover text-xl md:text-sm" href="/politique-en-matiere-de-confidentialite/">Confidentialité</a>
+                <a class="link link-hover text-xl md:text-sm" href="/conditions-generales-de-vente/">CGV</a>
+                <a class="link link-hover text-xl md:text-sm" href="/politique-en-matiere-de-remboursements-et-de-retours/">Retours</a>
             </nav>
             <nav class="flex flex-col gap-2">
-                <header class="footer-title text-primary opacity-100">Pratique</header>
-                <a class="link link-hover" href="/guide-des-tailles/">Guide des tailles</a>
-                <header class="footer-title text-primary opacity-100 mt-4">Réseaux Sociaux</header>
-                                <div class="flex align-center justify-start gap-6">
+                <header class="footer-title text-primary opacity-100 text-3xl md:text-xl">Pratique</header>
+                <a class="link link-hover text-xl md:text-sm" href="/guide-des-tailles/">Guide des tailles</a>
+                <header class="footer-title text-primary opacity-100 mt-4 text-3xl md:text-xl">Réseaux</header>
+                                <div class="flex align-center justify-center md:justify-start gap-24 mt-6 md:gap-6 md:mt-0">
                     <!-- Facebook -->
                     <a href="https://www.facebook.com/profile.php?id=61583318666684&locale=fr_FR" target="_blank" rel="noopener" class="social-icon-gold">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: #000000; stroke: none">
