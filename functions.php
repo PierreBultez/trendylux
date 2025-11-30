@@ -391,8 +391,7 @@ function trendylux_show_destock_badge_single(): void
     // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
     // on essaie de le décaler un peu (top-12 ou top-14).
     // Le z-index doit être élevé.
-    echo '<div class="badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';
-    }
+            echo '<div class="hidden md:block badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';    }
 }
     // On le hook avec une priorité qui le place probablement au début du conteneur images
 add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
@@ -1040,7 +1039,7 @@ function trendylux_product_page_last_chance_script(): void
                 
                 // On injecte un message visuel fort
                 const msg = document.createElement('div');
-                msg.className = 'trendylux-last-chance-msg alert alert-error mt-2 py-2 text-sm';
+                msg.className = 'trendylux-last-chance-msg alert alert-error mt-2 py-2 text-sm w-full';
                 msg.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     <span><b>Dernière pièce !</b> <br/>Une remise de 15% est appliquée.</span>
@@ -1063,6 +1062,18 @@ function trendylux_product_page_last_chance_script(): void
     </script>
     <?php
 }
+
+//function trendylux_show_destock_badge_after_add_to_cart_mobile(): void
+//{
+//    global $product;
+//    if ( ! $product ) return;
+//
+//    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
+//        // Only show on mobile, hidden on desktop
+//        echo '<div class="md:hidden badge badge-dash badge-warning mt-5 mb-5 p-5 font-bold z-10 text-center w-full">Dernière chance</div>';
+//    }
+//}
+//add_action( 'woocommerce_after_add_to_cart_form', 'trendylux_show_destock_badge_after_add_to_cart_mobile', 10 );
 
 // 5. DISPLAY (Panier/Mini-Panier) : Afficher le prix remisé visuellement dans la colonne prix
 add_filter( 'woocommerce_cart_item_price', 'trendylux_display_discounted_price_in_cart', 10, 3 );
