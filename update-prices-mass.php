@@ -5,7 +5,7 @@ use WP_CLI\Utils;
  * Script de mise à jour MASSIVE des prix.
  *
  * LOGIQUE :
- * - Si Prix Régulier > 50€ => -18% (/ 1.18)
+ * - Si Prix Régulier > 50€ => -18% (* 0,82)
  * - Si Prix Régulier <= 50€ => Ignoré
  *
  * UTILISATION :
@@ -90,8 +90,8 @@ foreach ( $product_ids as $parent_id ) {
 
         // --- LOGIQUE DE PRIX ---
         if ( $old_price > 50 ) {
-            $new_price = round( $old_price * 0.82, 2 );
-            $rule_label = '* 0.82';
+            $new_price = round( $old_price / 0.82, 2 );
+            $rule_label = '/ 0.82';
         } else {
             // On ignore les produits <= 50€
             continue;
