@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_edit_account_form' ); ?>
 
-<form class="woocommerce-EditAccountForm edit-account w-full max-w-3xl mx-auto" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?> >
+<form class="woocommerce-EditAccountForm edit-account w-full md:max-w-3xl mx-auto" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?> >
 
 	<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
 
@@ -55,18 +55,18 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 		<input type="email" class="input input-bordered w-full focus:outline-none focus:border-primary" name="account_email" id="account_email" autocomplete="email" value="<?php echo esc_attr( $user->user_email ); ?>" />
 	</div>
 
-	<fieldset class="border border-base-300 p-6 rounded-box bg-base-100 shadow-sm">
+	<fieldset class="border border-base-300 p-3 md:p-6 rounded-box bg-base-100 shadow-sm w-full min-w-0">
 		<legend class="text-lg font-bold px-2 text-primary"><?php esc_html_e( 'Password change', 'woocommerce' ); ?></legend>
 
 		<div class="form-control w-full mb-4">
 			<label for="password_current" class="label">
-                <span class="label-text font-semibold"><?php esc_html_e( 'Current password (leave blank to leave unchanged)', 'woocommerce' ); ?></span>
+                <span class="label-text font-semibold">Mot de passe actuel</span>
             </label>
 			<input type="password" class="input input-bordered w-full focus:outline-none focus:border-primary" name="password_current" id="password_current" autocomplete="off" />
 		</div>
 		<div class="form-control w-full mb-4">
 			<label for="password_1" class="label">
-                <span class="label-text font-semibold"><?php esc_html_e( 'New password (leave blank to leave unchanged)', 'woocommerce' ); ?></span>
+                <span class="label-text font-semibold">Nouveau mot de passe</span>
             </label>
 			<input type="password" class="input input-bordered w-full focus:outline-none focus:border-primary" name="password_1" id="password_1" autocomplete="off" />
 		</div>
@@ -82,7 +82,7 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 
 	<div class="mt-8 flex justify-end">
 		<?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
-		<button type="submit" class="btn btn-primary min-w-[200px]" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+		<button type="submit" class="btn btn-primary min-w-[200px] w-full" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
 		<input type="hidden" name="action" value="save_account_details" />
 	</div>
 

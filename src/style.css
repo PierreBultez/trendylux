@@ -245,6 +245,54 @@ body.home .toast-container > * {
 }
 
 /* ==========================================================================
+   RESPONSIVE MY ACCOUNT ORDERS TABLE (Mobile Cards)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .my-orders-table, 
+    .my-orders-table tbody, 
+    .my-orders-table tr, 
+    .my-orders-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .my-orders-table thead {
+        display: none;
+    }
+
+    .my-orders-table tr {
+        @apply mb-6 bg-base-100 rounded-box border border-base-200 p-4 shadow-sm relative;
+    }
+
+    .my-orders-table td {
+        @apply flex justify-between items-center border-b border-base-200 py-3 px-0 last:border-0 text-right;
+        text-align: right;
+        padding-left: 50%; /* Reserve space for label if using absolute positioning, but flex is better */
+        padding-left: 0;
+        position: relative;
+    }
+
+    .my-orders-table td::before {
+        content: attr(data-title);
+        @apply font-bold text-sm text-neutral uppercase mr-auto text-left;
+        /* mr-auto pushes label to left, content stays right */
+    }
+
+    /* Specific Adjustments */
+    .my-orders-table td.woocommerce-orders-table__cell-order-actions {
+        @apply flex-col gap-2 items-stretch mt-2 pt-4 border-t border-base-200;
+    }
+    
+    .my-orders-table td.woocommerce-orders-table__cell-order-actions::before {
+        display: none; /* Hide "Actions" label */
+    }
+
+    .my-orders-table td.woocommerce-orders-table__cell-order-actions a {
+        @apply btn-block mb-2;
+    }
+}
+
+/* ==========================================================================
    TARTEAUCITRON CUSTOM STYLES - TRENDYLUX
    ========================================================================== */
 
@@ -501,7 +549,7 @@ body.home .toast-container > * {
 /* En-têtes de section (si présents) */
 .tinv-header h2,
 .tinv-header h1 {
-    @apply text-3xl font-serif font-bold text-neutral mb-8 text-center uppercase tracking-wider;
+    @apply hidden;
 }
 
 /* TABLEAU PRINCIPAL */
@@ -715,6 +763,36 @@ body.home .toast-container > * {
     }
     .product-action button {
         @apply w-full btn-block;
+    }
+
+    /* Footer Actions (Mobile) */
+    .tinv-wishlist .tinv-lists-nav {
+        @apply flex-col items-stretch gap-4;
+    }
+    
+    /* Cible les conteneurs de boutons/selects */
+    .tinv-wishlist .tinv-lists-nav > div,
+    .tinv-wishlist .tinv-lists-nav > button {
+        @apply w-full;
+    }
+
+    .tinv-wishlist .tinv-lists-nav select {
+        @apply select w-full mb-2;
+    }
+    
+    .tinv-wishlist .tinv-lists-nav button,
+    .tinv-wishlist .tinv-lists-nav .tinvwl-btn-onclick {
+        @apply w-full mb-2 btn-block;
+    }
+}
+
+.tinvwl-table-manage-list tfoot {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .tinv-wishlist .social-buttons {
+        flex-direction: column;
     }
 }
 
