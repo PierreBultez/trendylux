@@ -9,7 +9,7 @@
         <!-- Bandeau Promo Horizontal (Fixe) -->
         <div class="relative py-4 flex-none w-full bg-primary text-primary-content flex flex-col items-center justify-center shadow-md rounded-box overflow-hidden">
             <!-- Image de fond subtile pour la texture -->
-            <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/AdobeStock_607063407_Preview.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
+            <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/hero-promo.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
             
             <div class="relative z-10 flex flex-col items-center text-center gap-1">
                 <span class="text-base md:text-lg font-bold uppercase tracking-wider text-white drop-shadow-md">Ouverture officielle</span>
