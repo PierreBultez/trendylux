@@ -96,7 +96,7 @@
         @keydown.escape.window="openMenu = null"
 >
     <!-- Logo (Overlay Absolute) -->
-    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-4 z-50 flex items-center py-2 transition duration-300 logo-glow-gold">
+    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-16 lg:left-4 z-50 flex items-center py-2 transition duration-300 logo-glow-gold">
         <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-full w-auto object-contain">
     </a>
 
@@ -106,6 +106,23 @@
 
             <!-- Navbar Start : Tagline uniquement (Logo en absolute) -->
             <div class="navbar-start">
+                <!-- Mobile Hamburger Menu -->
+                <div class="dropdown lg:hidden">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle" aria-label="Menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                    </div>
+                    <div tabindex="0" class="dropdown-content z-[50] menu p-2 shadow bg-base-100 rounded-box w-[92vw] max-w-sm mt-3 fixed inset-x-4 top-28 h-[calc(100vh-140px)] overflow-y-auto border border-base-200 text-base-content !translate-x-0">
+                        <?php
+                        wp_nav_menu([
+                            'theme_location' => 'primary_menu',
+                            'container'      => false,
+                            'menu_class'     => 'menu w-full',
+                            'walker'         => new TRENDYLUX_Mobile_Walker(),
+                        ]);
+                        ?>
+                    </div>
+                </div>
+
                 <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold xl:ml-48" style="font-family: 'Mrs Saint Delafield', cursive;">Choose your style... Be trendy !</span>
             </div>
 

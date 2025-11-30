@@ -1,6 +1,7 @@
 <?php
 
 require_once get_template_directory() . '/inc/class-trendylux-nav-walker.php';
+require_once get_template_directory() . '/inc/class-trendylux-mobile-walker.php';
 
 function trendylux_register_nav_menu(): void
 {
