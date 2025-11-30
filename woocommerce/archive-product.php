@@ -26,11 +26,26 @@ get_header();
 
     if ($sub_categories) {
         echo '<div class="container mx-auto px-4 mb-8">';
-        echo '<div class="flex flex-wrap justify-center gap-4">';
+        
+        // Desktop: Flex Wrap List (hidden on mobile)
+        echo '<div class="hidden md:flex flex-wrap justify-center gap-4">';
         foreach ($sub_categories as $sub_category) {
             echo '<a href="' . get_term_link($sub_category) . '" class="btn btn-outline">' . $sub_category->name . '</a>';
         }
         echo '</div>';
+
+        // Mobile: DaisyUI Dropdown (visible on mobile only)
+        echo '<div class="md:hidden w-full">';
+        echo '<div class="dropdown w-full">';
+        echo '<div tabindex="0" role="button" class="btn btn-outline w-full justify-between mb-4">Sous-catégories <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div>';
+        echo '<ul tabindex="0" class="dropdown-content z-[9999] menu p-2 shadow bg-base-100 rounded-box w-full border border-base-200">';
+        foreach ($sub_categories as $sub_category) {
+             echo '<li><a href="' . get_term_link($sub_category) . '">' . $sub_category->name . '</a></li>';
+        }
+        echo '</ul>';
+        echo '</div>';
+        echo '</div>';
+
         echo '</div>';
     }
     ?>
