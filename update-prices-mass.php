@@ -48,6 +48,13 @@ $query_args = array(
     'post_status'    => 'publish',
     'posts_per_page' => -1,
     'fields'         => 'ids',
+    'tax_query'      => array(
+        array(
+            'taxonomy' => 'product_tag',
+            'field'    => 'slug',
+            'terms'    => 'destockage',
+        ),
+    ),
 );
 
 WP_CLI::line( 'Récupération du catalogue...' );
