@@ -39,15 +39,15 @@
 }
 
 [x-cloak] {
-    display: none !important;
+    display: none;
 }
 
 /* Remove focus outline from WooCommerce notices */
 .woocommerce-message:focus,
 .toast:focus, .toast:active, .toast:hover,
 .alert:focus, .alert:active, .alert:hover {
-    outline: none !important;
-    box-shadow: none !important;
+    outline: none;
+    box-shadow: none;
 }
 
 /**
@@ -238,195 +238,195 @@ body.home .toast-container > * {
 
 /* Bandeau principal en bas de page */
 #tarteaucitronAlertBig {
-    background-color: #111 !important; /* Noir profond */
-    color: #fff !important;
-    box-shadow: 0 -4px 15px rgba(0,0,0,0.5) !important;
-    border-top: 1px solid #333 !important;
-    font-family: 'Noto Sans', sans-serif !important;
+    background-color: #111; /* Noir profond */
+    color: #fff;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+    border-top: 1px solid #333;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 /* Texte du bandeau */
 #tarteaucitronDisclaimerAlert,
 #tarteaucitronDisclaimerAlert b {
-    font-size: 14px !important;
-    color: #eee !important;
+    font-size: 14px;
+    color: #eee;
 }
 
 /* Boutons dans le bandeau */
 #tarteaucitronPersonalize2,
 #tarteaucitronCloseAlert2 {
-    background-color: transparent !important;
-    color: #D4AF37 !important; /* Or */
-    border: 1px solid #D4AF37 !important;
-    border-radius: 8px !important; /* Rounded */
-    font-weight: bold !important;
-    padding: 8px 16px !important;
-    margin-right: 10px !important;
-    transition: all 0.3s ease !important;
-    font-size: 13px !important;
-    text-transform: uppercase !important;
+    background-color: transparent;
+    color: #D4AF37; /* Or */
+    border: 1px solid #D4AF37;
+    border-radius: 8px; /* Rounded */
+    font-weight: bold;
+    padding: 8px 16px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    text-transform: uppercase;
 }
 
 #tarteaucitronPersonalize2:hover,
 #tarteaucitronCloseAlert2:hover {
-    background-color: rgba(212, 175, 55, 0.1) !important;
+    background-color: rgba(212, 175, 55, 0.1);
 }
 
 .tarteaucitronPartnersList {
-    background-color: #111 !important; /* Noir profond */
+    background-color: #111; /* Noir profond */
 }
 
 #tarteaucitron #tarteaucitronInfo {
-    color: #eee !important;
-    background-color: #111 !important; /* Noir profond */
+    color: #eee;
+    background-color: #111; /* Noir profond */
 }
 
 .tarteaucitronLine {
-    background-color: #111 !important; /* Noir profond */
+    background-color: #111; /* Noir profond */
 }
 
 #tarteaucitronSave {
-    background-color: #111 !important; /* Noir profond */
+    background-color: #111; /* Noir profond */
 }
 
 .tarteaucitronH3 {
-    color: #eee !important;
+    color: #eee;
 }
 
 .tarteaucitronName span {
-    color: #eee !important;
+    color: #eee;
 }
 
 .tarteaucitronName a {
-    color: #eee !important;
+    color: #eee;
 }
 
 .tarteaucitronCross::before {
-    color: #eee !important;
+    color: #eee;
 }
 
 .tarteaucitronCheck::before {
-    color: #eee !important;
+    color: #eee;
 }
 
 #tarteaucitronRoot span {
-    font-family: 'Noto Sans', sans-serif !important;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 .tarteaucitron-toggle-group {
-    color: #eee !important;
+    color: #eee;
 }
 
 #tarteaucitron #tarteaucitronClosePanel {
-    background: unset !important;
+    background: unset;
 }
 
 #tarteaucitron #tarteaucitronPrivacyUrlDialog {
-    color: #eee !important;
-    background-color: #111 !important; /* Noir profond */
+    color: #eee;
+    background-color: #111; /* Noir profond */
 }
 
 #tarteaucitron #tarteaucitronServices .tarteaucitronMainLine {
-    background-color: #111 !important; /* Noir profond */
+    background-color: #111; /* Noir profond */
 }
 
 #tarteaucitronAlertBig #tarteaucitronDisclaimerAlert .tarteaucitronPartnersList * {
-    color: #eee !important;
+    color: #eee;
 }
 
 #tarteaucitronPrivacyUrl {
-    color: #eee !important;
+    color: #eee;
 }
 
 /* Bouton "Tout Accepter" (Mis en avant) */
 #tarteaucitronAllAllowed2 {
-    background-color: #D4AF37 !important; /* Or */
-    color: #000 !important; /* Texte noir */
-    border: 1px solid #D4AF37 !important;
-    border-radius: 8px !important;
-    font-weight: bold !important;
-    padding: 8px 16px !important;
-    transition: all 0.3s ease !important;
-    font-size: 13px !important;
-    text-transform: uppercase !important;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+    background-color: #D4AF37; /* Or */
+    color: #000; /* Texte noir */
+    border: 1px solid #D4AF37;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
 #tarteaucitronAllAllowed2:hover {
-    background-color: #C5A028 !important; /* Or un peu plus foncé */
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5) !important;
+    background-color: #C5A028; /* Or un peu plus foncé */
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
 }
 
 /* Bouton "Tout Refuser" */
 #tarteaucitronAllDenied2 {
-    background-color: #333 !important;
-    color: #fff !important;
-    border: 1px solid #555 !important;
-    border-radius: 8px !important;
-    font-weight: bold !important;
-    padding: 8px 16px !important;
-    margin-right: 10px !important;
-    transition: all 0.3s ease !important;
-    font-size: 13px !important;
-    text-transform: uppercase !important;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 8px 16px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    text-transform: uppercase;
 }
 
 #tarteaucitronAllDenied2:hover {
-    background-color: #444 !important;
-    border-color: #777 !important;
+    background-color: #444;
+    border-color: #777;
 }
 
 /* --- PANNEAU DE CONFIGURATION (MODALE) --- */
 
 /* Fond de la modale */
 #tarteaucitron {
-    background-color: rgba(0, 0, 0, 0.8) !important; /* Overlay plus sombre */
+    background-color: rgba(0, 0, 0, 0.8); /* Overlay plus sombre */
 }
 
 #tarteaucitronPercentage {
-    color: #D4AF37 !important;
-    border-left-color: #D4AF37 !important;
-    border-bottom-color: #D4AF37 !important;
+    color: #D4AF37;
+    border-left-color: #D4AF37;
+    border-bottom-color: #D4AF37;
 }
 
 /* Titres dans le panneau */
 .tarteaucitronTitle,
 .tarteaucitronH1,
 .tarteaucitronH2 {
-    color: #D4AF37 !important;
-    font-family: 'Noto Serif', serif !important;
-    text-transform: uppercase !important;
+    color: #D4AF37;
+    font-family: 'Noto Serif', serif;
+    text-transform: uppercase;
 }
 
 /* Texte des services */
 .tarteaucitronName {
-    color: #fff !important;
-    font-weight: bold !important;
+    color: #fff;
+    font-weight: bold;
 }
 
 /* Boutons d'activation individuels (Switchs) */
 .tarteaucitronAllow {
-    background-color: #D4AF37 !important;
-    color: #eee !important;
+    background-color: #D4AF37;
+    color: #eee;
 }
 .tarteaucitronDeny {
-    background-color: #333 !important;
-    color: #fff !important;
+    background-color: #333;
+    color: #fff;
 }
 
 #tarteaucitronCloseCross {
-    color: #eee !important;
+    color: #eee;
 }
 
 /* Petit bouton cookie en bas à droite */
 #tarteaucitronIcon {
-    background-color: #D4AF37 !important;
-    border-radius: 50% !important;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
+    background-color: #D4AF37;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 #tarteaucitronIcon .tarteaucitron-cookie-text {
-    display: none !important; /* On cache le texte, on garde juste le cookie */
+    display: none; /* On cache le texte, on garde juste le cookie */
 }
 
 /* ==========================================================================
@@ -436,43 +436,284 @@ body.home .toast-container > * {
 /* Reset du bouton plugin pour correspondre au style du thème */
 .trendylux-wishlist-btn .tinvwl_add_to_wishlist_button,
 .trendylux-wishlist-btn .tinvwl_add_to_wishlist_button.button {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0.5rem !important;
-    color: #9ca3af !important; /* text-gray-400 */
-    font-size: 0 !important;   /* Cache le texte "Add to Wishlist" */
-    display: flex !important;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0.5rem;
+    color: #9ca3af; /* text-gray-400 */
+    font-size: 0;   /* Cache le texte "Add to Wishlist" */
+    display: flex;
     align-items: center;
     justify-content: center;
     transition: color 0.3s ease;
-    width: auto !important;
-    height: auto !important;
-    min-width: unset !important;
-    margin: 0 !important;
+    width: auto;
+    height: auto;
+    min-width: unset;
+    margin: 0;
 }
 
 /* Style de l'icône (souvent insérée via :before ou un tag <i>) */
 .trendylux-wishlist-btn .tinvwl_add_to_wishlist_button:before,
 .trendylux-wishlist-btn .tinvwl_add_to_wishlist_button i {
-    font-size: 1.5rem !important; /* 24px ~ w-6 h-6 */
-    line-height: 1 !important;
-    margin: 0 !important;
-    font-family: inherit !important; /* Essaie d'éviter la surcharge de police si possible, sinon le plugin gagne */
+    font-size: 1.5rem; /* 24px ~ w-6 h-6 */
+    line-height: 1;
+    margin: 0;
+    font-family: inherit; /* Essaie d'éviter la surcharge de police si possible, sinon le plugin gagne */
 }
 
 /* Hover state */
 .trendylux-wishlist-btn .tinvwl_add_to_wishlist_button:hover {
-    color: #ef4444 !important; /* text-red-500 */
-    background: transparent !important;
+    color: #ef4444; /* text-red-500 */
+    background: transparent;
 }
 
 /* State: Product Added (Active) */
 .trendylux-wishlist-btn .tinvwl_add_to_wishlist_button.tinvwl-product-in-list {
-    color: #ef4444 !important;
+    color: #ef4444;
 }
 
 /* Masquer le loader/spinner qui peut apparaitre et décaler le layout */
 .trendylux-wishlist-btn .tinv-wraper.tinv-wishlist .tinv-modal .tinv-modal-inner {
     /* Optionnel: Style la modale si nécessaire */
+}
+
+/* ==========================================================================
+   TI WOOCOMMERCE WISHLIST PAGE STYLING
+   ========================================================================== */
+
+/* Conteneur Principal */
+.tinv-wishlist {
+    @apply w-full max-w-7xl mx-auto py-12 px-4;
+}
+
+/* En-têtes de section (si présents) */
+.tinv-header h2,
+.tinv-header h1 {
+    @apply text-3xl font-serif font-bold text-neutral mb-8 text-center uppercase tracking-wider;
+}
+
+/* TABLEAU PRINCIPAL */
+.tinv-wishlist table.tinvwl-table-manage-list {
+    @apply table w-full border border-base-200 rounded-box overflow-hidden mb-8;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* En-têtes du tableau */
+.tinv-wishlist table thead th {
+    @apply bg-base-200 text-neutral font-bold uppercase text-xs tracking-widest p-4 text-left border-b border-base-300;
+}
+
+/* Corps du tableau - Lignes */
+.tinv-wishlist table tbody tr {
+    @apply hover:bg-base-100 border-b border-base-200 transition-colors duration-200;
+}
+
+/* Cellules générales */
+.tinv-wishlist table tbody td {
+    @apply p-4 align-middle border-b border-base-200;
+}
+
+/* --- COLONNES SPÉCIFIQUES --- */
+
+/* Checkbox (si active) */
+.product-cb {
+    @apply w-12 text-center;
+}
+.product-cb input[type="checkbox"] {
+    @apply checkbox checkbox-primary;
+}
+
+/* Bouton de suppression */
+.product-remove {
+    @apply w-12 text-center;
+}
+.product-remove button,
+.product-remove a {
+    @apply btn btn-ghost btn-circle btn-sm text-gray-400 hover:text-error;
+    font-size: 0; /* Cache le texte s'il y en a */
+}
+.product-remove button:before,
+.product-remove a:before,
+.product-remove button i,
+.product-remove a i {
+    @apply text-xl;
+    content: "×"; /* Fallback si pas d'icone */
+    display: inline-block;
+    font-family: sans-serif;
+}
+/* Si le plugin utilise FontAwesome, on s'assure que l'icone s'affiche */
+.product-remove i::before {
+    content: "\f00d"; 
+}
+
+
+/* Image du produit */
+.product-thumbnail {
+    @apply w-24;
+}
+.product-thumbnail img {
+    @apply w-20 h-24 object-cover rounded-lg shadow-sm;
+}
+
+/* Nom du produit */
+.product-name {
+    @apply font-bold text-neutral;
+}
+.product-name a {
+    @apply link link-hover text-neutral hover:text-primary transition-colors;
+}
+
+/* Prix */
+.product-price {
+    @apply font-bold text-lg text-primary whitespace-nowrap;
+}
+.product-price del {
+    @apply text-xs text-gray-400 font-normal mr-2;
+}
+.product-price ins {
+    @apply no-underline;
+}
+
+/* Date (si affichée) */
+.product-date {
+    @apply text-sm text-gray-500;
+}
+
+/* Stock Status */
+.product-stock {
+    @apply text-sm;
+}
+.product-stock .stock.in-stock {
+    @apply badge badge-success badge-outline gap-1 font-bold;
+}
+.product-stock .stock.in-stock:before {
+    content: "●";
+    font-size: 0.6em;
+}
+.product-stock .stock.out-of-stock {
+    @apply badge badge-error badge-outline gap-1 font-bold;
+}
+
+/* Actions (Bouton Ajouter au panier) */
+.product-action {
+    @apply text-right;
+}
+.product-action button,
+.product-action .button {
+    @apply btn btn-primary btn-sm uppercase text-xs tracking-wide rounded px-6;
+}
+/* Bouton texte "Ajouter au panier" */
+.product-action .tinvwl_add_to_cart_button i {
+    @apply mr-2;
+}
+
+/* --- FOOTER DU TABLEAU (ACTIONS DE MASSE) --- */
+.tinvwl-table-manage-list tfoot td {
+    @apply p-4 bg-base-200;
+}
+
+.tinv-wishlist .tinv-lists-nav {
+    @apply flex flex-wrap justify-between items-center gap-4;
+}
+
+/* Boutons d'action de masse (Apply Action) */
+.tinv-wishlist button[type="submit"], 
+.tinv-wishlist .button {
+    @apply btn btn-outline btn-sm uppercase tracking-wide;
+}
+/* Le bouton principal peut être rempli */
+.tinv-wishlist .tinvwl-btn-onclick {
+    @apply btn-primary text-white border-primary;
+}
+
+
+/* --- RESEAUX SOCIAUX (PARTAGE) --- */
+.tinv-wishlist .social-buttons {
+    @apply flex gap-2 justify-center mt-8 list-none p-0;
+}
+
+.tinv-wishlist .social-buttons li {
+    @apply m-0;
+}
+
+.tinv-wishlist .social-buttons li a {
+    @apply btn btn-circle btn-ghost bg-gray-100 hover:bg-primary hover:text-white transition-all duration-300 w-10 h-10 flex items-center justify-center;
+}
+
+.tinv-wishlist .social-buttons li a i {
+    @apply text-lg;
+}
+
+/* Message "Aucun produit" */
+.tinv-wishlist .wishlist-empty {
+    @apply alert alert-info shadow-lg mt-8 mb-8;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+}
+
+/* --- RESPONSIVE (MOBILE) --- */
+@media (max-width: 768px) {
+    .tinv-wishlist table.tinvwl-table-manage-list, 
+    .tinv-wishlist table.tinvwl-table-manage-list tbody, 
+    .tinv-wishlist table.tinvwl-table-manage-list tr, 
+    .tinv-wishlist table.tinvwl-table-manage-list td {
+        display: block;
+        width: 100%;
+    }
+    
+    .tinv-wishlist table.tinvwl-table-manage-list thead {
+        display: none; /* On cache les en-têtes classiques */
+    }
+
+    .tinv-wishlist table.tinvwl-table-manage-list tr {
+        @apply mb-6 bg-white border border-base-200 rounded-box p-4 shadow-sm relative;
+    }
+
+    .tinv-wishlist table.tinvwl-table-manage-list td {
+        @apply flex justify-between items-center px-0 py-2 border-b border-gray-100 last:border-0 text-right;
+        text-align: right;
+    }
+
+    /* Pour afficher des "labels" avant le contenu en mobile si besoin, 
+       mais souvent le contexte suffit. Ici on force un layout flex. */
+    
+    .product-thumbnail {
+        @apply justify-center mb-4;
+    }
+    .product-thumbnail img {
+        @apply w-32 h-40 mx-auto;
+    }
+    
+    .product-remove {
+        @apply absolute top-2 right-2 w-auto border-0 p-0;
+    }
+
+    .product-name {
+        @apply text-center block w-full text-lg mb-2;
+    }
+
+    .product-price {
+        @apply justify-center font-bold text-xl mb-4 block w-full;
+    }
+
+    .product-action {
+        @apply justify-center block w-full mt-4;
+    }
+    .product-action button {
+        @apply w-full btn-block;
+    }
+}
+
+.tinv-wishlist .product-action .button .tinvwl-txt {
+    display: none;
+}
+
+.tinv-wishlist .product-action>.button>i {
+    display: block;
+}
+
+.social-buttons li {
+    padding-inline: 5px;
 }

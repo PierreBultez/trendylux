@@ -52,7 +52,7 @@ get_header(); ?>
                                 ?>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4 text-xs text-gray-500 border-t border-gray-200 pt-4">
+                            <div class="flex flex-wrap justify-between gap-4 text-xs text-gray-500 border-t border-gray-200 pt-4">
                                 <div class="flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                     <span>Livraison 3 à 5 jours</span>
@@ -60,6 +60,9 @@ get_header(); ?>
                                 <div class="flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                                     <span>Retours Gratuits</span>
+                                </div>
+                                <div class="flex items-center gap-2 trendylux-wishlist-btn">
+                                    <?php echo do_shortcode('[ti_wishlists_addtowishlist]'); ?>
                                 </div>
                             </div>
 
