@@ -28,7 +28,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
             <div class="card bg-base-200 shadow-xl">
                 <div class="card-body">
-                    <table class="table w-full" cellspacing="0">
+                    <table class="table w-full my-orders-table" cellspacing="0">
                         <!-- Le thead de votre tableau -->
                         <thead>
                         <tr>

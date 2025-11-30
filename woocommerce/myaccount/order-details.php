@@ -9,7 +9,7 @@ if ( ! $order ) return;
     <h2 class="woocommerce-order-details__title text-2xl font-bold text-primary mb-6"><?php esc_html_e( 'Order details', 'woocommerce' ); ?></h2>
 
     <div class="overflow-x-auto">
-        <table class="table table-zebra w-full woocommerce-table woocommerce-table--order-details shop_table order_details">
+        <table class="table table-zebra w-full woocommerce-table woocommerce-table--order-details shop_table order_details my-orders-table">
             <thead>
             <tr>
                 <th class="woocommerce-table__product-name product-name"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
