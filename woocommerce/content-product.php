@@ -19,7 +19,7 @@ if ( $terms && ! is_wp_error( $terms ) ) {
     <a href="<?php the_permalink(); ?>" class="block w-full h-full flex flex-col">
 
         <!-- Le 'overflow-hidden' du parent va maintenant arrondir les coins de l'image -->
-        <div class="relative w-full aspect-[3/4] bg-gray-100">
+        <div class="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden rounded-box">
 
             <div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
                 <?php
