@@ -38,6 +38,9 @@ add_action( 'init', 'trendylux_init' );
 
 // Mise en file d'attente des assets Vite
 function trendylux_vite_assets(): void {
+    // Charge le CSS de Tarteaucitron avant les styles du thème pour faciliter la surcharge
+    wp_enqueue_style('tarteaucitron-css', get_template_directory_uri() . '/tarteaucitron/css/tarteaucitron.min.css', [], '1.27.1');
+
     if (defined('IS_VITE_DEVELOPMENT') && IS_VITE_DEVELOPMENT === true) {
         $vite_dev_server_url = 'http://localhost:5173';
 

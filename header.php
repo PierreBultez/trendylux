@@ -40,7 +40,7 @@
             "removeCredit": false, /* Retirer le lien de crédit vers tarteaucitron.io */
             "moreInfoLink": true, /* Afficher le lien En savoir plus */
 
-            "useExternalCss": false, /* Mode expert : désactiver le chargement des fichiers .css tarteaucitron */
+            "useExternalCss": true, /* Mode expert : désactiver le chargement des fichiers .css tarteaucitron */
             "useExternalJs": false, /* Mode expert : désactiver le chargement des fichiers .js tarteaucitron */
 
             //"cookieDomain": ".my-multisite-domaine.fr", /* Optionnel: domaine principal pour partager le consentement avec des sous domaines */
