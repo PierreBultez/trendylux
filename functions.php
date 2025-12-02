@@ -103,7 +103,8 @@ function trendylux_vite_assets(): void {
                 foreach ($entry['css'] as $key => $css_file) {
                     wp_enqueue_style(
                         'trendylux-style-' . $key, // Identifiant unique pour chaque fichier CSS
-                        get_template_directory_uri() . '/dist/' . $css_file
+                        get_template_directory_uri() . '/dist/' . $css_file,
+                        ['tarteaucitron-css'] // S'assure que le CSS de tarteaucitron est chargé AVANT
                     );
                 }
             }
