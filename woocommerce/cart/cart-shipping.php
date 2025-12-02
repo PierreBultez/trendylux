@@ -26,7 +26,7 @@ $calculator_text          = '';
 ?>
 <tr class="woocommerce-shipping-totals shipping">
 	<th class="pt-5 align-baseline"><?php echo esc_html( $package_name ); ?></th>
-	<td data-title="<?php echo esc_attr( $package_name ); ?>" class="pt-5 w-2/5">
+	<td data-title="<?php echo esc_attr( $package_name ); ?>" class="pt-5 w-full md:w-2/5">
 		<?php if ( $available_methods ) : ?>
 			<ul id="shipping_method" class="woocommerce-shipping-methods">
 				<?php foreach ( $available_methods as $method ) : ?>

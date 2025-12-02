@@ -25,7 +25,7 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 	<?php if ( $has_orders ) : ?>
 
 		<div class="overflow-x-auto">
-			<table class="table w-full">
+			<table class="table w-full my-orders-table">
 				<!-- head -->
 				<thead>
 					<tr>

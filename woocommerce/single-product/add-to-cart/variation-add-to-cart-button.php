@@ -13,7 +13,7 @@ global $product;
 <div class="woocommerce-variation-add-to-cart variations_button">
 	<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
 
-	<div class="flex items-center gap-4">
+	<div class="flex flex-col items-center gap-4">
 		<?php
 		woocommerce_quantity_input(
 			[
@@ -25,7 +25,7 @@ global $product;
 		);
 		?>
 
-		<button type="submit" class="single_add_to_cart_button button alt btn btn-primary flex-grow"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+		<button type="submit" class="single_add_to_cart_button button alt btn btn-primary flex-grow w-full"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
 	</div>
 
 	<input type="hidden" name="add-to-cart" value="<?php echo absint( $product->get_id() ); ?>" />

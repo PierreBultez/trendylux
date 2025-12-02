@@ -26,136 +26,191 @@ get_header();
 
     if ($sub_categories) {
         echo '<div class="container mx-auto px-4 mb-8">';
-        echo '<div class="flex flex-wrap justify-center gap-4">';
+        
+        // Desktop: Flex Wrap List (hidden on mobile)
+        echo '<div class="hidden md:flex flex-wrap justify-center gap-4">';
         foreach ($sub_categories as $sub_category) {
             echo '<a href="' . get_term_link($sub_category) . '" class="btn btn-outline">' . $sub_category->name . '</a>';
         }
         echo '</div>';
+
+        // Mobile: DaisyUI Dropdown (visible on mobile only)
+        echo '<div class="md:hidden w-full">';
+        echo '<div class="dropdown w-full">';
+        echo '<div tabindex="0" role="button" class="btn btn-outline w-full justify-between mb-4">Sous-catégories <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div>';
+        echo '<ul tabindex="0" class="dropdown-content z-[9999] menu p-2 shadow bg-base-100 rounded-box w-full border border-base-200">';
+        foreach ($sub_categories as $sub_category) {
+             echo '<li><a href="' . get_term_link($sub_category) . '">' . $sub_category->name . '</a></li>';
+        }
+        echo '</ul>';
+        echo '</div>';
+        echo '</div>';
+
         echo '</div>';
     }
     ?>
 
 
-    <main class="container mx-auto px-2 md:px-4 pb-20">
+    <main class="container mx-auto px-4 pb-20">
+        
+        <!-- Layout Grid -->
+        <div class="flex flex-col lg:flex-row lg:gap-8">
 
-        <!-- Barre d'outils (Filtres & Tri) -->
-        <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b border-gray-200">
+            <!-- SIDEBAR FILTERS -->
+            <aside class="w-full lg:w-1/4 flex-shrink-0 mb-8 lg:mb-0">
+                
+                <!-- Mobile Filter Toggle -->
+                <div class="lg:hidden mb-4">
+                    <button type="button" class="btn btn-outline w-full flex items-center gap-2" onclick="document.getElementById('sidebar-filters').classList.toggle('hidden')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+                        Filtrer les produits
+                    </button>
+                </div>
 
-            <!-- Côté gauche : Filtres -->
-            <div>
-                <?php
-                $attribute_taxonomies = wc_get_attribute_taxonomies();
-                $attributes = [];
-                foreach ($attribute_taxonomies as $taxonomy) {
-                    $attributes[] = 'pa_' . $taxonomy->attribute_name;
-                }
-
-                if ($attributes) {
-                    $current_object = get_queried_object();
-                    $current_term_id = 0;
-                    $current_taxonomy = '';
-                    $filter_object_ids = null;
-    
-                    if ( isset($current_object->term_id) && isset($current_object->taxonomy) ) {
-                        $current_term_id = $current_object->term_id;
-                        $current_taxonomy = $current_object->taxonomy;
+                <div id="sidebar-filters" class="hidden lg:block bg-base-100 rounded-box p-4 border border-base-200">
+                    <form id="product-filters">
                         
-                        // Get all product IDs in this taxonomy term to filter available attributes
-                         $product_ids_args = [
-                            'post_type' => 'product',
-                            'posts_per_page' => -1,
-                            'fields' => 'ids',
-                            'tax_query' => [
-                                [
-                                    'taxonomy' => $current_taxonomy,
-                                    'field'    => 'term_id',
-                                    'terms'    => $current_term_id,
-                                    'include_children' => true, 
+                        <!-- Header & Reset -->
+                        <div class="flex justify-between items-center border-b border-base-200 pb-4 mb-6 mt-2">
+                            <h2 class="font-bold text-lg uppercase tracking-wider">Filtres</h2>
+                            <button type="button" id="reset-filters" class="text-xs text-error font-bold uppercase tracking-wide hover:underline hidden">Effacer tout</button>
+                        </div>
+
+                        <?php
+                        $current_object = get_queried_object();
+                        $current_term_id = 0;
+                        $current_taxonomy = '';
+                        $filter_object_ids = null;
+
+                        if ( isset($current_object->term_id) && isset($current_object->taxonomy) ) {
+                            $current_term_id = $current_object->term_id;
+                            $current_taxonomy = $current_object->taxonomy;
+                            echo '<input type="hidden" name="current_term_id" value="' . esc_attr($current_term_id) . '">';
+                            echo '<input type="hidden" name="current_taxonomy" value="' . esc_attr($current_taxonomy) . '">';
+                            
+                            // Get all product IDs in this taxonomy term to filter available attributes
+                            $product_ids_args = [
+                                'post_type' => 'product',
+                                'posts_per_page' => -1,
+                                'fields' => 'ids',
+                                'tax_query' => [
+                                    [
+                                        'taxonomy' => $current_taxonomy,
+                                        'field'    => 'term_id',
+                                        'terms'    => $current_term_id,
+                                        'include_children' => true, 
+                                    ]
                                 ]
-                            ]
-                        ];
-                        $filter_object_ids = get_posts($product_ids_args);
-                    }
-
-                    echo '<form id="product-filters" class="flex flex-wrap gap-4 items-center">';
-
-                    if ($current_term_id && $current_taxonomy) {
-                        echo '<input type="hidden" name="current_term_id" value="' . esc_attr($current_term_id) . '">';
-                        echo '<input type="hidden" name="current_taxonomy" value="' . esc_attr($current_taxonomy) . '">';
-                    }
-
-                    foreach ($attributes as $attribute) {
-                        $term_args = ['taxonomy' => $attribute];
-                        
-                        // Only add object_ids if we are in a category context.
-                        if (is_array($filter_object_ids)) {
-                            if (empty($filter_object_ids)) {
-                                $terms = []; 
-                            } else {
-                                $term_args['object_ids'] = $filter_object_ids;
-                                $terms = get_terms($term_args);
-                            }
-                        } else {
-                             $terms = get_terms($term_args);
+                            ];
+                            $filter_object_ids = get_posts($product_ids_args);
                         }
 
-                        if ($terms && !is_wp_error($terms)) {
-                            echo '<div class="dropdown z-20">';
-                            echo '<div tabindex="0" role="button" class="btn m-1">' . wc_attribute_label($attribute) . '</div>';
-                            echo '<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">';
-                            foreach ($terms as $term) {
-                                echo '<li><label class="label cursor-pointer"><span class="label-text">' . $term->name . '</span><input type="checkbox" name="' . $attribute . '[]" value="' . $term->slug . '" class="checkbox checkbox-primary" /></label></li>';
-                            }
-                            echo '</ul>';
-                            echo '</div>';
+                        $attribute_taxonomies = wc_get_attribute_taxonomies();
+                        $attributes = [];
+                        foreach ($attribute_taxonomies as $taxonomy) {
+                            $attributes[] = 'pa_' . $taxonomy->attribute_name;
                         }
-                    }
-                    echo '<button type="button" id="reset-filters" class="btn btn-dash btn-info hidden">Réinitialiser</button>';
-                    echo '</form>';
-                }
-                ?>
-            </div>
 
-            <!-- Côté droit : Tri et Compteur -->
-            <div class="flex items-center gap-5">
-                <div class="woocommerce-result-count text-sm font-bold text-gray-500">
-                    <?php woocommerce_result_count(); ?>
+                        if ($attributes) :
+                            $total_attributes = count($attributes);
+                            $current_index = 0;
+
+                            foreach ($attributes as $attribute) {
+                                $current_index++;
+                                $term_args = ['taxonomy' => $attribute, 'hide_empty' => true];
+                                
+                                if (is_array($filter_object_ids)) {
+                                    if (empty($filter_object_ids)) {
+                                        $terms = []; 
+                                    } else {
+                                        $term_args['object_ids'] = $filter_object_ids;
+                                        $terms = get_terms($term_args);
+                                    }
+                                } else {
+                                    $terms = get_terms($term_args);
+                                }
+
+                                if ($terms && !is_wp_error($terms)) {
+                                    ?>
+                                    <div class="filter-group" x-data="{ expanded: false }">
+                                        <h3 class="font-bold mb-4 text-sm uppercase tracking-wide text-neutral"><?php echo wc_attribute_label($attribute); ?></h3>
+                                        <ul class="space-y-3">
+                                            <?php 
+                                            $count = 0;
+                                            foreach ($terms as $term): 
+                                                $count++;
+                                                $isHidden = $count > 5;
+                                            ?>
+                                                <li <?php echo $isHidden ? 'x-show="expanded" x-cloak' : ''; ?> class="mb-1 transition-all duration-300">
+                                                    <label class="cursor-pointer flex items-center gap-3 group">
+                                                        <input type="checkbox" name="<?php echo $attribute; ?>[]" value="<?php echo $term->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" />
+                                                        <span class="text-sm text-gray-600 group-hover:text-primary transition-colors"><?php echo $term->name; ?></span>
+                                                    </label>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                        <?php if ($count > 5): ?>
+                                            <button type="button" @click="expanded = !expanded" class="text-xs font-bold text-primary mt-3 hover:underline focus:outline-none flex items-center gap-1">
+                                                <span x-show="!expanded">Voir plus (+<?php echo $count - 5; ?>)</span>
+                                                <span x-show="expanded" x-cloak>Voir moins</span>
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="divider my-2 last:hidden"></div>
+                                    <?php
+                                }
+                            }
+                        endif;
+                        ?>
+                    </form>
                 </div>
-                <div class="flex gap-4">
-                    <?php woocommerce_catalog_ordering(); ?>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <div class="w-full lg:w-3/4">
+
+                <!-- Toolbar (Sort + Count) -->
+                <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b border-gray-200">
+                     <div class="woocommerce-result-count text-sm font-bold text-gray-500">
+                        <?php woocommerce_result_count(); ?>
+                    </div>
+                    <div class="flex gap-4">
+                        <?php woocommerce_catalog_ordering(); ?>
+                    </div>
+                </div>
+
+                <div id="product-archive-container">
+                    <div class="products">
+                    <?php
+                    if ( woocommerce_product_loop() ) {
+
+                        // GRILLE PRODUITS : 1 colonnes mobile, 3 colonnes desktop, gap confortable
+                        echo '<ul class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">';
+
+                        if ( wc_get_loop_prop( 'total' ) ) {
+                            while ( have_posts() ) {
+                                the_post();
+                                do_action( 'woocommerce_shop_loop' );
+                                wc_get_template_part( 'content', 'product' );
+                            }
+                        }
+
+                        echo '</ul>';
+
+                        // Pagination
+                        echo '<div class="mt-12 flex justify-center">';
+                        do_action( 'woocommerce_after_shop_loop' );
+                        echo '</div>';
+
+                    } else {
+                        do_action( 'woocommerce_no_products_found' );
+                    }
+                    ?>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div id="product-archive-container">
-            <div class="products">
-            <?php
-            if ( woocommerce_product_loop() ) {
-
-                // GRILLE PRODUITS : 2 colonnes mobile, 4 colonnes desktop, gap réduit
-                echo '<ul class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10">';
-
-                if ( wc_get_loop_prop( 'total' ) ) {
-                    while ( have_posts() ) {
-                        the_post();
-                        do_action( 'woocommerce_shop_loop' );
-                        wc_get_template_part( 'content', 'product' );
-                    }
-                }
-
-                echo '</ul>';
-
-                // Pagination
-                echo '<div class="mt-12 flex justify-center">';
-                do_action( 'woocommerce_after_shop_loop' );
-                echo '</div>';
-
-            } else {
-                do_action( 'woocommerce_no_products_found' );
-            }
-            ?>
-            </div>
-        </div>
+            
+        </div> <!-- End Grid -->
     </main>
 
 <?php

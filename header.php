@@ -75,7 +75,7 @@
         (tarteaucitron.job = tarteaucitron.job || []).push('googlefonts');
 
         // 2. Google Analytics (GA4)
-        tarteaucitron.user.gtagUa = 'G-XXXXXXXXXX'; // <--- REMPLACEZ PAR VOTRE ID GA4 ICI
+        tarteaucitron.user.gtagUa = 'G-VXT1FWF15V'; // <--- REMPLACEZ PAR VOTRE ID GA4 ICI
         tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
         (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
 
@@ -96,7 +96,7 @@
         @keydown.escape.window="openMenu = null"
 >
     <!-- Logo (Overlay Absolute) -->
-    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-4 z-50 flex items-center py-2 transition duration-300 logo-glow-gold">
+    <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-16 lg:left-4 z-50 flex items-center py-2 transition duration-300 logo-glow-gold">
         <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-full w-auto object-contain">
     </a>
 
@@ -106,6 +106,23 @@
 
             <!-- Navbar Start : Tagline uniquement (Logo en absolute) -->
             <div class="navbar-start">
+                <!-- Mobile Hamburger Menu -->
+                <div class="dropdown lg:hidden">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle" aria-label="Menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                    </div>
+                    <div tabindex="0" class="dropdown-content z-[50] menu p-2 shadow bg-base-100 rounded-box w-[92vw] max-w-sm mt-3 fixed inset-x-4 top-28 h-[calc(100vh-140px)] overflow-y-auto border border-base-200 text-base-content !translate-x-0">
+                        <?php
+                        wp_nav_menu([
+                            'theme_location' => 'primary_menu',
+                            'container'      => false,
+                            'menu_class'     => 'menu w-full',
+                            'walker'         => new TRENDYLUX_Mobile_Walker(),
+                        ]);
+                        ?>
+                    </div>
+                </div>
+
                 <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold xl:ml-48" style="font-family: 'Mrs Saint Delafield', cursive;">Choose your style... Be trendy !</span>
             </div>
 
@@ -150,7 +167,7 @@
                                     <span class="badge badge-xs badge-primary indicator-item border border-base-100"></span>
                                 </div>
                             </div>
-                            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-200 text-base-content">
+                            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow-lg bg-base-100 rounded-box fixed inset-x-4 top-28 w-auto !translate-x-0 md:absolute md:inset-auto md:right-0 md:top-full md:w-52 border border-base-200 text-base-content">
                                 <!-- AJOUT DE 'text-base-content' ci-dessus pour forcer le texte sombre -->
 
                                 <li>
@@ -186,12 +203,12 @@
                     <?php endif; ?>
 
                     <!-- FAVORIS -->
-                    <button class="btn btn-ghost btn-circle" aria-label="Favoris">
+                    <a href="<?php echo function_exists('tinv_url_wishlist_default') ? esc_url(tinv_url_wishlist_default()) : '#'; ?>" class="btn btn-ghost btn-circle" aria-label="Favoris">
                         <!-- Heroicon: Heart -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                         </svg>
-                    </button>
+                    </a>
 
                     <!-- PANIER (Mini Cart Dropdown) -->
                     <div class="dropdown dropdown-end">
@@ -214,7 +231,7 @@
                         </div>
 
                         <!-- Le contenu du Dropdown (Mini Cart) -->
-                        <div tabindex="0" class="card card-compact dropdown-content bg-base-100 z-[50] mt-3 w-96 shadow-xl border border-base-200 text-base-content">
+                        <div tabindex="0" class="card card-compact dropdown-content bg-base-100 z-[50] mt-3 shadow-xl border border-base-200 text-base-content fixed inset-x-4 top-28 w-auto !translate-x-0 md:absolute md:inset-auto md:right-0 md:top-full md:w-96">
                             <div class="card-body">
                                 <div class="widget_shopping_cart_content">
                                     <?php

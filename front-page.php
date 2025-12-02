@@ -9,7 +9,7 @@
         <!-- Bandeau Promo Horizontal (Fixe) -->
         <div class="relative py-4 flex-none w-full bg-primary text-primary-content flex flex-col items-center justify-center shadow-md rounded-box overflow-hidden">
             <!-- Image de fond subtile pour la texture -->
-            <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/AdobeStock_607063407_Preview.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
+            <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/hero-promo.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
             
             <div class="relative z-10 flex flex-col items-center text-center gap-1">
                 <span class="text-base md:text-lg font-bold uppercase tracking-wider text-white drop-shadow-md">Ouverture officielle</span>
@@ -22,7 +22,7 @@
         </div>
 
         <!-- Grille Hero (Reste de la hauteur) -->
-        <div class="flex-grow relative grid grid-cols-[1fr_2fr_1fr] md:grid-cols-[1fr_2fr_1fr] gap-4 overflow-hidden">
+        <div class="flex-grow relative grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 overflow-hidden">
             
             <?php
             // Logique de récupération des images slider
@@ -63,7 +63,7 @@
                 </div>
             </div>
              <!-- Version mobile colonne gauche -->
-             <div class="relative overflow-hidden h-full md:hidden rounded-box">
+             <div class="relative overflow-hidden h-full hidden rounded-box">
                  <?php if (!empty($images_left)): ?>
                     <img src="<?php echo esc_url( $slider_url . $images_left[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
                  <?php endif; ?>
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <!-- Version mobile colonne droite -->
-             <div class="relative overflow-hidden h-full md:hidden rounded-box">
+             <div class="relative overflow-hidden h-full hidden rounded-box">
                  <?php if (!empty($images_right)): ?>
                     <img src="<?php echo esc_url( $slider_url . $images_right[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
                  <?php endif; ?>
@@ -292,7 +292,7 @@
                         Faites plaisir à coup sûr avec la Carte Cadeau Trendy Lux. Laissez-les choisir leur style parmi nos collections exclusives.
                     </p>
                     <a href="/produit/carte-cadeau-exclusive-trendy-lux/" class="btn btn-primary btn-lg rounded-full px-8 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
-                        Acheter une Carte Cadeau
+                        Acheter
                     </a>
                 </div>
             </div>
@@ -302,7 +302,7 @@
     <!-- 4b. Section Top Marques -->
     <div class="container mx-auto py-12 px-4">
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Marques</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <?php 
             // Configuration des marques : Assurez-vous que l'ordre correspond aux images top-marques-1.jpg à top-marques-12.jpg
             $top_brands = [
@@ -337,7 +337,7 @@
     </div>
 
     <!-- Section Publicitaire Sacs -->
-    <div class="container mx-auto py-12 px-4 w-2/3">
+    <div class="container mx-auto py-12 px-4 w-full md:w-3/4">
         <a href="/categorie-produit/femme/accessoires-femme/femme-sacs/" class="block relative overflow-hidden rounded-box shadow-lg group">
             <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-bags.jpg" alt="Collection Sacs" class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end justify-center p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -417,7 +417,7 @@
                                     <a href="<?php the_permalink(); ?>" class="block w-full h-full">
                                         <?php 
                                         if ( has_post_thumbnail() ) {
-                                            the_post_thumbnail( 'woocommerce_thumbnail', ['class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out'] );
+                                            the_post_thumbnail( 'large', ['class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out'] );
                                         } else {
                                             echo '<img src="' . wc_placeholder_img_src() . '" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out" alt="Placeholder" />';
                                         }

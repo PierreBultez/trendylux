@@ -1,6 +1,7 @@
 <?php
 
 require_once get_template_directory() . '/inc/class-trendylux-nav-walker.php';
+require_once get_template_directory() . '/inc/class-trendylux-mobile-walker.php';
 
 function trendylux_register_nav_menu(): void
 {
@@ -28,8 +29,9 @@ function trendylux_init(): void
     // Définir les tailles d'images custom après l'initialisation de WordPress.
     // Cela résout la notice "traduction déclenchée trop tôt".
     add_theme_support( 'woocommerce', array(
-        'gallery_thumbnail_image_width' => 64,
-        'thumbnail_image_width'         => 450,
+        'gallery_thumbnail_image_width' => 100,
+        'thumbnail_image_width'         => 800,
+        'woocommerce_thumbnail'         => 600,
     ) );
 }
 add_action( 'init', 'trendylux_init' );
@@ -380,20 +382,19 @@ function trendylux_style_sale_flash( $html, $post, $product ): string
 }
 add_filter( 'woocommerce_sale_flash', 'trendylux_style_sale_flash', 10, 3 );
 
-function trendylux_show_destock_badge_single(): void
-{
-    global $product;
-    if ( ! $product ) return;
-
-    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
-    // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
-    // on essaie de le décaler un peu (top-12 ou top-14).
-    // Le z-index doit être élevé.
-    echo '<div class="badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';
-    }
-}
-    // On le hook avec une priorité qui le place probablement au début du conteneur images
-add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
+//function trendylux_show_destock_badge_single(): void
+//{
+//    global $product;
+//    if ( ! $product ) return;
+//
+//    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
+//    // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
+//    // on essaie de le décaler un peu (top-12 ou top-14).
+//    // Le z-index doit être élevé.
+//            echo '<div class="hidden md:block badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';    }
+//}
+//    // On le hook avec une priorité qui le place probablement au début du conteneur images
+//add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
 
 /**
  * 4. Afficher les étoiles de notation avec des SVG et des classes DaisyUI.
@@ -670,7 +671,7 @@ function trendylux_filter_products(): void
     ob_start();
 
     if ($query->have_posts()) {
-        echo '<ul class="products grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8 md:gap-x-6 md:gap-y-10">';
+        echo '<ul class="products grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">';
         while ($query->have_posts()) {
             $query->the_post();
             wc_get_template_part('content', 'product');
@@ -949,15 +950,15 @@ function trendylux_update_destock_status($product_id): void
 
 
 // 3. DISPLAY (Panier) : Badge textuel
-add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10, 3);
-
-function trendylux_add_discount_badge_cart($name, $cart_item, $cart_item_key) {
-    $product = $cart_item['data'];
-    if (trendylux_is_last_chance_product($product)) {
-        $name .= ' <span style="color:#e74c3c; font-size:0.85em; font-weight:bold;">(Dernière pièce : -15% appliqués !)</span>';
-    }
-    return $name;
-}
+//add_filter('woocommerce_cart_item_name', 'trendylux_add_discount_badge_cart', 10, 3);
+//
+//function trendylux_add_discount_badge_cart($name, $cart_item, $cart_item_key) {
+//    $product = $cart_item['data'];
+//    if (trendylux_is_last_chance_product($product)) {
+//        $name .= ' <span style="color:#e74c3c; font-size:0.85em; font-weight:bold;">(Dernière pièce : -15% appliqués !)</span>';
+//    }
+//    return $name;
+//}
 
 // 4. DISPLAY (Liste produits) : Badge visuel sur l'image
 add_action('woocommerce_before_shop_loop_item_title', 'trendylux_show_last_chance_badge', 10);
@@ -1038,7 +1039,7 @@ function trendylux_product_page_last_chance_script(): void
                 
                 // On injecte un message visuel fort
                 const msg = document.createElement('div');
-                msg.className = 'trendylux-last-chance-msg alert alert-error mt-2 py-2 text-sm';
+                msg.className = 'trendylux-last-chance-msg alert alert-error mt-2 py-2 text-sm w-full';
                 msg.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     <span><b>Dernière pièce !</b> <br/>Une remise de 15% est appliquée.</span>
@@ -1061,6 +1062,18 @@ function trendylux_product_page_last_chance_script(): void
     </script>
     <?php
 }
+
+//function trendylux_show_destock_badge_after_add_to_cart_mobile(): void
+//{
+//    global $product;
+//    if ( ! $product ) return;
+//
+//    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
+//        // Only show on mobile, hidden on desktop
+//        echo '<div class="md:hidden badge badge-dash badge-warning mt-5 mb-5 p-5 font-bold z-10 text-center w-full">Dernière chance</div>';
+//    }
+//}
+//add_action( 'woocommerce_after_add_to_cart_form', 'trendylux_show_destock_badge_after_add_to_cart_mobile', 10 );
 
 // 5. DISPLAY (Panier/Mini-Panier) : Afficher le prix remisé visuellement dans la colonne prix
 add_filter( 'woocommerce_cart_item_price', 'trendylux_display_discounted_price_in_cart', 10, 3 );

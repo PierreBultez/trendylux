@@ -5,8 +5,8 @@ use WP_CLI\Utils;
  * Script de mise à jour MASSIVE des prix.
  *
  * LOGIQUE :
- * - Si Prix Régulier < 50€  => +30% (x 1.30)
- * - Si Prix Régulier >= 50€ => +22% (x 1.22)
+ * - Si Prix Régulier > 50€ => -18% (* 0,82)
+ * - Si Prix Régulier <= 50€ => Ignoré
  *
  * UTILISATION :
  * 
@@ -48,6 +48,13 @@ $query_args = array(
     'post_status'    => 'publish',
     'posts_per_page' => -1,
     'fields'         => 'ids',
+    'tax_query'      => array(
+        array(
+            'taxonomy' => 'product_tag',
+            'field'    => 'slug',
+            'terms'    => 'destockage',
+        ),
+    ),
 );
 
 WP_CLI::line( 'Récupération du catalogue...' );
@@ -89,8 +96,13 @@ foreach ( $product_ids as $parent_id ) {
         if ( $old_price <= 0 ) continue;
 
         // --- LOGIQUE DE PRIX ---
-        $multiplier = ($old_price < 50) ? 1.30 : 1.22;
-        $new_price = round( $old_price * $multiplier, 2 );
+        if ( $old_price > 50 ) {
+            $new_price = round( $old_price / 0.82, 2 );
+            $rule_label = '/ 0.82';
+        } else {
+            // On ignore les produits <= 50€
+            continue;
+        }
 
         if ( $is_dry_run ) {
             // En mode simulation, on stocke juste pour affichage
@@ -100,7 +112,7 @@ foreach ( $product_ids as $parent_id ) {
                     'Name' => substr($item->get_name(), 0, 30) . '...',
                     'Old' => $old_price . '€',
                     'New' => $new_price . '€',
-                    'Rule' => ($multiplier == 1.30) ? '+30%' : '+22%'
+                    'Rule' => $rule_label
                 ];
             }
         } else {
