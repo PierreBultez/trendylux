@@ -1,4 +1,4 @@
-name: Déploiement en Pré-production
+name: Déploiement en Production
 
 on:
   push:
@@ -33,10 +33,10 @@ jobs:
           REMOTE_USER: ${{ secrets.VPS_SSH_USER }}
           REMOTE_PORT: ${{ secrets.VPS_SSH_PORT }}
           SOURCE: "./"
-          TARGET: ${{ secrets.PREPROD_PATH }}
+          TARGET: ${{ secrets.PROD_PATH }}
           # --- SYNTAXE DE L'EXCLUDE CORRIGÉE ---
           EXCLUDE: "node_modules, src, .git, .github, vite.config.js, tailwind.config.js, package.json, package-lock.json, README.md"
           SCRIPT_AFTER: |
-            sudo chown -R pierre:www-data ${{ secrets.PREPROD_PATH }}
-            sudo find ${{ secrets.PREPROD_PATH }} -type d -exec chmod 775 {} \;
-            sudo find ${{ secrets.PREPROD_PATH }} -type f -exec chmod 664 {} \;
+            sudo chown -R pierre:www-data ${{ secrets.PROD_PATH }}
+            sudo find ${{ secrets.PROD_PATH }} -type d -exec chmod 775 {} \;
+            sudo find ${{ secrets.PROD_PATH }} -type f -exec chmod 664 {} \;
