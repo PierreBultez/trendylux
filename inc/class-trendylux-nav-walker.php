@@ -271,7 +271,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 $attributes .= ' :class="{ \'text-primary\': openMenu === \'menu-item-' . $menu_item->ID . '\' }"';
             } else {
                 // Ici, on gère les classes pour les liens simples
-                if (strtoupper($menu_item->title) === 'PROMOS') {
+                if (strtoupper($menu_item->title) === 'PROMOS -15%') {
                     $a_classes[] = 'btn btn-dash btn-error';
                 } else {
                     $a_classes[] = 'hover:text-primary';
