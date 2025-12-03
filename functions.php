@@ -152,6 +152,17 @@ function trendylux_add_module_type_attribute($tag, $handle, $src) {
 }
 add_filter('script_loader_tag', 'trendylux_add_module_type_attribute', 10, 3);
 
+// Forcer la barre d'admin pour les gestionnaires de boutique
+if ( ! function_exists( 'trendylux_force_admin_bar' ) ) {
+    function trendylux_force_admin_bar($show) {
+        if ( current_user_can( 'manage_woocommerce' ) ) {
+            return true;
+        }
+        return $show;
+    }
+    add_filter( 'show_admin_bar', 'trendylux_force_admin_bar' );
+}
+
 /**
  * Redirige wp-login.php vers la page Mon Compte de WooCommerce
  */
