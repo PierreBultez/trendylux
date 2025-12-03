@@ -181,9 +181,9 @@
             // DÉFINITION MANUELLE DES CATÉGORIES (SLUGS + TITRES PERSONNALISÉS)
             // Format: 'slug' => 'Titre personnalisé' (ou null pour utiliser le nom de la catégorie par défaut)
             $category_config = [
-                'femme'             => 'Tout l\'univers pour dames',            // #0: Grande largeur haut
+                'vetements-femme'   => 'La garde-robe de Madame',            // #0: Grande largeur haut
                 'chaussures-femme'  => 'Les chaussures de Madame',            // #1: Large gauche
-                'homme'             => 'L\'univers des hommes',            // #2: Carré centre
+                'vetements-homme'   => 'Le dressing de Monsieur',            // #2: Carré centre
                 'chaussures-homme'  => 'Sneakers & Chaussures homme',   // #3: Vertical droite
                 'accessoires-femme' => 'Accessoires Femme',      // #4: Carré bas gauche
                 'accessoires-homme' => 'Accessoires Homme',                    // #5: Large bas centre (Titre par défaut)
