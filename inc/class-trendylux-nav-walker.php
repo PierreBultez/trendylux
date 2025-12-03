@@ -126,7 +126,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 $output .= '</a>';
 
                 // Image 2 : Image horizontale en haut à droite
-                $output .= '<a href="' . home_url( '/homme/chaussures-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'chaussures-homme-2.jpg" alt="Chaussures de ville" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Toutes les chaussures</div>';
