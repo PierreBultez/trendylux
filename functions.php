@@ -938,7 +938,7 @@ function trendylux_update_destock_status($product_id): void
         }
     }
 
-    // --- GESTION DU TAG SUR LE PARENT ---
+    // --- GESTION DU TAG SUR LE PARENT ET DES CATEGORIES ---
     
     $term_slug = 'destockage';
     if (!term_exists($term_slug, 'product_tag')) {
@@ -946,12 +946,36 @@ function trendylux_update_destock_status($product_id): void
     }
 
     if ($has_last_item) {
+        // Ajout du tag destockage
         if (!has_term($term_slug, 'product_tag', $parent_id)) {
             wp_set_object_terms($parent_id, $term_slug, 'product_tag', true);
         }
+
+        // Gestion des catégories : Sauvegarde et Suppression
+        // On ne sauvegarde que si ce n'est pas déjà fait (pour ne pas écraser avec une liste vide)
+        $original_cats = get_post_meta($parent_id, '_trendylux_original_cat_ids', true);
+        
+        if (empty($original_cats)) {
+             $current_cat_ids = wc_get_product_term_ids($parent_id, 'product_cat');
+             // On sauvegarde seulement s'il y a des catégories à sauver
+             if (!empty($current_cat_ids)) {
+                 update_post_meta($parent_id, '_trendylux_original_cat_ids', $current_cat_ids);
+                 // Suppression des catégories (le produit n'apparaît plus dans ses rayons d'origine)
+                 wp_set_object_terms($parent_id, array(), 'product_cat');
+             }
+        }
+
     } else {
+        // Retrait du tag destockage
         if (has_term($term_slug, 'product_tag', $parent_id)) {
             wp_remove_object_terms($parent_id, $term_slug, 'product_tag');
+        }
+        
+        // Restauration des catégories
+        $original_cats = get_post_meta($parent_id, '_trendylux_original_cat_ids', true);
+        if (!empty($original_cats)) {
+            wp_set_object_terms($parent_id, $original_cats, 'product_cat');
+            delete_post_meta($parent_id, '_trendylux_original_cat_ids');
         }
     }
 }
