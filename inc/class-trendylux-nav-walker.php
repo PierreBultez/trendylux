@@ -18,7 +18,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $output .= '<div class="p-6 flex gap-8 min-h-[500px]">';
 
             // Ajustement : Pour Univers Homme ou Univers Femme, on masque la liste (hidden).
-            $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false;
+            $is_homme = stripos( $this->current_parent_title, 'univers homme' ) !== false;
             $is_femme = stripos( $this->current_parent_title, 'univers femme' ) !== false;
             $is_chaussures_homme = stripos( $this->current_parent_title, 'chaussures homme' ) !== false;
             $is_chaussures_femme = stripos( $this->current_parent_title, 'chaussures femme' ) !== false;
@@ -53,13 +53,13 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $output .= '</ul>';
 
             // Injection du Bento Grid pour la catégorie Univers Homme
-            if ( stripos( $this->current_parent_title, 'univers homme' ) !== false && stripos( $this->current_parent_title, 'femme' ) === false ) {
+            if ( stripos( $this->current_parent_title, 'univers homme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/homme/';
                 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
                 
                 // Image 1 : Grande image verticale à gauche
-                $output .= '<a href="' . home_url( '/categorie-produit/homme/vetements/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
+                $output .= '<a href="' . home_url( '/categorie-produit/homme/vetements-homme/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
                 $output .= '<img src="' . $img_base . 'vetements.webp" alt="Mode Homme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Vêtements</div>';
