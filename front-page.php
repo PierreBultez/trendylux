@@ -181,12 +181,12 @@
             // DÉFINITION MANUELLE DES CATÉGORIES (SLUGS + TITRES PERSONNALISÉS)
             // Format: 'slug' => 'Titre personnalisé' (ou null pour utiliser le nom de la catégorie par défaut)
             $category_config = [
-                'vetements-femme'   => 'La garde-robe de Madame',            // #0: Grande largeur haut
-                'chaussures-femme'  => 'Les chaussures de Madame',            // #1: Large gauche
-                'vetements-homme'   => 'Le dressing de Monsieur',            // #2: Carré centre
-                'chaussures-homme'  => 'Sneakers & Chaussures homme',   // #3: Vertical droite
-                'accessoires-femme' => 'Accessoires Femme',      // #4: Carré bas gauche
-                'accessoires-homme' => 'Accessoires Homme',                    // #5: Large bas centre (Titre par défaut)
+                'vetements-femme'   => 'La garde-robe de Madame',               // #0: Grande largeur haut
+                'chaussures-femme'  => 'Les chaussures de Madame',              // #1: Large gauche
+                'accessoires-homme' => 'Accessoires Homme',                     // #2: Carré centre
+                'chaussures-homme'  => 'Sneakers & Chaussures homme',           // #3: Vertical droite
+                'accessoires-femme' => 'Accessoires Femme',                     // #4: Carré bas gauche
+                'vetements-homme'   => 'Le dressing de Monsieur',               // #5: Large bas centre (Titre par défaut)
             ];
 
             // On récupère les objets catégories correspondants
