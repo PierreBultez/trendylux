@@ -104,7 +104,8 @@ get_header();
                         </svg>
                     </div>
 
-                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Casquette Collector 2025</h3>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">Casquette Collector 2025</h3>
+                    <p class="text-3xl text-primary font-bold mb-6">39.99€</p>
                     <p class="text-gray-300 mb-8 max-w-lg mx-auto">
                         Une pièce unique fusionnant le luxe accessible de Trendy Lux et le design audacieux de Makaï. Finitions or, broderie 3D, et matériaux premium.
                     </p>
