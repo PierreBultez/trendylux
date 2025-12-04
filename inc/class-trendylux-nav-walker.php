@@ -26,7 +26,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $is_accessoires_femme = stripos( $this->current_parent_title, 'accessoires femme' ) !== false;
             $is_luxe_createurs = stripos( $this->current_parent_title, 'luxe & créateurs' ) !== false;
 
-            $is_bento_menu = $is_homme || $is_femme;
+            $is_bento_menu = $is_homme || $is_femme || $is_luxe_createurs;
             
             if ( $is_bento_menu ) {
                 $ul_class = 'hidden';
