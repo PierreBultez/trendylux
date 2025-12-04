@@ -250,14 +250,14 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/luxe-createurs/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'luxe-createurs-2.jpg" alt="casquette de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'luxe-createurs-3.webp" alt="casquette de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/luxe-createurs/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'luxe-createurs-3.webp" alt="chaussure de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'luxe-createurs-2.jpg" alt="chaussure de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</a>';
