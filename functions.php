@@ -650,6 +650,16 @@ function trendylux_filter_products(): void
                 'terms'    => $value,
                 'operator' => 'IN',
             ];
+        } else {
+            // Support generic taxonomies (like product_brand)
+            if (taxonomy_exists($clean_key)) {
+                $tax_query[] = [
+                    'taxonomy' => $clean_key,
+                    'field'    => 'slug',
+                    'terms'    => $value,
+                    'operator' => 'IN',
+                ];
+            }
         }
     }
     
