@@ -225,6 +225,48 @@ get_header();
                                         continue;
                                     }
                                 }
+                                
+                                // 3. Hide Genre filter if we are in a Gender-specific category context
+                                // (Check current category AND its ancestors for 'homme' or 'femme')
+                                if ( $attribute === 'pa_genre' ) {
+                                    $hide_genre = false;
+                                    $term_check_obj = null;
+
+                                    // Determine the current product_cat term object
+                                    if ( isset($current_object->term_id) && isset($current_object->taxonomy) && $current_object->taxonomy === 'product_cat' ) {
+                                        $term_check_obj = $current_object;
+                                    } elseif ( $qv_slug = get_query_var('product_cat') ) {
+                                        $term = get_term_by( 'slug', $qv_slug, 'product_cat' );
+                                        if ( $term && ! is_wp_error( $term ) ) {
+                                            $term_check_obj = $term;
+                                        }
+                                    }
+
+                                    if ( $term_check_obj ) {
+                                        // 1. Check current term slug
+                                        if ( strpos( $term_check_obj->slug, 'homme' ) !== false || strpos( $term_check_obj->slug, 'femme' ) !== false ) {
+                                            $hide_genre = true;
+                                        } else {
+                                            // 2. Check ancestors
+                                            $ancestors = get_ancestors( $term_check_obj->term_id, 'product_cat', 'taxonomy' );
+                                            if ( ! empty( $ancestors ) ) {
+                                                foreach ( $ancestors as $ancestor_id ) {
+                                                    $ancestor = get_term( $ancestor_id, 'product_cat' );
+                                                    if ( $ancestor && ! is_wp_error( $ancestor ) ) {
+                                                        if ( strpos( $ancestor->slug, 'homme' ) !== false || strpos( $ancestor->slug, 'femme' ) !== false ) {
+                                                            $hide_genre = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if ( $hide_genre ) {
+                                        continue;
+                                    }
+                                }
 
                                 $term_args = ['taxonomy' => $attribute, 'hide_empty' => true];
                                 
