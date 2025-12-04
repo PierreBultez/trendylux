@@ -24,7 +24,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $is_chaussures_femme = stripos( $this->current_parent_title, 'chaussures femme' ) !== false;
             $is_accessoires_homme = stripos( $this->current_parent_title, 'accessoires homme' ) !== false;
             $is_accessoires_femme = stripos( $this->current_parent_title, 'accessoires femme' ) !== false;
-            $is_luxe_createurs = stripos( $this->current_parent_title, 'luxe & créateurs' ) !== false;
+            $is_luxe_createurs = stripos( $this->current_parent_title, "luxe et créateurs" ) !== false;
 
             $is_bento_menu = $is_homme || $is_femme || $is_luxe_createurs;
             
@@ -236,7 +236,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour la catégorie Luxe & Createurs
-            if ( stripos( $this->current_parent_title, 'luxe & créateurs' ) !== false ) {
+            if ( stripos( $this->current_parent_title, 'luxe et créateurs' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/luxe/';
 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
