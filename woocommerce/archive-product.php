@@ -47,11 +47,15 @@ get_header();
     }
 
     // 2. Récupération simple et standard des catégories (Comme sur les pages standard)
-    $display_categories = get_terms([
-        'taxonomy'   => 'product_cat',
-        'parent'     => $parent_id,
-        'hide_empty' => true,
-    ]);
+    if ( is_product_tag( 'destockage' ) ) {
+        $display_categories = [];
+    } else {
+        $display_categories = get_terms([
+            'taxonomy'   => 'product_cat',
+            'parent'     => $parent_id,
+            'hide_empty' => true,
+        ]);
+    }
 
     // 3. Détection du contexte Marque pour persistance dans les liens
     $brand_param_key = '';

@@ -324,7 +324,7 @@
                 // Récupération du nom de la marque ou fallback
                 $brand_name = isset($top_brands[$i-1]) ? $top_brands[$i-1] : 'Marque ' . $i;
                 // Création de l'URL de recherche
-                $search_link = home_url( '/marque/' . urlencode($brand_name) );
+                $search_link = home_url( '/marque/' . sanitize_title($brand_name) );
             ?>
                 <a href="<?php echo esc_url($search_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
                     <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-<?php echo $i; ?>.jpg" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
