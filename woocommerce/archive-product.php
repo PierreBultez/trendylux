@@ -17,48 +17,58 @@ get_header();
     </div>
 
     <?php
-    $current_object = get_queried_object();
-    $display_categories = [];
+    // --- LOGIQUE D'AFFICHAGE DES SOUS-CATÉGORIES ---
+    
+    // 1. Déterminer l'ID Parent pour lister les enfants
+    $parent_id = 0;
+    $qo = get_queried_object();
 
-    if ( is_product_category() ) {
-        // Standard behavior for Category pages: Show children
-        $display_categories = get_terms([
-            'taxonomy' => 'product_cat',
-            'parent' => $current_object->term_id,
-            'hide_empty' => true,
-        ]);
-    } elseif ( is_tax(['product_brand', 'pa_marque']) ) {
-        // Behavior for Brand pages: Show categories containing products from this brand
-        // 1. Get IDs of products in this brand
-        $product_ids = get_posts([
-            'post_type' => 'product',
-            'posts_per_page' => -1, // Limit to avoid memory issues on huge sites if necessary
-            'fields' => 'ids',
-            'tax_query' => [[
-                'taxonomy' => $current_object->taxonomy,
-                'field' => 'term_id',
-                'terms' => $current_object->term_id,
-            ]]
-        ]);
-
-        if ( !empty($product_ids) ) {
-            // 2. Get categories associated with these products (Top Level only first)
-            $display_categories = get_terms([
-                'taxonomy' => 'product_cat',
-                'object_ids' => $product_ids,
-                'parent' => 0,
-                'hide_empty' => true,
-            ]);
-            
-            // Fallback: If no top-level categories found, try all levels
-            if ( empty($display_categories) || is_wp_error($display_categories) ) {
-                 $display_categories = get_terms([
-                    'taxonomy' => 'product_cat',
-                    'object_ids' => $product_ids,
-                    'hide_empty' => true,
-                ]);
+    // Cas 1: Page Catégorie standard
+    if ( $qo instanceof WP_Term && $qo->taxonomy === 'product_cat' ) {
+        $parent_id = $qo->term_id;
+    } 
+    // Cas 2: Page filtrée où l'objet principal est devenu la Marque, 
+    // mais on est bien sur une URL de catégorie (ex: /categorie-produit/slug/)
+    elseif ( $cat_slug = get_query_var( 'product_cat' ) ) {
+        $term = get_term_by( 'slug', $cat_slug, 'product_cat' );
+        if ( $term && ! is_wp_error( $term ) ) {
+            $parent_id = $term->term_id;
+        }
+    }
+    // Cas 3: Fallback URL param (rare, pour permaliens bruts)
+    elseif ( ! empty( $_GET['product_cat'] ) ) {
+        $cat_slug = sanitize_text_field( $_GET['product_cat'] );
+        if ( strpos( $cat_slug, ',' ) === false ) {
+            $term = get_term_by( 'slug', $cat_slug, 'product_cat' );
+            if ( $term && ! is_wp_error( $term ) ) {
+                $parent_id = $term->term_id;
             }
         }
+    }
+
+    // 2. Récupération simple et standard des catégories (Comme sur les pages standard)
+    $display_categories = get_terms([
+        'taxonomy'   => 'product_cat',
+        'parent'     => $parent_id,
+        'hide_empty' => true,
+    ]);
+
+    // 3. Détection du contexte Marque pour persistance dans les liens
+    $brand_param_key = '';
+    $brand_param_val = '';
+
+    if ( is_tax('product_brand') ) {
+        $brand_param_key = 'product_brand';
+        $brand_param_val = get_queried_object()->slug;
+    } elseif ( is_tax('pa_marque') ) {
+        $brand_param_key = 'pa_marque';
+        $brand_param_val = get_queried_object()->slug;
+    } elseif ( !empty($_GET['product_brand']) ) {
+        $brand_param_key = 'product_brand';
+        $brand_param_val = sanitize_text_field($_GET['product_brand']);
+    } elseif ( !empty($_GET['pa_marque']) ) {
+        $brand_param_key = 'pa_marque';
+        $brand_param_val = sanitize_text_field($_GET['pa_marque']);
     }
 
     if ( !empty($display_categories) && !is_wp_error($display_categories) ) {
@@ -67,22 +77,14 @@ get_header();
         // Desktop: Flex Wrap List (hidden on mobile)
         echo '<div class="hidden md:flex flex-wrap justify-center gap-4">';
         foreach ($display_categories as $category) {
-            // Link Construction:
-            // If we are on a Brand page (product_brand tax), we want the link to go to the Category page
-            // BUT keep the Brand as a filter.
             $link = get_term_link($category);
             
-            if ( is_tax('product_brand') ) {
-                 $current_brand = get_queried_object();
-                 // Append ?product_brand=slug
-                 $link = add_query_arg( 'product_brand', $current_brand->slug, $link );
-            } elseif ( is_tax('pa_marque') ) {
-                 $current_brand = get_queried_object();
-                 // Append ?pa_marque=slug
-                 $link = add_query_arg( 'pa_marque', $current_brand->slug, $link );
+            // Ajout du paramètre marque si présent
+            if ( $brand_param_key && $brand_param_val ) {
+                $link = add_query_arg( $brand_param_key, $brand_param_val, $link );
             }
 
-            echo '<a href="' . esc_url($link) . '" class="btn btn-outline">' . $category->name . '</a>';
+            echo '<a href="' . esc_url($link) . '" class="btn btn-outline">' . esc_html($category->name) . '</a>';
         }
         echo '</div>';
 
@@ -92,17 +94,11 @@ get_header();
         echo '<div tabindex="0" role="button" class="btn btn-outline w-full justify-between mb-4">' . (is_product_category() ? 'Sous-catégories' : 'Catégories') . ' <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></div>';
         echo '<ul tabindex="0" class="dropdown-content z-[9999] menu p-2 shadow bg-base-100 rounded-box w-full border border-base-200">';
         foreach ($display_categories as $category) {
-             // Same logic for mobile
              $link = get_term_link($category);
-             if ( is_tax('product_brand') ) {
-                 $current_brand = get_queried_object();
-                 $link = add_query_arg( 'product_brand', $current_brand->slug, $link );
-             } elseif ( is_tax('pa_marque') ) {
-                 $current_brand = get_queried_object();
-                 $link = add_query_arg( 'pa_marque', $current_brand->slug, $link );
+             if ( $brand_param_key && $brand_param_val ) {
+                 $link = add_query_arg( $brand_param_key, $brand_param_val, $link );
              }
-
-             echo '<li><a href="' . esc_url($link) . '">' . $category->name . '</a></li>';
+             echo '<li><a href="' . esc_url($link) . '">' . esc_html($category->name) . '</a></li>';
         }
         echo '</ul>';
         echo '</div>';
