@@ -1,5 +1,44 @@
 <?php
 
+/**
+ * Injection automatique du menu "TOP MARQUES" s'il n'existe pas.
+ */
+function trendylux_inject_top_marques_menu( $items, $args ) {
+    if ( $args->theme_location != 'primary_menu' ) {
+        return $items;
+    }
+
+    foreach ( $items as $item ) {
+        if ( strtoupper( $item->title ) === 'TOP MARQUES' ) {
+            return $items;
+        }
+    }
+
+    $new_item = new stdClass();
+    $new_item->ID = 999999;
+    $new_item->db_id = 999999;
+    $new_item->title = 'TOP MARQUES';
+    $new_item->url = '#';
+    $new_item->menu_order = -1; // Force first position
+    $new_item->menu_item_parent = 0;
+    $new_item->type = 'custom';
+    $new_item->object = 'custom';
+    $new_item->type_label = 'Custom Link';
+    $new_item->post_parent = 0;
+    $new_item->object_id = 999999;
+    $new_item->classes = array('menu-item-has-children', 'top-marques-menu');
+    $new_item->target = '';
+    $new_item->attr_title = '';
+    $new_item->description = '';
+    $new_item->xfn = '';
+    $new_item->status = 'publish';
+    
+    array_unshift( $items, $new_item );
+
+    return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'trendylux_inject_top_marques_menu', 10, 2 );
+
 require_once get_template_directory() . '/inc/class-trendylux-nav-walker.php';
 require_once get_template_directory() . '/inc/class-trendylux-mobile-walker.php';
 

@@ -5,6 +5,63 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
     private int $current_item_id = 0;
     private string $current_parent_title = '';
 
+    private function render_brands_mega_menu( int $item_id ): string
+    {
+        $output = '<div x-cloak x-show="openMenu === \'menu-item-' . $item_id . '\'" 
+            @mouseenter="openMenu = \'menu-item-' . $item_id . '\'" 
+            @mouseleave="openMenu = null" 
+            x-transition
+            class="auto-cols-auto z-50 absolute top-full left-1/2 -translate-x-1/2 z-10 w-screen max-w-7xl overflow-hidden rounded-box bg-neutral text-neutral-content shadow-lg ring-1 ring-black/5" 
+            style="display: none;">';
+        
+        $output .= '<div class="p-6 flex gap-8 min-h-[500px]">';
+        $output .= '<ul class="w-full">'; // Full width container
+
+        $brands = get_terms([
+            'taxonomy'   => 'product_brand',
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC'
+        ]);
+
+        if ( ! empty( $brands ) && ! is_wp_error( $brands ) ) {
+            // Grouper par première lettre
+            $grouped = [];
+            foreach ( $brands as $brand ) {
+                $first_letter = strtoupper( mb_substr( $brand->name, 0, 1 ) );
+                $grouped[$first_letter][] = $brand;
+            }
+
+            $output .= '<div class="flex-grow px-8 pb-8 overflow-y-auto max-h-[600px]">';
+            $output .= '<div class="columns-2 md:columns-4 lg:columns-5 gap-8 space-y-8">';
+            
+            foreach ( $grouped as $letter => $terms ) {
+                $output .= '<div class="break-inside-avoid">';
+                $output .= '<h3 class="font-serif font-bold text-2xl text-primary border-b border-primary/30 mb-4 pb-2">' . $letter . '</h3>';
+                $output .= '<ul class="space-y-2">';
+                foreach ( $terms as $term ) {
+                    $link = get_term_link( $term );
+                    if ( ! is_wp_error( $link ) ) {
+                        $output .= '<li><a href="' . esc_url( $link ) . '" class="block text-neutral-content/80 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm">' . esc_html( $term->name ) . '</a></li>';
+                    }
+                }
+                $output .= '</ul>';
+                $output .= '</div>';
+            }
+            
+            $output .= '</div>'; // Fin columns
+            $output .= '</div>'; // Fin scroll container
+        } else {
+            $output .= '<div class="p-8 w-full text-center text-lg">Aucune marque disponible pour le moment.</div>';
+        }
+
+        $output .= '</ul>';
+        $output .= '</div>'; // Fin flex container
+        $output .= '</div>'; // Fin mega menu wrapper
+
+        return $output;
+    }
+
     public function start_lvl( &$output, $depth = 0, $args = null ): void
     {
         if ( $depth === 0 && $this->is_mega_menu ) {
@@ -24,7 +81,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             $is_chaussures_femme = stripos( $this->current_parent_title, 'chaussures femme' ) !== false;
             $is_accessoires_homme = stripos( $this->current_parent_title, 'accessoires homme' ) !== false;
             $is_accessoires_femme = stripos( $this->current_parent_title, 'accessoires femme' ) !== false;
-            $is_luxe_createurs = stripos( $this->current_parent_title, "luxe et créateurs" ) !== false;
+            $is_luxe_createurs = stripos( $this->current_parent_title, 'luxe et créateurs' ) !== false;
 
             $is_bento_menu = $is_homme || $is_femme || $is_luxe_createurs;
             
@@ -54,9 +111,9 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
     {
         if ( $depth === 0 && $this->is_mega_menu ) {
             $output .= '</ul>';
-
+            
             // Injection du Bento Grid pour la catégorie Univers Homme
-            if ( stripos( $this->current_parent_title, 'univers homme' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'univers homme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/homme/';
                 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -86,7 +143,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour la catégorie Univers Femme
-            if ( stripos( $this->current_parent_title, 'univers femme' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'univers femme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/femme/';
                 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -116,7 +173,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour Chaussures Homme
-            if ( stripos( $this->current_parent_title, 'chaussures homme' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'chaussures homme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/chaussures-homme/';
                 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -146,7 +203,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour Chaussures Femme
-            if ( stripos( $this->current_parent_title, 'chaussures femme' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'chaussures femme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/chaussures-femme/';
 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -176,7 +233,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour Accessoires Homme
-            if ( stripos( $this->current_parent_title, 'accessoires homme' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'accessoires homme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/accessoires-homme/';
 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -206,7 +263,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour Accessoires Femme
-            if ( stripos( $this->current_parent_title, 'accessoires femme' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'accessoires femme' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/accessoires-femme/';
 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -236,7 +293,7 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             }
 
             // Injection du Bento Grid pour la catégorie Luxe & Createurs
-            if ( stripos( $this->current_parent_title, 'luxe et créateurs' ) !== false ) {
+            if (stripos( $this->current_parent_title, 'luxe et créateurs' ) !== false ) {
                 $img_base = get_template_directory_uri() . '/public/mega-menu/luxe/';
 
                 $output .= '<div class="flex-grow grid grid-cols-4 grid-rows-2 gap-4">';
@@ -327,6 +384,11 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
         $item_output .= $args->link_before . apply_filters( 'the_title', $menu_item->title, $menu_item->ID ) . $args->link_after;
         $item_output .= '</a>';
         $item_output .= $args->after;
+
+        // MODIFICATION: Inject Top Marques Mega Menu manually because start_lvl is skipped for items without children
+        if ( $depth === 0 && strtoupper($menu_item->title) === 'TOP MARQUES' ) {
+            $item_output .= $this->render_brands_mega_menu( $menu_item->ID );
+        }
 
         $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $menu_item, $depth, $args );
     }
