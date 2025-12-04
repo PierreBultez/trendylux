@@ -302,6 +302,9 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
             if ($has_children) {
                 $attributes .= ' @mouseenter="openMenu = \'menu-item-' . $menu_item->ID . '\'"';
                 $attributes .= ' :class="{ \'text-primary\': openMenu === \'menu-item-' . $menu_item->ID . '\' }"';
+                if (stripos($menu_item->title, 'luxe et créateurs') !== false) {
+                    $a_classes[] = 'menu-luxe-glow'; // Custom class for glow
+                }
             } else {
                 // Ici, on gère les classes pour les liens simples
                 if (strtoupper($menu_item->title) === 'PROMOS -15%') {

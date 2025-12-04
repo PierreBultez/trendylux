@@ -414,7 +414,6 @@ body.home .toast-container > * {
 .product-remove a:before,
 .product-remove button i,
 .product-remove a i {
-    @apply text-xl;
     content: "×"; /* Fallback si pas d'icone */
     display: inline-block;
     font-family: sans-serif;
@@ -627,4 +626,14 @@ body.home .toast-container > * {
 
 #place_order {
     margin-top: 10px;
+}
+
+/* Style for Luxe & Créateurs menu item glow */
+.menu-luxe-glow {
+    text-shadow: 0 0 8px var(--color-primary), 0 0 15px var(--color-primary);
+    transition: text-shadow 0.3s ease-in-out;
+}
+
+.menu-luxe-glow:hover {
+    text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary), 0 0 30px rgba(212, 175, 55, 0.8);
 }
