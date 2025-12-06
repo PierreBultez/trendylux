@@ -36,6 +36,21 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
                     </div>
                     <div tabindex="0" class="dropdown-content z-[50] menu p-2 shadow bg-base-100 rounded-box w-[92vw] max-w-sm mt-3 fixed inset-x-4 top-28 h-[calc(100vh-140px)] overflow-y-auto border border-base-200 text-base-content !translate-x-0">
+                        <!-- Barre de recherche Mobile -->
+                        <div class="mb-4 p-2">
+                            <form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                                <label class="input input-bordered flex items-center gap-2 w-full">
+                                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <path d="m21 21-4.3-4.3"></path>
+                                        </g>
+                                    </svg>
+                                    <input type="search" class="grow" placeholder="Rechercher" name="s" value="<?php echo get_search_query(); ?>" />
+                                    <button type="submit" class="hidden" aria-label="Lancer la recherche"></button>
+                                </label>
+                            </form>
+                        </div>
                         <?php
                         wp_nav_menu([
                             'theme_location' => 'primary_menu',
