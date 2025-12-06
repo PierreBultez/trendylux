@@ -75,55 +75,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gère les boutons + et -
     handleQuantityButtons();
     
-    // Gestion du formulaire Newsletter
-    const newsletterForm = document.getElementById('newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const emailInput = this.querySelector('input[name="email"]');
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const msgContainer = document.getElementById('newsletter-message');
-            const originalBtnText = submitBtn.innerHTML;
+    // Gestion du formulaire Newsletter (Event Delegation pour support AJAX/Multi-instance)
+    document.body.addEventListener('submit', function(e) {
+        if (!e.target.classList.contains('js-newsletter-form')) return;
 
-            // Reset UI
-            msgContainer.innerHTML = '';
-            msgContainer.className = 'text-xs mt-2 absolute';
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading loading-spinner loading-xs"></span>';
+        e.preventDefault();
+        const form = e.target;
+        
+        const emailInput = form.querySelector('input[name="email"]');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        // On cherche le conteneur de message associé (frère ou dans le parent)
+        const msgContainer = form.parentElement.querySelector('.js-newsletter-message');
+        
+        if (!msgContainer) return;
 
-            const formData = new FormData();
-            formData.append('action', 'subscribe_newsletter');
-            formData.append('email', emailInput.value);
-            // trendylux_ajax est injecté via wp_localize_script dans functions.php
-            formData.append('nonce', trendylux_ajax.nonce);
+        const originalBtnText = submitBtn.innerHTML;
 
-            fetch(trendylux_ajax.ajax_url, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    msgContainer.classList.add('text-success');
-                    msgContainer.textContent = data.data;
-                    emailInput.value = ''; // Clear input
-                } else {
-                    msgContainer.classList.add('text-error');
-                    msgContainer.textContent = data.data;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        // Reset UI
+        msgContainer.innerHTML = '';
+        msgContainer.classList.remove('text-success', 'text-error');
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading loading-spinner loading-xs"></span>';
+
+        const formData = new FormData();
+        formData.append('action', 'subscribe_newsletter');
+        formData.append('email', emailInput.value);
+        formData.append('nonce', trendylux_ajax.nonce);
+
+        fetch(trendylux_ajax.ajax_url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                msgContainer.classList.add('text-success');
+                msgContainer.textContent = data.data;
+                emailInput.value = ''; // Clear input
+            } else {
                 msgContainer.classList.add('text-error');
-                msgContainer.textContent = 'Une erreur technique est survenue.';
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-            });
+                msgContainer.textContent = data.data;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            msgContainer.classList.add('text-error');
+            msgContainer.textContent = 'Une erreur technique est survenue.';
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
         });
-    }
+    });
 });
 
 // Ajout pour masquer les flèches via CSS

@@ -40,3 +40,14 @@ if ( ! wc_coupons_enabled() ) {
     </div>
 
 </form>
+
+<div class="w-full md:w-1/3 mb-8">
+    <p class="label-text mb-2 mt-4"><?php esc_html_e( 'Livraison offerte sur votre 1ère commande pour l’inscription à la newsletter', 'woocommerce' ); ?></p>
+    <div class="form-control">
+        <form class="join w-full js-newsletter-form">
+            <input type="email" name="email" placeholder="votre.email@exemple.com" class="input input-bordered join-item w-full" required />
+            <button type="submit" class="btn btn-primary join-item">S'inscrire</button>
+        </form>
+        <div class="text-xs mt-2 absolute js-newsletter-message"></div>
+    </div>
+</div>

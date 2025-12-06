@@ -88,11 +88,11 @@
         <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row justify-around items-center">
             <h3 class="font-bold text-lg mb-4 md:mb-0">Inscrivez-vous à notre newsletter pour profiter de la livraison offerte sur votre première commande</h3>
             <div class="form-control">
-                <form id="newsletter-form" class="join relative">
+                <form id="newsletter-form" class="join relative js-newsletter-form">
                     <input type="email" name="email" placeholder="votre.email@exemple.com" class="input input-bordered join-item text-base-content" required />
                     <button type="submit" class="btn btn-primary join-item">S'inscrire</button>
                 </form>
-                <div id="newsletter-message" class="text-xs mt-2 absolute"></div>
+                <div id="newsletter-message" class="text-xs mt-2 absolute js-newsletter-message"></div>
             </div>
         </div>
     </div>
