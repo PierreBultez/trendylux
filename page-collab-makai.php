@@ -112,12 +112,12 @@ get_header();
 
                     <div class="alert bg-primary/20 border-primary text-primary-content mb-8">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span class="font-bold text-lg text-secondary">A venir … disponible en pré commande envoie nous un mail pour être sûr de recevoir la tienne Stock limité</span>
+                        <span class="font-bold text-lg text-secondary">Stock Limité ! Disponible en pré commande, réserves vite la tienne dés maintenant pour la recevoir en Janvier</span>
                     </div>
 
-                    <a href="mailto:contact@trendylux.com?subject=Pré-commande Casquette Makai x TrendyLux" class="btn btn-primary btn-lg w-full md:w-auto gap-3 shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+                    <a href="/casquette-collector-2025-trendy-lux-x-makai-design/" class="btn btn-primary btn-lg w-full md:w-auto gap-3 shadow-[0_0_20px_rgba(212,175,55,0.5)]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                        Réserver ma casquette
+                        Pré-commander ma casquette
                     </a>
                 </div>
             </div>
