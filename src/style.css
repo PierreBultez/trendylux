@@ -637,3 +637,34 @@ body.home .toast-container > * {
 .menu-luxe-glow:hover {
     text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary), 0 0 30px rgba(212, 175, 55, 0.8);
 }
+
+/* ==========================================================================
+   WORDPRESS PAGINATION (Styled as DaisyUI Join)
+   ========================================================================== */
+
+.navigation.pagination {
+    @apply flex justify-center mt-12;
+}
+
+.navigation.pagination .nav-links {
+    @apply join;
+}
+
+.navigation.pagination .page-numbers {
+    @apply join-item btn btn-md bg-base-100 border-base-300 hover:bg-base-200 hover:border-primary transition-colors;
+    text-decoration: none;
+}
+
+.navigation.pagination .page-numbers.current {
+    @apply btn-active btn-primary text-primary-content border-primary cursor-default;
+}
+
+.navigation.pagination .page-numbers.dots {
+    @apply btn-disabled bg-transparent border-transparent text-gray-400;
+}
+
+/* Hide "Previous" and "Next" text on mobile if desired, or keep them */
+.navigation.pagination .prev,
+.navigation.pagination .next {
+    @apply px-4;
+}

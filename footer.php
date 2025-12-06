@@ -60,6 +60,7 @@
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary opacity-100 text-3xl md:text-xl">Pratique</header>
                 <a class="link link-hover text-xl md:text-sm" href="/guide-des-tailles/">Guide des tailles</a>
+                <a class="link link-hover text-xl md:text-sm" href="<?php echo get_post_type_archive_link( 'post' ); ?>">L'actu Trendy</a>
                 <header class="footer-title text-primary opacity-100 mt-4 text-3xl md:text-xl">Réseaux</header>
                                 <div class="flex align-center justify-center md:justify-start gap-24 mt-6 md:gap-6 md:mt-0">
                     <!-- Facebook -->

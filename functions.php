@@ -1280,3 +1280,76 @@ function trendylux_create_welcome_coupon(string $email): ?string
 
     return $code;
 }
+
+/**
+ * Custom Excerpt Length
+ */
+function trendylux_custom_excerpt_length( $length ) {
+    return 25;
+}
+add_filter( 'excerpt_length', 'trendylux_custom_excerpt_length', 999 );
+
+/**
+ * Custom Excerpt "Read More"
+ */
+function trendylux_excerpt_more( $more ) {
+    return '...';
+}
+add_filter( 'excerpt_more', 'trendylux_excerpt_more' );
+
+/**
+ * Custom Comment Callback for wp_list_comments
+ */
+function trendylux_comment_callback($comment, $args, $depth) {
+    ?>
+    <li <?php comment_class('comment mb-6'); ?> id="li-comment-<?php comment_ID(); ?>">
+        <article id="comment-<?php comment_ID(); ?>" class="flex flex-col sm:flex-row gap-4 bg-base-100 p-6 rounded-box shadow-sm border border-base-200">
+            <div class="flex-shrink-0 hidden sm:block">
+                <?php if (0 != $args['avatar_size']) echo get_avatar($comment, $args['avatar_size'], '', '', ['class' => 'rounded-full border-2 border-primary/20']); ?>
+            </div>
+            <div class="flex-grow">
+                <header class="flex justify-between items-start sm:items-center mb-2 flex-col sm:flex-row">
+                    <div class="flex items-center gap-2 mb-2 sm:mb-0">
+                         <div class="sm:hidden">
+                            <?php if (0 != $args['avatar_size']) echo get_avatar($comment, 32, '', '', ['class' => 'rounded-full border-2 border-primary/20']); ?>
+                        </div>
+                        <div class="comment-author vcard">
+                            <?php printf(__('<cite class="font-bold not-italic text-lg">%s</cite>', 'trendylux'), get_comment_author_link()); ?>
+                        </div>
+                    </div>
+                   
+                    <div class="comment-metadata text-xs text-gray-400">
+                        <a href="<?php echo esc_url(get_comment_link($comment->comment_ID)); ?>" class="hover:underline">
+                            <time datetime="<?php comment_time('c'); ?>">
+                                <?php printf(__('%1$s à %2$s', 'trendylux'), get_comment_date(), get_comment_time()); ?>
+                            </time>
+                        </a>
+                        <?php edit_comment_link(__('(Modifier)', 'trendylux'), ' <span class="ml-2 text-primary">', '</span>'); ?>
+                    </div>
+                </header>
+
+                <?php if ('0' == $comment->comment_approved) : ?>
+                    <div class="alert alert-info text-sm py-2 mb-2">
+                        <?php _e('Votre commentaire est en attente de modération.', 'trendylux'); ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="comment-content prose prose-sm max-w-none mb-4 text-base-content/80">
+                    <?php comment_text(); ?>
+                </div>
+
+                <div class="reply text-right">
+                    <?php comment_reply_link(array_merge($args, array(
+                        'depth'     => $depth,
+                        'max_depth' => $args['max_depth'],
+                        'add_below' => 'comment',
+                        'before'    => '',
+                        'after'     => '',
+                        'class'     => 'btn btn-xs btn-outline btn-primary normal-case'
+                    ))); ?>
+                </div>
+            </div>
+        </article>
+    <!-- </li> is closed by WordPress -->
+    <?php
+}
