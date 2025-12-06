@@ -48,7 +48,7 @@ get_header();
 
     // 2. Récupération simple et standard des catégories (Comme sur les pages standard)
     // Masquer les catégories sur la page déstockage
-    if ( is_product_tag( 'destockage' ) ) {
+    if ( is_product_tag( '' ) ) {
         $display_categories = [];
     } else {
         $display_categories = get_terms([
