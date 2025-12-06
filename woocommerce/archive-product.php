@@ -76,6 +76,40 @@ get_header();
         $brand_param_val = sanitize_text_field($_GET['pa_marque']);
     }
 
+    // FILTRAGE SPECIFIQUE : Si on est dans un contexte de marque,
+    // on ne veut afficher que les catégories qui contiennent des produits de cette marque.
+    if ( ! empty( $display_categories ) && ! is_wp_error( $display_categories ) && ( $brand_param_key === 'product_brand' || $brand_param_key === 'pa_marque' ) && ! empty( $brand_param_val ) ) {
+        $filtered_categories = [];
+        foreach ( $display_categories as $cat_term ) {
+            // Vérification légère : Est-ce qu'il existe au moins 1 produit dans cette catégorie ET cette marque ?
+            $check_args = [
+                'post_type'      => 'product',
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'tax_query'      => [
+                    'relation' => 'AND',
+                    [
+                        'taxonomy'         => 'product_cat',
+                        'field'            => 'term_id',
+                        'terms'            => $cat_term->term_id,
+                        'include_children' => true,
+                    ],
+                    [
+                        'taxonomy' => $brand_param_key,
+                        'field'    => 'slug',
+                        'terms'    => $brand_param_val,
+                    ]
+                ]
+            ];
+
+            $check_query = new WP_Query( $check_args );
+            if ( $check_query->have_posts() ) {
+                $filtered_categories[] = $cat_term;
+            }
+        }
+        $display_categories = $filtered_categories;
+    }
+
     if ( !empty($display_categories) && !is_wp_error($display_categories) ) {
         echo '<div class="container mx-auto px-4 mb-8">';
         
