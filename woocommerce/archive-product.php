@@ -47,8 +47,8 @@ get_header();
     }
 
     // 2. Récupération simple et standard des catégories (Comme sur les pages standard)
-    // Masquer les catégories sur la page déstockage et les pages de marques
-    if ( is_product_tag( 'destockage' ) || is_tax( 'pa_marque' ) || is_tax( 'product_brand' ) ) {
+    // Masquer les catégories sur la page déstockage
+    if ( is_product_tag( 'destockage' ) ) {
         $display_categories = [];
     } else {
         $display_categories = get_terms([
