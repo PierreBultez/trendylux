@@ -1,23 +1,42 @@
-<?php get_header(); ?>
+<?php 
+get_header(); 
+
+// Récupération des options du thème
+$home_opts = get_option( 'trendylux_home_options', [] );
+
+// -- Helpers pour les valeurs par défaut --
+$promo_text_1 = $home_opts['promo_text_1'] ?? 'Ouverture officielle';
+$promo_text_2 = $home_opts['promo_text_2_prefix'] ?? '-10% sur tout le site avec le code promo';
+$promo_code   = $home_opts['promo_code'] ?? 'VIP10';
+$promo_text_3 = $home_opts['promo_text_3'] ?? 'Livraison offerte**';
+$promo_bg     = !empty($home_opts['promo_bg_image']) ? wp_get_attachment_url($home_opts['promo_bg_image']) : get_template_directory_uri() . '/public/hero-promo/hero-promo.jpeg';
+
+$hero_title    = $home_opts['hero_title'] ?? 'Trendy Lux';
+$hero_subtitle = $home_opts['hero_subtitle'] ?? 'Élégance Intemporelle';
+$hero_btn_text = $home_opts['hero_btn_text'] ?? 'Découvrir';
+$hero_btn_url  = $home_opts['hero_btn_url'] ?? get_permalink( wc_get_page_id( 'shop' ) );
+$hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($home_opts['hero_main_image']) : get_template_directory_uri() . '/public/hero.jpg';
+
+?>
 
 <main>
     <!-- 1. HERO SECTION (Full Viewport minus Header approx) -->
-    <!-- On ajuste la hauteur pour que le bas de cette section corresponde au bas de l'écran -->
-    <!-- Header est approx 80-100px. On vise calc(100vh - 100px) pour la zone principale -->
     <div class="flex flex-col h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] mb-12 p-4 gap-4">
 
         <!-- Bandeau Promo Horizontal (Fixe) -->
         <div class="relative py-4 flex-none w-full bg-primary text-primary-content flex flex-col items-center justify-center shadow-md rounded-box overflow-hidden">
-            <!-- Image de fond subtile pour la texture -->
-            <img src="<?php echo get_template_directory_uri(); ?>/public/hero-promo/hero-promo.jpeg" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" alt="">
+            <!-- Image de fond -->
+            <img src="<?php echo esc_url( $promo_bg ); ?>" class="absolute inset-0 w-full h-full object-cover" alt="">
             
             <div class="relative z-10 flex flex-col items-center text-center gap-1">
-                <span class="text-base md:text-lg font-bold uppercase tracking-wider text-white drop-shadow-md">Ouverture officielle</span>
+                <span class="text-base md:text-lg font-bold uppercase tracking-wider text-white drop-shadow-md"><?php echo esc_html( $promo_text_1 ); ?></span>
                 <span class="text-sm md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">
-                    -10% sur tout le site avec le code promo 
-                    <span class="bg-white text-primary px-2 py-1 rounded mx-1 font-serif font-black text-sm md:text-lg shadow-sm">VIP10</span>*
+                    <?php echo esc_html( $promo_text_2 ); ?> 
+                    <?php if ( $promo_code ) : ?>
+                        <span class="bg-white text-primary px-2 py-1 rounded mx-1 font-serif font-black text-sm md:text-lg shadow-sm"><?php echo esc_html( $promo_code ); ?></span>*
+                    <?php endif; ?>
                 </span>
-                <span class="text-sm md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md">Livraison offerte**</span>
+                <span class="text-sm md:text-base font-bold uppercase tracking-wider text-white drop-shadow-md"><?php echo esc_html( $promo_text_3 ); ?></span>
             </div>
         </div>
 
@@ -25,27 +44,43 @@
         <div class="flex-grow relative grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 overflow-hidden">
             
             <?php
-            // Logique de récupération des images slider
-            $slider_dir = get_template_directory() . '/public/hero-slider/';
-            $slider_url = get_template_directory_uri() . '/public/hero-slider/';
-            $all_files = glob( $slider_dir . '*.{jpg,jpeg,png,webp}', GLOB_BRACE );
+            // --- Logique Slider Latéral ---
+            $slider_images = [];
             
-            if ( ! $all_files ) $all_files = [];
-            $filenames = array_map( 'basename', $all_files );
-            if ( ! empty($filenames) ) shuffle( $filenames );
+            // 1. Essayer de récupérer depuis les options
+            if ( ! empty( $home_opts['hero_slider_ids'] ) ) {
+                $ids = explode( ',', $home_opts['hero_slider_ids'] );
+                foreach ( $ids as $id ) {
+                    $url = wp_get_attachment_url( $id );
+                    if ( $url ) $slider_images[] = $url;
+                }
+            }
+
+            // 2. Fallback : Dossier public/hero-slider/
+            if ( empty( $slider_images ) ) {
+                $slider_dir = get_template_directory() . '/public/hero-slider/';
+                $slider_url_base = get_template_directory_uri() . '/public/hero-slider/';
+                $all_files = glob( $slider_dir . '*.{jpg,jpeg,png,webp}', GLOB_BRACE );
+                
+                if ( $all_files ) {
+                    foreach ( $all_files as $file ) {
+                        $slider_images[] = $slider_url_base . basename( $file );
+                    }
+                }
+            }
+
+            if ( ! empty($slider_images) ) shuffle( $slider_images );
 
             // Fonction pour assurer assez d'images pour le scroll
             $ensure_loop = function($arr) {
                 if (empty($arr)) return [];
-                // Minimum 4 pour la hauteur
                 while(count($arr) < 4) $arr = array_merge($arr, $arr); 
-                // Doubler pour le loop infini
                 return array_merge($arr, $arr); 
             };
 
-            $half = ceil( count( $filenames ) / 2 );
-            $left_base = array_slice( $filenames, 0, $half );
-            $right_base = array_slice( $filenames, $half );
+            $half = ceil( count( $slider_images ) / 2 );
+            $left_base = array_slice( $slider_images, 0, $half );
+            $right_base = array_slice( $slider_images, $half );
 
             $images_left = $ensure_loop($left_base);
             $images_right = $ensure_loop($right_base);
@@ -54,9 +89,9 @@
             <!-- Colonne Gauche : Défilement VERS LE HAUT -->
             <div class="relative overflow-hidden h-full hidden md:block">
                 <div class="animate-scroll-up w-full">
-                    <?php foreach($images_left as $img): ?>
+                    <?php foreach($images_left as $img_url): ?>
                         <div class="w-full aspect-[3/4] relative rounded-box overflow-hidden mb-4">
-                            <img src="<?php echo esc_url( $slider_url . $img ); ?>" class="w-full h-full object-cover block" alt="Mode">
+                            <img src="<?php echo esc_url( $img_url ); ?>" class="w-full h-full object-cover block" alt="Mode">
                             <div class="absolute inset-0 bg-black/20"></div>
                         </div>
                     <?php endforeach; ?>
@@ -65,14 +100,14 @@
              <!-- Version mobile colonne gauche -->
              <div class="relative overflow-hidden h-full hidden rounded-box">
                  <?php if (!empty($images_left)): ?>
-                    <img src="<?php echo esc_url( $slider_url . $images_left[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
+                    <img src="<?php echo esc_url( $images_left[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
                  <?php endif; ?>
              </div>
 
 
             <!-- Colonne Centrale : Image Fixe + CTA -->
             <div class="relative h-full w-full overflow-hidden group flex items-end justify-center pb-20 rounded-box">
-                <img src="<?php echo get_template_directory_uri(); ?>/public/hero.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-105" alt="Nouvelle Collection">
+                <img src="<?php echo esc_url( $hero_img ); ?>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-105" alt="<?php echo esc_attr( $hero_title ); ?>">
                 
                 <!-- Overlay Gradient -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30"></div>
@@ -80,14 +115,14 @@
                 <!-- Contenu Central -->
                 <div class="relative z-10 text-center px-4 max-w-2xl mx-auto">
                     <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white mb-2 uppercase tracking-tighter drop-shadow-2xl">
-                        Trendy Lux
+                        <?php echo esc_html( $hero_title ); ?>
                     </h1>
                     <p class="text-xl md:text-2xl text-gray-200 mb-8 font-light tracking-[0.2em] uppercase border-t border-b border-white/30 py-2 inline-block">
-                        Élégance Intemporelle
+                        <?php echo esc_html( $hero_subtitle ); ?>
                     </p>
                     <div>
-                        <a href="<?php echo get_permalink( wc_get_page_id( 'shop' ) ); ?>" class="btn btn-primary btn-lg rounded-full px-10 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
-                            Découvrir
+                        <a href="<?php echo esc_url( $hero_btn_url ); ?>" class="btn btn-primary btn-lg rounded-full px-10 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
+                            <?php echo esc_html( $hero_btn_text ); ?>
                         </a>
                     </div>
                 </div>
@@ -96,9 +131,9 @@
             <!-- Colonne Droite : Défilement VERS LE BAS -->
             <div class="relative overflow-hidden h-full hidden md:block">
                 <div class="animate-scroll-down w-full -translate-y-1/2"> 
-                     <?php foreach($images_right as $img): ?>
+                     <?php foreach($images_right as $img_url): ?>
                         <div class="w-full aspect-[3/4] relative rounded-box overflow-hidden mb-4">
-                            <img src="<?php echo esc_url( $slider_url . $img ); ?>" class="w-full h-full object-cover block" alt="Accessoires">
+                            <img src="<?php echo esc_url( $img_url ); ?>" class="w-full h-full object-cover block" alt="Accessoires">
                             <div class="absolute inset-0 bg-black/20"></div>
                         </div>
                     <?php endforeach; ?>
@@ -107,7 +142,7 @@
             <!-- Version mobile colonne droite -->
              <div class="relative overflow-hidden h-full hidden rounded-box">
                  <?php if (!empty($images_right)): ?>
-                    <img src="<?php echo esc_url( $slider_url . $images_right[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
+                    <img src="<?php echo esc_url( $images_right[0] ); ?>" class="w-full h-full object-cover opacity-50" alt="">
                  <?php endif; ?>
              </div>
 
@@ -117,28 +152,42 @@
     <!-- 1b. Slider Marques (Marquee) -->
     <div class="bg-white border-y border-base-200 overflow-hidden py-8 relative z-10">
         <h2 class="text-center text-xl md:text-2xl font-serif uppercase tracking-widest mb-8 px-4">
-            Choisis parmi les plus grandes Marques et affirme ton style … <span class="text-primary block md:inline mt-2 md:mt-0" style="font-family: 'Mrs Saint Delafield', cursive; text-transform: none; font-size: 1.5em;">Be Trendy</span>
+            <?php echo esc_html( $home_opts['brand_slider_title'] ?? 'Choisis parmi les plus grandes Marques et affirme ton style …' ); ?> 
+            <span class="text-primary block md:inline mt-2 md:mt-0" style="font-family: 'Mrs Saint Delafield', cursive; text-transform: none; font-size: 1.5em;">Be Trendy</span>
         </h2>
         <div class="animate-marquee flex items-center">
             <?php 
-            $brand_dir = get_template_directory() . '/public/brand-slider/';
-            $brand_url = get_template_directory_uri() . '/public/brand-slider/';
-            $brand_files = glob( $brand_dir . '*.svg' );
+            $brand_images = [];
             
-            if ( ! $brand_files ) $brand_files = [];
-            $brand_filenames = array_map( 'basename', $brand_files );
+            // 1. Options
+            if ( ! empty( $home_opts['brand_slider_ids'] ) ) {
+                $ids = explode( ',', $home_opts['brand_slider_ids'] );
+                foreach ( $ids as $id ) {
+                    $url = wp_get_attachment_url( $id );
+                    if ( $url ) $brand_images[] = $url;
+                }
+            }
             
-            if ( ! empty( $brand_filenames ) ) {
-                // Mélanger pour l'aléatoire à chaque chargement
-                shuffle( $brand_filenames );
+            // 2. Fallback
+            if ( empty( $brand_images ) ) {
+                $brand_dir = get_template_directory() . '/public/brand-slider/';
+                $brand_url_base = get_template_directory_uri() . '/public/brand-slider/';
+                $brand_files = glob( $brand_dir . '*.svg' );
+                if ( $brand_files ) {
+                    foreach ( $brand_files as $file ) {
+                        $brand_images[] = $brand_url_base . basename( $file );
+                    }
+                }
+            }
+
+            if ( ! empty( $brand_images ) ) {
+                shuffle( $brand_images );
+                $display_brands = array_merge( $brand_images, $brand_images );
                 
-                // Doubler la liste pour la boucle infinie
-                $display_brands = array_merge( $brand_filenames, $brand_filenames );
-                
-                foreach ( $display_brands as $brand_file ): ?>
+                foreach ( $display_brands as $img_url ): ?>
                     <img 
-                        src="<?php echo esc_url( $brand_url . $brand_file ); ?>" 
-                        alt="<?php echo esc_attr( pathinfo( $brand_file, PATHINFO_FILENAME ) ); ?>" 
+                        src="<?php echo esc_url( $img_url ); ?>" 
+                        alt="Brand" 
                         class="h-10 md:h-14 w-auto mx-8 md:mx-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
                     >
                 <?php endforeach; 
@@ -148,24 +197,35 @@
     </div>
 
     <!-- 2. Blocs Catégories Principales -->
+    <?php
+    // Préparation des variables Bloc 1
+    $b1_title = $home_opts['block_1_title'] ?? 'Collab\'s';
+    $b1_url   = $home_opts['block_1_url'] ?? site_url('/collab-makai');
+    $b1_img   = !empty($home_opts['block_1_image']) ? wp_get_attachment_url($home_opts['block_1_image']) : get_template_directory_uri() . '/public/makai.jpeg';
+
+    // Préparation des variables Bloc 2
+    $b2_title = $home_opts['block_2_title'] ?? 'Ventes Flash';
+    $b2_url   = $home_opts['block_2_url'] ?? '/categorie-produit/ventes-flash/';
+    $b2_img   = !empty($home_opts['block_2_image']) ? wp_get_attachment_url($home_opts['block_2_image']) : get_template_directory_uri() . '/public/home-flash-sales.jpeg';
+    ?>
     <div class="container mx-auto py-12 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <a href="<?php echo site_url('/collab-makai'); ?>" class="group relative block">
+            <a href="<?php echo esc_url( $b1_url ); ?>" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo get_template_directory_uri(); ?>/public/makai.jpeg" alt="Collab Makaï x Trendy Lux" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img src="<?php echo esc_url( $b1_img ); ?>" alt="<?php echo esc_attr( $b1_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
                         <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
-                            <h2 class="text-5xl font-bold font-serif uppercase text-primary">Collab's</h2>
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b1_title ); ?></h2>
                         </div>
                     </div>
                 </div>
             </a>
-            <a href="/categorie-produit/ventes-flash/" class="group relative block">
+            <a href="<?php echo esc_url( $b2_url ); ?>" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo get_template_directory_uri(); ?>/public/home-flash-sales.jpeg" alt="Ventes Flash" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img src="<?php echo esc_url( $b2_img ); ?>" alt="<?php echo esc_attr( $b2_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
                         <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
-                            <h2 class="text-5xl font-bold font-serif uppercase text-primary">Ventes Flash</h2>
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b2_title ); ?></h2>
                         </div>
                     </div>
                 </div>
@@ -279,20 +339,27 @@
     </div>
 
     <!-- 4. Section "Carte Cadeau" -->
+    <?php
+    $gift_title    = $home_opts['gift_title'] ?? 'Le Plaisir <br><span class="text-primary">D\'offrir</span>';
+    $gift_text     = $home_opts['gift_text'] ?? 'Faites plaisir à coup sûr avec la Carte Cadeau Trendy Lux. Laissez-les choisir leur style parmi nos collections exclusives.';
+    $gift_btn_text = $home_opts['gift_btn_text'] ?? 'Acheter';
+    $gift_btn_url  = $home_opts['gift_btn_url'] ?? '/produit/carte-cadeau-exclusive-trendy-lux/';
+    $gift_img      = !empty($home_opts['gift_image']) ? wp_get_attachment_url($home_opts['gift_image']) : get_template_directory_uri() . '/public/gift-card-section.jpg';
+    ?>
     <div class="container mx-auto py-12 px-4">
         <div class="hero rounded-box overflow-hidden min-h-[500px] relative group shadow-2xl">
-            <img src="<?php echo get_template_directory_uri(); ?>/public/gift-card-section.jpg" alt="Carte Cadeau Trendy Lux" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="<?php echo esc_url( $gift_img ); ?>" alt="Carte Cadeau" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div class="hero-overlay bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
             <div class="hero-content text-neutral-content text-center md:text-left w-full justify-start px-6 md:px-16">
                 <div class="max-w-xl bg-black/40 backdrop-blur-sm p-8 rounded-box border border-white/10">
                     <h2 class="mb-6 text-4xl md:text-6xl font-bold font-serif text-white uppercase drop-shadow-lg leading-tight">
-                        Le Plaisir <br><span class="text-primary">D'offrir</span>
+                        <?php echo wp_kses_post( $gift_title ); ?>
                     </h2>
                     <p class="mb-8 text-lg md:text-xl font-light tracking-wider text-gray-100 border-l-4 border-primary pl-4">
-                        Faites plaisir à coup sûr avec la Carte Cadeau Trendy Lux. Laissez-les choisir leur style parmi nos collections exclusives.
+                        <?php echo nl2br( esc_html( $gift_text ) ); ?>
                     </p>
-                    <a href="/produit/carte-cadeau-exclusive-trendy-lux/" class="btn btn-primary btn-lg rounded-full px-8 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
-                        Acheter
+                    <a href="<?php echo esc_url( $gift_btn_url ); ?>" class="btn btn-primary btn-lg rounded-full px-8 text-lg shadow-[0_0_30px_rgba(212,175,55,0.4)] border-white/20 hover:scale-105 transition-transform">
+                        <?php echo esc_html( $gift_btn_text ); ?>
                     </a>
                 </div>
             </div>
