@@ -330,7 +330,7 @@ get_header();
                                     ?>
                                     <div class="filter-group" x-data="{ expanded: false }">
                                         <h3 class="font-bold mb-4 text-sm uppercase tracking-wide text-neutral"><?php echo esc_html($label); ?></h3>
-                                        <ul class="space-y-3">
+                                        <ul class="space-y-3 transition-all duration-300" :class="expanded ? 'max-h-60 overflow-y-auto pr-2' : ''">
                                             <?php 
                                             $count = 0;
                                             foreach ($terms as $term): 
