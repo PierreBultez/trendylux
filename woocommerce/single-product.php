@@ -42,6 +42,7 @@ get_header(); ?>
 
                                 <div class="mt-4 text-sm text-gray-600 prose max-w-none">
                                     <?php the_excerpt(); ?>
+                                    <?php do_action( 'trendylux_after_product_description' ); ?>
                                 </div>
                             </div>
 
@@ -65,8 +66,6 @@ get_header(); ?>
                                     <?php echo do_shortcode('[ti_wishlists_addtowishlist]'); ?>
                                 </div>
                             </div>
-
-                            <!-- SUPPRIMÉ : L'action qui affichait les onglets ici -->
 
                         </div>
                     </div>

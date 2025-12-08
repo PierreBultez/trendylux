@@ -368,21 +368,6 @@ function trendylux_checkout_field_args( $args, $key, $value ): array
 }
 add_filter( 'woocommerce_form_field_args', 'trendylux_checkout_field_args', 10, 3 );
 
-/**
- * Déplace le formulaire de code promo de la page de paiement.
- * On le retire de sa position par défaut (en haut) pour le réinsérer
- * juste avant la section des moyens de paiement.
- */
-//function trendylux_move_checkout_coupon_form(): void
-//{
-//    // 1. On le "décroche" de son emplacement d'origine.
-//    remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
-//
-//    // 2. On le "raccroche" juste avant le bloc de paiement.
-//    add_action( 'woocommerce_after_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
-//}
-//add_action( 'init', 'trendylux_move_checkout_coupon_form' );
-
 // =========================================================================
 // == PERSONNALISATION DE LA PAGE PRODUIT UNIQUE (single-product.php)
 // =========================================================================
@@ -432,20 +417,6 @@ function trendylux_style_sale_flash( $html, $post, $product ): string
     return '<div class="badge badge-dash badge-error mb-5 p-5 font-bold z-10">' . $html . '</div>';
 }
 add_filter( 'woocommerce_sale_flash', 'trendylux_style_sale_flash', 10, 3 );
-
-//function trendylux_show_destock_badge_single(): void
-//{
-//    global $product;
-//    if ( ! $product ) return;
-//
-//    if ( has_term( 'destockage', 'product_tag', $product->get_id() ) ) {
-//    // On le place en absolute. Si un badge promo existe déjà (souvent top-0 left-0 ou similaire),
-//    // on essaie de le décaler un peu (top-12 ou top-14).
-//    // Le z-index doit être élevé.
-//            echo '<div class="hidden md:block badge badge-dash badge-warning mb-5 p-5 font-bold z-10">Dernière chance</div>';    }
-//}
-//    // On le hook avec une priorité qui le place probablement au début du conteneur images
-//add_action( 'woocommerce_before_single_product_summary', 'trendylux_show_destock_badge_single', 9 );
 
 /**
  * 4. Afficher les étoiles de notation avec des SVG et des classes DaisyUI.
@@ -832,6 +803,25 @@ function trendylux_remove_my_account_downloads_link( $items ) {
     return $items;
 }
 add_filter( 'woocommerce_account_menu_items', 'trendylux_remove_my_account_downloads_link' );
+
+add_action( 'woocommerce_product_meta_end', 'trendylux_seo_footer_product' );
+
+/**
+ * Insert une phrase seo sur les fiches produits
+ */
+
+add_action( 'trendylux_after_product_description', 'trendylux_seo_footer_product' );
+function trendylux_seo_footer_product() {
+    ?>
+    <div class="mt-8 pt-6 border-t border-gray-100 text-sm text-gray-500 italic">
+        <p>
+            Retrouvez cette marque exclusive sur <strong class="text-neutral">Trendy Lux</strong>,
+            votre référence en ligne pour les <strong class="text-neutral">vêtements de mode</strong>
+            et les <strong class="text-neutral">dernières tendances</strong>.
+        </p>
+    </div>
+    <?php
+}
 
 /**
  * Allow SVG uploads
