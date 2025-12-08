@@ -196,41 +196,165 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         </div>
     </div>
 
-    <!-- 2. Blocs Catégories Principales -->
-    <?php
-    // Préparation des variables Bloc 1
-    $b1_title = $home_opts['block_1_title'] ?? 'Collab\'s';
-    $b1_url   = $home_opts['block_1_url'] ?? site_url('/collab-makai');
-    $b1_img   = !empty($home_opts['block_1_image']) ? wp_get_attachment_url($home_opts['block_1_image']) : get_template_directory_uri() . '/public/makai.jpeg';
-
-    // Préparation des variables Bloc 2
-    $b2_title = $home_opts['block_2_title'] ?? 'Ventes Flash';
-    $b2_url   = $home_opts['block_2_url'] ?? '/categorie-produit/ventes-flash/';
-    $b2_img   = !empty($home_opts['block_2_image']) ? wp_get_attachment_url($home_opts['block_2_image']) : get_template_directory_uri() . '/public/home-flash-sales.jpeg';
-    ?>
-    <div class="container mx-auto py-12 px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <a href="<?php echo esc_url( $b1_url ); ?>" class="group relative block">
-                <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo esc_url( $b1_img ); ?>" alt="<?php echo esc_attr( $b1_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    <div class="hero-content text-center text-neutral-content">
-                        <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
-                            <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b1_title ); ?></h2>
-                        </div>
-                    </div>
-                </div>
-            </a>
-            <a href="<?php echo esc_url( $b2_url ); ?>" class="group relative block">
-                <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo esc_url( $b2_img ); ?>" alt="<?php echo esc_attr( $b2_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                    <div class="hero-content text-center text-neutral-content">
-                        <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
-                            <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b2_title ); ?></h2>
-                        </div>
-                    </div>
-                </div>
-            </a>
+    <!-- 2. Carousel de Produits (Top Ventes) - Redesign Premium -->
+    <div class="container mx-auto py-16 px-4 overflow-hidden">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-5xl font-bold font-serif uppercase tracking-tight mb-3">Les Incontournables</h2>
+            <p class="text-gray-500 text-lg italic font-serif">Nos pièces les plus convoitées du moment</p>
+            <div class="w-24 h-1 bg-primary mx-auto mt-6"></div>
         </div>
+
+        <?php
+        // 1. Récupération des produits (Mis en avant / Featured)
+        $args = [
+                'post_type'      => 'product',
+                'posts_per_page' => 10,
+                'post_status'    => 'publish',
+                'tax_query'      => [
+                        [
+                                'taxonomy' => 'product_visibility',
+                                'field'    => 'name',
+                                'terms'    => 'featured',
+                        ],
+                ],
+        ];
+        $loop = new WP_Query( $args );
+
+        // Fallback : Si moins de 4 produits mis en avant, on prend les meilleures ventes
+        if ( $loop->post_count < 4 ) {
+            $args = [
+                    'post_type'      => 'product',
+                    'posts_per_page' => 10,
+                    'meta_key'       => 'total_sales',
+                    'orderby'        => 'meta_value_num',
+                    'order'          => 'DESC',
+                    'post_status'    => 'publish',
+            ];
+            $loop = new WP_Query( $args );
+        }
+
+        if ( $loop->have_posts() ) :
+            $unique_id = 'slider-' . uniqid();
+            ?>
+            <div class="relative group/slider">
+                <!-- Slider Container -->
+                <!-- scrollbar-hide : classe utilitaire souvent nécessaire, sinon on utilise du CSS inline pour cacher -->
+                <div id="<?php echo $unique_id; ?>" class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-10 pt-4 scroll-smooth px-4 md:px-0" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <style> #<?php echo $unique_id; ?>::-webkit-scrollbar { display: none; } </style>
+
+                    <?php while ( $loop->have_posts() ) : $loop->the_post(); global $product; ?>
+                        <div class="flex-none w-[280px] md:w-[320px] snap-center">
+                            <div class="card bg-base-100 w-full shadow-sm hover:shadow-2xl transition-all duration-500 group rounded-box overflow-hidden border border-transparent hover:border-base-200">
+                                <!-- Image Wrapper -->
+                                <figure class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                                    <?php
+                                    // Badge Promo
+                                    if ( $product->is_on_sale() ) :
+                                        $regular_price = (float) $product->get_regular_price();
+                                        $sale_price = (float) $product->get_sale_price();
+
+                                        if ( $regular_price > 0 ) {
+                                            $percentage = round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 );
+                                            ?>
+                                            <div class="absolute top-4 left-4 z-10">
+                                                <span class="badge badge-error text-white font-bold uppercase text-xs tracking-wider px-3 py-3 shadow-md">-<?php echo $percentage; ?>%</span>
+                                            </div>
+                                            <?php
+                                        }
+                                    endif; ?>
+
+                                    <!-- Image Produit -->
+                                    <a href="<?php the_permalink(); ?>" class="block w-full h-full">
+                                        <?php
+                                        if ( has_post_thumbnail() ) {
+                                            the_post_thumbnail( 'large', ['class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out'] );
+                                        } else {
+                                            echo '<img src="' . wc_placeholder_img_src() . '" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out" alt="Placeholder" />';
+                                        }
+                                        ?>
+                                    </a>
+
+                                    <!-- Actions Overlay (Slide Up) -->
+                                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out bg-white/95 backdrop-blur-sm border-t border-base-200 p-4 flex flex-col gap-2">
+                                        <a href="?add-to-cart=<?php echo $product->get_id(); ?>" class="btn btn-primary btn-block rounded-full text-white hover:scale-105 transition-transform ajax_add_to_cart add_to_cart_button shadow-lg" data-product_id="<?php echo $product->get_id(); ?>" aria-label="Ajouter au panier">
+                                            Ajouter au panier
+                                        </a>
+                                    </div>
+                                </figure>
+
+                                <!-- Card Body -->
+                                <div class="card-body p-5 text-center items-center gap-1">
+                                    <!-- Catégorie -->
+                                    <?php
+                                    $cats = wc_get_product_category_list( $product->get_id(), ', ', '<span class="text-xs font-bold text-gray-400 uppercase tracking-widest hover:text-primary transition-colors">', '</span>' );
+                                    echo $cats;
+                                    ?>
+
+                                    <!-- Titre -->
+                                    <h3 class="text-lg font-serif font-medium truncate w-full mt-1">
+                                        <a href="<?php the_permalink(); ?>" class="hover:text-primary transition-colors">
+                                            <?php the_title(); ?>
+                                        </a>
+                                    </h3>
+
+                                    <!-- Prix -->
+                                    <div class="text-primary font-bold text-lg mt-1">
+                                        <?php echo $product->get_price_html(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </div>
+
+                <!-- Navigation Arrows (Visible on hover) -->
+                <button onclick="document.getElementById('<?php echo $unique_id; ?>').scrollBy({left: -350, behavior: 'smooth'})" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:translate-x-4 group-hover/slider:translate-x-0 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 btn btn-circle btn-neutral shadow-lg z-20">
+                    ❮
+                </button>
+                <button onclick="document.getElementById('<?php echo $unique_id; ?>').scrollBy({left: 350, behavior: 'smooth'})" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:-translate-x-4 group-hover/slider:translate-x-0 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 btn btn-circle btn-neutral shadow-lg z-20">
+                    ❯
+                </button>
+            </div>
+
+            <!-- Script Auto-Scroll simple et robuste -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const slider = document.getElementById('<?php echo $unique_id; ?>');
+                    if(!slider) return;
+
+                    let scrollAmount = 0;
+                    let isHovered = false;
+
+                    // Pause au survol
+                    slider.parentElement.addEventListener('mouseenter', () => isHovered = true);
+                    slider.parentElement.addEventListener('mouseleave', () => isHovered = false);
+
+                    function autoScroll() {
+                        if(isHovered) return;
+
+                        // Vitesse de défilement : Changez le + 1 pour aller plus vite
+                        // Pour un défilement "snap" automatique toutes les X secondes :
+                        // C'est souvent plus propre qu'un défilement continu pixel par pixel en JS pur sans requestAnimationFrame complexe.
+                    }
+
+                    // Option : Défilement automatique par "snap" toutes les 3 secondes
+                    setInterval(() => {
+                        if(isHovered) return;
+
+                        const cardWidth = 320; // Largeur approx + gap
+                        const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+                        if (slider.scrollLeft >= maxScroll - 10) {
+                            // Retour au début smooth
+                            slider.scrollTo({left: 0, behavior: 'smooth'});
+                        } else {
+                            slider.scrollBy({left: cardWidth, behavior: 'smooth'});
+                        }
+                    }, 4000);
+                });
+            </script>
+
+        <?php endif; ?>
     </div>
 
     <!-- 3. Grille de Catégories Secondaires -->
@@ -413,165 +537,41 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         </a>
     </div>
 
-    <!-- 5. Carousel de Produits (Top Ventes) - Redesign Premium -->
-    <div class="container mx-auto py-16 px-4 overflow-hidden">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-5xl font-bold font-serif uppercase tracking-tight mb-3">Les Incontournables</h2>
-            <p class="text-gray-500 text-lg italic font-serif">Nos pièces les plus convoitées du moment</p>
-            <div class="w-24 h-1 bg-primary mx-auto mt-6"></div>
-        </div>
+    <!-- 5. Blocs Catégories Principales -->
+    <?php
+    // Préparation des variables Bloc 1
+    $b1_title = $home_opts['block_1_title'] ?? 'Collab\'s';
+    $b1_url   = $home_opts['block_1_url'] ?? site_url('/collab-makai');
+    $b1_img   = !empty($home_opts['block_1_image']) ? wp_get_attachment_url($home_opts['block_1_image']) : get_template_directory_uri() . '/public/makai.jpeg';
 
-        <?php
-        // 1. Récupération des produits (Mis en avant / Featured)
-        $args = [
-            'post_type'      => 'product',
-            'posts_per_page' => 10,
-            'post_status'    => 'publish',
-            'tax_query'      => [
-                [
-                    'taxonomy' => 'product_visibility',
-                    'field'    => 'name',
-                    'terms'    => 'featured',
-                ],
-            ],
-        ];
-        $loop = new WP_Query( $args );
-
-        // Fallback : Si moins de 4 produits mis en avant, on prend les meilleures ventes
-        if ( $loop->post_count < 4 ) {
-            $args = [
-                'post_type'      => 'product',
-                'posts_per_page' => 10,
-                'meta_key'       => 'total_sales',
-                'orderby'        => 'meta_value_num',
-                'order'          => 'DESC',
-                'post_status'    => 'publish',
-            ];
-            $loop = new WP_Query( $args );
-        }
-
-        if ( $loop->have_posts() ) :
-            $unique_id = 'slider-' . uniqid();
-        ?>
-            <div class="relative group/slider">
-                <!-- Slider Container -->
-                <!-- scrollbar-hide : classe utilitaire souvent nécessaire, sinon on utilise du CSS inline pour cacher -->
-                <div id="<?php echo $unique_id; ?>" class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-10 pt-4 scroll-smooth px-4 md:px-0" style="scrollbar-width: none; -ms-overflow-style: none;">
-                    <style> #<?php echo $unique_id; ?>::-webkit-scrollbar { display: none; } </style>
-                    
-                    <?php while ( $loop->have_posts() ) : $loop->the_post(); global $product; ?>
-                        <div class="flex-none w-[280px] md:w-[320px] snap-center">
-                            <div class="card bg-base-100 w-full shadow-sm hover:shadow-2xl transition-all duration-500 group rounded-box overflow-hidden border border-transparent hover:border-base-200">
-                                <!-- Image Wrapper -->
-                                <figure class="relative aspect-[3/4] overflow-hidden bg-gray-100">
-                                    <?php 
-                                    // Badge Promo
-                                    if ( $product->is_on_sale() ) : 
-                                        $regular_price = (float) $product->get_regular_price();
-                                        $sale_price = (float) $product->get_sale_price();
-                                        
-                                        if ( $regular_price > 0 ) {
-                                            $percentage = round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 );
-                                        ?>
-                                            <div class="absolute top-4 left-4 z-10">
-                                                <span class="badge badge-error text-white font-bold uppercase text-xs tracking-wider px-3 py-3 shadow-md">-<?php echo $percentage; ?>%</span>
-                                            </div>
-                                        <?php 
-                                        }
-                                    endif; ?>
-
-                                    <!-- Image Produit -->
-                                    <a href="<?php the_permalink(); ?>" class="block w-full h-full">
-                                        <?php 
-                                        if ( has_post_thumbnail() ) {
-                                            the_post_thumbnail( 'large', ['class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out'] );
-                                        } else {
-                                            echo '<img src="' . wc_placeholder_img_src() . '" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ease-in-out" alt="Placeholder" />';
-                                        }
-                                        ?>
-                                    </a>
-
-                                    <!-- Actions Overlay (Slide Up) -->
-                                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out bg-white/95 backdrop-blur-sm border-t border-base-200 p-4 flex flex-col gap-2">
-                                        <a href="?add-to-cart=<?php echo $product->get_id(); ?>" class="btn btn-primary btn-block rounded-full text-white hover:scale-105 transition-transform ajax_add_to_cart add_to_cart_button shadow-lg" data-product_id="<?php echo $product->get_id(); ?>" aria-label="Ajouter au panier">
-                                            Ajouter au panier
-                                        </a>
-                                    </div>
-                                </figure>
-
-                                <!-- Card Body -->
-                                <div class="card-body p-5 text-center items-center gap-1">
-                                    <!-- Catégorie -->
-                                    <?php
-                                    $cats = wc_get_product_category_list( $product->get_id(), ', ', '<span class="text-xs font-bold text-gray-400 uppercase tracking-widest hover:text-primary transition-colors">', '</span>' );
-                                    echo $cats;
-                                    ?>
-                                    
-                                    <!-- Titre -->
-                                    <h3 class="text-lg font-serif font-medium truncate w-full mt-1">
-                                        <a href="<?php the_permalink(); ?>" class="hover:text-primary transition-colors">
-                                            <?php the_title(); ?>
-                                        </a>
-                                    </h3>
-
-                                    <!-- Prix -->
-                                    <div class="text-primary font-bold text-lg mt-1">
-                                        <?php echo $product->get_price_html(); ?>
-                                    </div>
-                                </div>
-                            </div>
+    // Préparation des variables Bloc 2
+    $b2_title = $home_opts['block_2_title'] ?? 'Ventes Flash';
+    $b2_url   = $home_opts['block_2_url'] ?? '/categorie-produit/ventes-flash/';
+    $b2_img   = !empty($home_opts['block_2_image']) ? wp_get_attachment_url($home_opts['block_2_image']) : get_template_directory_uri() . '/public/home-flash-sales.jpeg';
+    ?>
+    <div class="container mx-auto py-12 px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <a href="<?php echo esc_url( $b1_url ); ?>" class="group relative block">
+                <div class="hero h-96 rounded-box overflow-hidden">
+                    <img src="<?php echo esc_url( $b1_img ); ?>" alt="<?php echo esc_attr( $b1_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="hero-content text-center text-neutral-content">
+                        <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b1_title ); ?></h2>
                         </div>
-                    <?php endwhile; wp_reset_postdata(); ?>
+                    </div>
                 </div>
-                
-                <!-- Navigation Arrows (Visible on hover) -->
-                <button onclick="document.getElementById('<?php echo $unique_id; ?>').scrollBy({left: -350, behavior: 'smooth'})" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:translate-x-4 group-hover/slider:translate-x-0 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 btn btn-circle btn-neutral shadow-lg z-20">
-                    ❮
-                </button>
-                <button onclick="document.getElementById('<?php echo $unique_id; ?>').scrollBy({left: 350, behavior: 'smooth'})" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:-translate-x-4 group-hover/slider:translate-x-0 opacity-0 group-hover/slider:opacity-100 transition-all duration-300 btn btn-circle btn-neutral shadow-lg z-20">
-                    ❯
-                </button>
-            </div>
-
-            <!-- Script Auto-Scroll simple et robuste -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const slider = document.getElementById('<?php echo $unique_id; ?>');
-                    if(!slider) return;
-
-                    let scrollAmount = 0;
-                    let isHovered = false;
-                    
-                    // Pause au survol
-                    slider.parentElement.addEventListener('mouseenter', () => isHovered = true);
-                    slider.parentElement.addEventListener('mouseleave', () => isHovered = false);
-
-                    function autoScroll() {
-                        if(isHovered) return;
-
-                        // Vitesse de défilement : Changez le + 1 pour aller plus vite
-                        // Pour un défilement "snap" automatique toutes les X secondes :
-                        // C'est souvent plus propre qu'un défilement continu pixel par pixel en JS pur sans requestAnimationFrame complexe.
-                    }
-
-                    // Option : Défilement automatique par "snap" toutes les 3 secondes
-                    setInterval(() => {
-                        if(isHovered) return;
-                        
-                        const cardWidth = 320; // Largeur approx + gap
-                        const maxScroll = slider.scrollWidth - slider.clientWidth;
-                        
-                        if (slider.scrollLeft >= maxScroll - 10) {
-                            // Retour au début smooth
-                            slider.scrollTo({left: 0, behavior: 'smooth'});
-                        } else {
-                            slider.scrollBy({left: cardWidth, behavior: 'smooth'});
-                        }
-                    }, 4000);
-                });
-            </script>
-
-        <?php endif; ?>
+            </a>
+            <a href="<?php echo esc_url( $b2_url ); ?>" class="group relative block">
+                <div class="hero h-96 rounded-box overflow-hidden">
+                    <img src="<?php echo esc_url( $b2_img ); ?>" alt="<?php echo esc_attr( $b2_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="hero-content text-center text-neutral-content">
+                        <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
+                            <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b2_title ); ?></h2>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 
 </main>
