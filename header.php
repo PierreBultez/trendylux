@@ -12,6 +12,16 @@
     <?php wp_head(); ?>
 </head>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-653RV0LZWT"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-653RV0LZWT');
+</script>
+
 <body <?php body_class( 'font-sans bg-base-100 text-base-content' ); ?>>
 
 <header
