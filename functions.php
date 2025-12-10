@@ -42,6 +42,7 @@ add_filter( 'wp_nav_menu_objects', 'trendylux_inject_top_marques_menu', 10, 2 );
 require_once get_template_directory() . '/inc/class-trendylux-nav-walker.php';
 require_once get_template_directory() . '/inc/class-trendylux-mobile-walker.php';
 require_once get_template_directory() . '/inc/admin/theme-options.php';
+require_once get_template_directory() . '/inc/class-trendylux-seo.php';
 
 function trendylux_register_nav_menu(): void
 {
@@ -62,6 +63,16 @@ function trendylux_add_woocommerce_support(): void
     add_theme_support( 'wc-product-gallery-slider' );
 }
 add_action( 'after_setup_theme', 'trendylux_add_woocommerce_support' );
+
+function trendylux_theme_setup(): void
+{
+    add_theme_support( 'title-tag' );
+    add_theme_support( 'post-thumbnails' );
+    add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'script', 'style' ) );
+    add_theme_support( 'customize-selective-refresh-widgets' );
+    add_theme_support( 'responsive-embeds' );
+}
+add_action( 'after_setup_theme', 'trendylux_theme_setup' );
 
 // --- HOOK 'INIT' POUR LES CONFIGURATIONS TARDIVES ---
 function trendylux_init(): void
@@ -429,12 +440,15 @@ function trendylux_display_star_rating(): void
     }
 
     global $product;
-    $rating_count = $product->get_rating_count();
-    $review_count = $product->get_review_count();
+    $rating_count   = $product->get_rating_count();
+    $review_count   = $product->get_review_count();
     $average_rating = (float) $product->get_average_rating();
 
     if ( $rating_count > 0 ) { ?>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+            <meta itemprop="ratingValue" content="<?php echo esc_attr( $average_rating ); ?>">
+            <meta itemprop="ratingCount" content="<?php echo esc_attr( $rating_count ); ?>">
+            <meta itemprop="reviewCount" content="<?php echo esc_attr( $review_count ); ?>">
             <div class="rating">
                 <?php
                 $rounded_rating = round( $average_rating ); // Arrondir à l'entier le plus proche

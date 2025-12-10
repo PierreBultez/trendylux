@@ -26,7 +26,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         <!-- Bandeau Promo Horizontal (Fixe) -->
         <div class="relative py-4 flex-none w-full bg-primary text-primary-content flex flex-col items-center justify-center shadow-md rounded-box overflow-hidden">
             <!-- Image de fond -->
-            <img src="<?php echo esc_url( $promo_bg ); ?>" class="absolute inset-0 w-full h-full object-cover" alt="">
+            <img src="<?php echo esc_url( $promo_bg ); ?>" class="absolute inset-0 w-full h-full object-cover" alt="Bannière promotionnelle Trendy Lux: <?php echo esc_attr($promo_text_1); ?> <?php echo esc_attr($promo_text_2); ?> <?php echo esc_attr($promo_code); ?>">
             
             <div class="relative z-10 flex flex-col items-center text-center gap-1">
                 <span class="text-base md:text-lg font-bold uppercase tracking-wider text-white drop-shadow-md"><?php echo esc_html( $promo_text_1 ); ?></span>
@@ -107,7 +107,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
 
             <!-- Colonne Centrale : Image Fixe + CTA -->
             <div class="relative h-full w-full overflow-hidden group flex items-end justify-center pb-20 rounded-box">
-                <img src="<?php echo esc_url( $hero_img ); ?>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-105" alt="<?php echo esc_attr( $hero_title ); ?>">
+                <img src="<?php echo esc_url( $hero_img ); ?>" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-105" alt="Image principale Trendy Lux: <?php echo esc_attr( $hero_title ); ?> <?php echo esc_attr( $hero_subtitle ); ?>">
                 
                 <!-- Overlay Gradient -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30"></div>
@@ -184,10 +184,16 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
                 shuffle( $brand_images );
                 $display_brands = array_merge( $brand_images, $brand_images );
                 
-                foreach ( $display_brands as $img_url ): ?>
+                foreach ( $display_brands as $img_url ): 
+                    // Extract brand name from URL
+                    $filename = basename($img_url);
+                    $brand_alt = sanitize_title( str_replace( ['_Logo', '.svg', '.png', '.jpeg', '.jpg'], '', $filename ) );
+                    // Capitalize first letter of each word
+                    $brand_alt = ucwords( str_replace( '-', ' ', $brand_alt ) );
+                    ?>
                     <img 
                         src="<?php echo esc_url( $img_url ); ?>" 
-                        alt="Brand" 
+                        alt="<?php echo esc_attr( $brand_alt ); ?>" 
                         class="h-10 md:h-14 w-auto mx-8 md:mx-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
                     >
                 <?php endforeach; 
@@ -553,7 +559,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <a href="<?php echo esc_url( $b1_url ); ?>" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo esc_url( $b1_img ); ?>" alt="<?php echo esc_attr( $b1_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img src="<?php echo esc_url( $b1_img ); ?>" alt="Découvrez nos <?php echo esc_attr( $b1_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
                         <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
                             <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b1_title ); ?></h2>
@@ -563,7 +569,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
             </a>
             <a href="<?php echo esc_url( $b2_url ); ?>" class="group relative block">
                 <div class="hero h-96 rounded-box overflow-hidden">
-                    <img src="<?php echo esc_url( $b2_img ); ?>" alt="<?php echo esc_attr( $b2_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img src="<?php echo esc_url( $b2_img ); ?>" alt="Profitez de nos <?php echo esc_attr( $b2_title ); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
                     <div class="hero-content text-center text-neutral-content">
                         <div class="bg-black/30 backdrop-blur-sm p-4 rounded-box">
                             <h2 class="text-5xl font-bold font-serif uppercase text-primary"><?php echo esc_html( $b2_title ); ?></h2>
