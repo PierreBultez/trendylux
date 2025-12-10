@@ -172,33 +172,3 @@
 <?php wp_footer(); ?>
 </body>
 </html>
-
-
-Encore merci ! Contactez-nous à l’adresse {store_email}, si vous avez besoin d’aide avec votre commande.
-
-<div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
-    <p style="margin-bottom: 15px; font-size: 14px; color: #666;">Nos clients nous recommandent :</p>
-
-    <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto; border-collapse: collapse;">
-        <tr>
-            <td align="center" valign="middle" style="padding: 0 5px;">
-                <a href="https://fr.trustpilot.com/review/trendylux.fr" target="_blank" style="text-decoration: none;">
-                    <img src="https://trendylux.fr/wp-content/uploads/2025/12/Capture-decran-du-2025-12-09-21-20-12-e1765311745771.png"
-                         alt="Avis Trustpilot"
-                         width="135"
-                         style="display: block; width: 135px; height: auto; border: 0;">
-                </a>
-            </td>
-
-            <td align="center" valign="middle" style="padding: 0 5px;">
-                <a href="https://g.page/r/CZ_mrbWDD3T_EBI/review" target="_blank" style="text-decoration: none;">
-                    <img src="https://trendylux.fr/wp-content/uploads/2025/12/Capture-decran-du-2025-12-09-21-20-25-e1765311771862.png"
-                         alt="Avis Google"
-                         width="135"
-                         style="display: block; width: 135px; height: auto; border: 0;">
-                </a>
-            </td>
-        </tr>
-    </table>
-
-</div>
