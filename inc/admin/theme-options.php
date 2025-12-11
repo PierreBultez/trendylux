@@ -134,6 +134,45 @@ class Trendylux_Theme_Options {
         $this->add_field( 'gift_btn_text', 'Texte Bouton', 'section_gift_card', 'text', ['default' => 'Acheter'] );
         $this->add_field( 'gift_btn_url', 'Lien Bouton', 'section_gift_card', 'text', ['default' => '/produit/carte-cadeau-exclusive-trendy-lux/'] );
         $this->add_field( 'gift_image', 'Image de fond', 'section_gift_card', 'image' );
+
+        // --- SECTION 7: PIED DE PAGE (FOOTER) ---
+        add_settings_section(
+            'section_footer',
+            '7. Pied de Page (Footer)',
+            null,
+            'trendylux-home-settings'
+        );
+
+        // Réassurance 1
+        $this->add_field( 'reassurance_1_image', 'Réassurance 1: Icône', 'section_footer', 'image' );
+        $this->add_field( 'reassurance_1_title', 'Réassurance 1: Titre', 'section_footer', 'text', ['default' => 'Paiement Protégé'] );
+        $this->add_field( 'reassurance_1_subtitle', 'Réassurance 1: Sous-titre', 'section_footer', 'text', ['default' => 'Transactions 100% sécurisées'] );
+
+        // Réassurance 2
+        $this->add_field( 'reassurance_2_image', 'Réassurance 2: Icône', 'section_footer', 'image' );
+        $this->add_field( 'reassurance_2_title', 'Réassurance 2: Titre', 'section_footer', 'text', ['default' => 'Livraison Gratuite'] );
+        $this->add_field( 'reassurance_2_subtitle', 'Réassurance 2: Sous-titre', 'section_footer', 'text', ['default' => 'Dès 90€ d\'achat'] );
+
+        // Réassurance 3
+        $this->add_field( 'reassurance_3_image', 'Réassurance 3: Icône', 'section_footer', 'image' );
+        $this->add_field( 'reassurance_3_title', 'Réassurance 3: Titre', 'section_footer', 'text', ['default' => 'Livraison Standard'] );
+        $this->add_field( 'reassurance_3_subtitle', 'Réassurance 3: Sous-titre', 'section_footer', 'text', ['default' => '3 à 5 jours ouvrés'] );
+
+        // Réassurance 4
+        $this->add_field( 'reassurance_4_image', 'Réassurance 4: Icône', 'section_footer', 'image' );
+        $this->add_field( 'reassurance_4_title', 'Réassurance 4: Titre', 'section_footer', 'text', ['default' => 'Satisfait ou Remboursé'] );
+        $this->add_field( 'reassurance_4_subtitle', 'Réassurance 4: Sous-titre', 'section_footer', 'text', ['default' => 'Retours sous 14 jours'] );
+
+        // Newsletter
+        $this->add_field( 'footer_newsletter_text', 'Texte Newsletter', 'section_footer', 'textarea', ['default' => 'Inscrivez-vous à notre newsletter pour profiter de la livraison offerte sur votre première commande'] );
+
+        // Mentions (* et **)
+        $this->add_field( 'footer_disclaimer_1', 'Mention * (Texte)', 'section_footer', 'text', ['default' => '*: du 1er au 15 décembre hors promotions'] );
+        $this->add_field( 'footer_disclaimer_2', 'Mention ** (Texte)', 'section_footer', 'text', ['default' => '**: livraison offerte sur votre 1ère commande pour l’inscription à la newsletter'] );
+
+        // Crédits
+        $this->add_field( 'footer_credits_1', 'Crédits Ligne 1', 'section_footer', 'text', ['default' => 'SAS Trendy Lux n\'est pas un distributeur officiel des marques vendues sur le site web trendylux.fr'] );
+        $this->add_field( 'footer_credits_2', 'Crédits Ligne 2', 'section_footer', 'text', ['default' => 'Copyright © TRENDY LUX. Tous droits réservés. Tous les logos et marques déposées présents sur ce site appartiennent à leurs propriétaires respectifs.'] );
     }
 
     /**
