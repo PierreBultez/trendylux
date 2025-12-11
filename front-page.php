@@ -60,7 +60,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
             if ( empty( $slider_images ) ) {
                 $slider_dir = get_template_directory() . '/public/hero-slider/';
                 $slider_url_base = get_template_directory_uri() . '/public/hero-slider/';
-                $all_files = glob( $slider_dir . '*.{jpg,jpeg,png,webp}', GLOB_BRACE );
+                $all_files = glob( $slider_dir . '*.{webp}', GLOB_BRACE );
                 
                 if ( $all_files ) {
                     foreach ( $all_files as $file ) {
