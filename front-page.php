@@ -9,13 +9,13 @@ $promo_text_1 = $home_opts['promo_text_1'] ?? 'Ouverture officielle';
 $promo_text_2 = $home_opts['promo_text_2_prefix'] ?? '-10% sur tout le site avec le code promo';
 $promo_code   = $home_opts['promo_code'] ?? 'VIP10';
 $promo_text_3 = $home_opts['promo_text_3'] ?? 'Livraison offerte**';
-$promo_bg     = !empty($home_opts['promo_bg_image']) ? wp_get_attachment_url($home_opts['promo_bg_image']) : get_template_directory_uri() . '/public/hero-promo/hero-promo.jpeg';
+$promo_bg     = !empty($home_opts['promo_bg_image']) ? wp_get_attachment_url($home_opts['promo_bg_image']) : get_template_directory_uri() . '/public/hero-promo/hero-promo.webp';
 
 $hero_title    = $home_opts['hero_title'] ?? 'Trendy Lux';
 $hero_subtitle = $home_opts['hero_subtitle'] ?? 'Élégance Intemporelle';
 $hero_btn_text = $home_opts['hero_btn_text'] ?? 'Découvrir';
 $hero_btn_url  = $home_opts['hero_btn_url'] ?? get_permalink( wc_get_page_id( 'shop' ) );
-$hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($home_opts['hero_main_image']) : get_template_directory_uri() . '/public/hero.jpg';
+$hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($home_opts['hero_main_image']) : get_template_directory_uri() . '/public/hero.webp';
 
 ?>
 
@@ -474,7 +474,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
     $gift_text     = $home_opts['gift_text'] ?? 'Faites plaisir à coup sûr avec la Carte Cadeau Trendy Lux. Laissez-les choisir leur style parmi nos collections exclusives.';
     $gift_btn_text = $home_opts['gift_btn_text'] ?? 'Acheter';
     $gift_btn_url  = $home_opts['gift_btn_url'] ?? '/produit/carte-cadeau-exclusive-trendy-lux/';
-    $gift_img      = !empty($home_opts['gift_image']) ? wp_get_attachment_url($home_opts['gift_image']) : get_template_directory_uri() . '/public/gift-card-section.jpg';
+    $gift_img      = !empty($home_opts['gift_image']) ? wp_get_attachment_url($home_opts['gift_image']) : get_template_directory_uri() . '/public/gift-card-section.webp';
     ?>
     <div class="container mx-auto py-12 px-4">
         <div class="hero rounded-box overflow-hidden min-h-[500px] relative group shadow-2xl">
@@ -501,7 +501,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Marques</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <?php 
-            // Configuration des marques : Assurez-vous que l'ordre correspond aux images top-marques-1.jpg à top-marques-12.jpg
+            // Configuration des marques : Assurez-vous que l'ordre correspond aux images top-marques-1.webp à top-marques-12.webp
             $top_brands = [
                 'Calvin klein Jeans',
                 'Blauer',
@@ -524,7 +524,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
                 $search_link = home_url( '/marque/' . sanitize_title($brand_name) );
             ?>
                 <a href="<?php echo esc_url($search_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
-                    <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-<?php echo $i; ?>.jpg" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
+                    <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-<?php echo $i; ?>.webp" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
                         <span class="text-sm font-bold uppercase tracking-widest text-white">Voir <?php echo esc_html($brand_name); ?></span>
                     </div>
@@ -536,7 +536,7 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
     <!-- Section Publicitaire Sacs -->
     <div class="container mx-auto py-12 px-4 w-full md:w-3/4">
         <a href="/categorie-produit/femme/accessoires-femme/femme-sacs/" class="block relative overflow-hidden rounded-box shadow-lg group">
-            <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-bags.jpg" alt="Collection Sacs" class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300" />
+            <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-bags.webp" alt="Collection Sacs" class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end justify-center p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span class="text-3xl md:text-5xl font-bold uppercase tracking-widest text-white drop-shadow-lg">Découvrir les Sacs</span>
             </div>
@@ -548,12 +548,12 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
     // Préparation des variables Bloc 1
     $b1_title = $home_opts['block_1_title'] ?? 'Collab\'s';
     $b1_url   = $home_opts['block_1_url'] ?? site_url('/collab-makai');
-    $b1_img   = !empty($home_opts['block_1_image']) ? wp_get_attachment_url($home_opts['block_1_image']) : get_template_directory_uri() . '/public/makai.jpeg';
+    $b1_img   = !empty($home_opts['block_1_image']) ? wp_get_attachment_url($home_opts['block_1_image']) : get_template_directory_uri() . '/public/makai.webp';
 
     // Préparation des variables Bloc 2
     $b2_title = $home_opts['block_2_title'] ?? 'Ventes Flash';
     $b2_url   = $home_opts['block_2_url'] ?? '/categorie-produit/ventes-flash/';
-    $b2_img   = !empty($home_opts['block_2_image']) ? wp_get_attachment_url($home_opts['block_2_image']) : get_template_directory_uri() . '/public/home-flash-sales.jpeg';
+    $b2_img   = !empty($home_opts['block_2_image']) ? wp_get_attachment_url($home_opts['block_2_image']) : get_template_directory_uri() . '/public/home-flash-sales.webp';
     ?>
     <div class="container mx-auto py-12 px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
