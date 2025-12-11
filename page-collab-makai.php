@@ -9,7 +9,7 @@ get_header();
 
     <!-- 1. HERO SECTION -->
     <div class="hero min-h-[70vh] relative">
-        <img src="<?php echo get_template_directory_uri(); ?>/public/makai.jpeg" alt="Makaï Design x Trendy Lux" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+        <img src="<?php echo get_template_directory_uri(); ?>/public/makai.webp" alt="Makaï Design x Trendy Lux" class="absolute inset-0 w-full h-full object-cover opacity-40" />
         <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-base-100"></div>
         
         <div class="hero-content text-center text-neutral-content relative z-10">
@@ -79,7 +79,7 @@ get_header();
             <!-- Visuel -->
             <div class="group">
                 <div class="absolute -inset-4 bg-primary/20 rounded-xl rotate-3 transition-transform duration-500 group-hover:rotate-6"></div>
-                <img src="<?php echo get_template_directory_uri(); ?>/public/makai-2.jpeg" alt="Casquette Makaï" class="relative rounded-xl shadow-2xl w-full object-cover aspect-[4/5] grayscale group-hover:grayscale-0 transition-all duration-700">
+                <img src="<?php echo get_template_directory_uri(); ?>/public/makai-2.webp" alt="Casquette Makaï" class="relative rounded-xl shadow-2xl w-full object-cover aspect-[4/5] grayscale group-hover:grayscale-0 transition-all duration-700">
             </div>
         </div>
     </div>
