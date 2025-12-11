@@ -127,14 +127,14 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'sneakers.jpg" alt="Streetwear" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'sneakers.webp" alt="Streetwear" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures et sneakers</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/accessoires-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires.jpeg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires.webp" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</a>';
@@ -157,14 +157,14 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'sneakers.jpg" alt="Chaussures" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'sneakers.webp" alt="Chaussures" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures et sneakers</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/accessoires-femme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires.jpg" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires.webp" alt="Accessoires" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</a>';
@@ -180,21 +180,21 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
                 
                 // Image 1 : Grande image verticale à gauche
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/homme-schuhe-derbies/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'chaussures-homme-3.jpeg" alt="Sneakers" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'chaussures-homme-3.webp" alt="Sneakers" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Ville</div>';
                 $output .= '</a>';
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'chaussures-homme-2.jpg" alt="Chaussures de ville" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'chaussures-homme-2.webp" alt="Chaussures de ville" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Toutes les chaussures</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/chaussures-homme/homme-baskets/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'chaussures-homme-1.jpg" alt="Sport & Running" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'chaussures-homme-1.webp" alt="Sport & Running" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Baskets</div>';
                 $output .= '</a>';
@@ -210,21 +210,21 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 1 : Grande image verticale à gauche
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/femme-bottes/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'chaussures-femme-1.jpg" alt="chaussure de femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'chaussures-femme-1.webp" alt="chaussure de femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Bottes</div>';
                 $output .= '</a>';
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'chaussures-femme-4.jpg" alt="chaussure basse pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'chaussures-femme-4.webp" alt="chaussure basse pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Toutes les chaussures</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/chaussures-femme/femme-baskets/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'chaussures-femme-3.jpg" alt="basket pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'chaussures-femme-3.webp" alt="basket pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Sneakers</div>';
                 $output .= '</a>';
@@ -240,21 +240,21 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 1 : Grande image verticale à gauche
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/accessoires-homme/homme-sacs/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires-homme-3.jpg" alt="sac à dos homme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires-homme-3.webp" alt="sac à dos homme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Sacs</div>';
                 $output .= '</a>';
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/accessoires-homme/homme-chapeaux/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires-homme-1.jpg" alt="mannequin portant une casquette" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires-homme-1.webp" alt="mannequin portant une casquette" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Bonnets et casquettes</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/homme/accessoires-homme/homme-ceintures/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires-homme-2.jpg" alt="ceinture en cuir" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires-homme-2.webp" alt="ceinture en cuir" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Ceintures</div>';
                 $output .= '</a>';
@@ -270,21 +270,21 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 1 : Grande image verticale à gauche
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/accessoires-femme/femme-chapeaux/' ) . '" class="col-span-2 row-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires-femme-1.jpg" alt="femme portant un bonnet" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires-femme-1.webp" alt="femme portant un bonnet" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-4 left-4 text-white font-bold text-xl shadow-black drop-shadow-md">Chapeaux, bonnets et casquettes</div>';
                 $output .= '</a>';
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/accessoires-femme/femme-sacs/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires-femme-2.jpg" alt="petit sac à main de femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires-femme-2.webp" alt="petit sac à main de femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Sacs</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/femme/accessoires-femme/femme-ceintures/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'accessoires-femme-3.jpg" alt="ceinture en cuir pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'accessoires-femme-3.webp" alt="ceinture en cuir pour femme" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Ceintures</div>';
                 $output .= '</a>';
@@ -307,14 +307,14 @@ class TRENDYLUX_Nav_Walker extends Walker_Nav_Menu {
 
                 // Image 2 : Image horizontale en haut à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/luxe-createurs/chaussures-luxe-createurs/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'luxe-createurs-4.jpg" alt="casquette de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'luxe-createurs-4.webp" alt="casquette de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Chaussures</div>';
                 $output .= '</a>';
 
                 // Image 3 : Image horizontale en bas à droite
                 $output .= '<a href="' . home_url( '/categorie-produit/luxe-createurs/accessoires/' ) . '" class="col-span-2 relative rounded-box overflow-hidden group shadow-lg block">';
-                $output .= '<img src="' . $img_base . 'luxe-createurs-5.jpg" alt="chaussure de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
+                $output .= '<img src="' . $img_base . 'luxe-createurs-5.webp" alt="chaussure de luxe" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">';
                 $output .= '<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>';
                 $output .= '<div class="absolute bottom-3 left-3 text-white font-bold text-lg drop-shadow-md">Accessoires</div>';
                 $output .= '</a>';
