@@ -105,17 +105,17 @@ get_header();
                     </div>
 
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">Casquette Collector 2025</h3>
-                    <p class="text-3xl text-primary font-bold mb-6">39.99€</p>
+                    <p class="text-3xl text-primary font-bold mb-6">Contacte-nous pour obtenir la tienne !</p>
                     <p class="text-gray-300 mb-8 max-w-lg mx-auto">
                         Une pièce unique fusionnant le luxe accessible de Trendy Lux et le design audacieux de Makaï. Finitions or, broderie 3D, et matériaux premium.
                     </p>
 
                     <div class="alert bg-primary/20 border-primary text-primary-content mb-8">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span class="font-bold text-lg text-secondary">Stock Limité ! Disponible en pré commande, réserves vite la tienne dés maintenant pour la recevoir en Janvier</span>
+                        <span class="font-bold text-lg text-secondary">Stock Limité ! Disponible en pré commande, réserves vite la tienne dés maintenant pour la recevoir en Janvier. Clic sur le bouton ci-dessous et envoie un e-mail avec tes coordonnées, on te recontactera rapidement.</span>
                     </div>
 
-                    <a href="/casquette-collector-2025-trendy-lux-x-makai-design/" class="btn btn-primary btn-lg w-full md:w-auto gap-3 shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+                    <a href="mailto:contact@trendylux.fr" class="btn btn-primary btn-lg w-full md:w-auto gap-3 shadow-[0_0_20px_rgba(212,175,55,0.5)]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                         Pré-commander ma casquette
                     </a>
