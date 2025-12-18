@@ -1,0 +1,43 @@
+/* Styles spécifiques pour la page d'admin du Méga Menu */
+
+/* Espacement avant chaque titre de section (sauf le tout premier qui suit le titre de page) */
+.trendylux-mega-menu-page h2 {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #dcdcde; /* Gris standard WP */
+    font-size: 1.6em;
+    color: #1d2327;
+}
+
+/* Le premier h2 (s'il y en a un juste après le titre h1) n'a pas besoin de marge/bordure */
+.trendylux-mega-menu-page h1 + h2,
+.trendylux-mega-menu-page form > h2:first-of-type {
+    margin-top: 20px;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* Style pour les tables de formulaire */
+.trendylux-mega-menu-page .form-table {
+    margin-bottom: 0;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.trendylux-mega-menu-page .form-table tbody {
+    display: block;
+    padding: 20px;
+}
+
+/* Amélioration visuelle des labels */
+.trendylux-mega-menu-page .form-table th {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* Aide visuelle pour les recommandations */
+.trendylux-mega-menu-page .description {
+    color: #646970;
+    font-style: italic;
+}
