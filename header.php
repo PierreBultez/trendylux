@@ -24,6 +24,18 @@
 
 <body <?php body_class( 'font-sans bg-base-100 text-base-content' ); ?>>
 
+<?php
+// Récupération des options du thème pour le header
+$opts = get_option( 'trendylux_home_options', [] );
+
+// Logo
+$logo_id  = $opts['header_logo'] ?? '';
+$logo_url = $logo_id ? wp_get_attachment_url( $logo_id ) : get_template_directory_uri() . '/public/logo-trendy-lux.svg';
+
+// Tagline
+$tagline = ! empty( $opts['header_tagline'] ) ? $opts['header_tagline'] : 'Choose your style... Be trendy !';
+?>
+
 <header
         class="bg-neutral text-neutral-content relative"
         x-data="{ openMenu: null }"
@@ -31,7 +43,7 @@
 >
     <!-- Logo (Overlay Absolute) -->
     <a href="<?php echo home_url(); ?>" class="absolute top-0 bottom-0 left-16 lg:left-4 z-50 flex items-center py-2 transition duration-300 logo-glow-gold">
-        <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-full w-auto object-contain">
+        <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="h-full w-auto object-contain">
     </a>
 
     <!-- Section principale du header : Logo, Recherche, Icônes -->
@@ -72,7 +84,7 @@
                     </div>
                 </div>
 
-                <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold xl:ml-48" style="font-family: 'Mrs Saint Delafield', cursive;">Choose your style... Be trendy !</span>
+                <span class="hidden xl:inline-block text-2xl text-primary -mb-1 text-glow-gold xl:ml-48" style="font-family: 'Mrs Saint Delafield', cursive;"><?php echo esc_html( $tagline ); ?></span>
             </div>
 
             <!-- Barre de recherche (nouvel élément) -->

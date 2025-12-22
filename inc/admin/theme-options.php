@@ -32,7 +32,7 @@ class Trendylux_Theme_Options {
     public function create_admin_page() {
         ?>
         <div class="wrap">
-            <h1>Configuration de la Page d\'Accueil</h1>
+            <h1>Configuration de la Page d'Accueil</h1>
             <form method="post" action="options.php">
                 <?php
                 settings_fields( 'trendylux_home_group' );
@@ -59,10 +59,20 @@ class Trendylux_Theme_Options {
             [ $this, 'sanitize' ]
         );
 
-        // --- SECTION 1: BANDEAU PROMO ---
+        // --- SECTION 1: HEADER ---
+        add_settings_section(
+            'section_header',
+            '1. Header',
+            null,
+            'trendylux-home-settings'
+        );
+        $this->add_field( 'header_logo', 'Logo Principal', 'section_header', 'image' );
+        $this->add_field( 'header_tagline', 'Slogan (Tagline)', 'section_header', 'text', ['default' => 'Choose your style... Be trendy !'] );
+
+        // --- SECTION 2: BANDEAU PROMO ---
         add_settings_section(
             'section_hero_promo',
-            '1. Bandeau Promo (Haut)',
+            '2. Bandeau Promo (Haut)',
             null,
             'trendylux-home-settings'
         );
@@ -73,10 +83,10 @@ class Trendylux_Theme_Options {
         $this->add_field( 'promo_text_3', 'Texte Ligne 3', 'section_hero_promo', 'text', ['default' => 'Livraison offerte**'] );
         $this->add_field( 'promo_bg_image', 'Image de fond', 'section_hero_promo', 'image' );
 
-        // --- SECTION 2: HERO CENTRAL ---
+        // --- SECTION 3: HERO CENTRAL ---
         add_settings_section(
             'section_hero_main',
-            '2. Hero Central',
+            '3. Hero Central',
             null,
             'trendylux-home-settings'
         );
@@ -87,47 +97,41 @@ class Trendylux_Theme_Options {
         $this->add_field( 'hero_btn_url', 'Lien Bouton (URL)', 'section_hero_main', 'text', ['default' => '/boutique/'] );
         $this->add_field( 'hero_main_image', 'Image Centrale', 'section_hero_main', 'image' );
 
-        // --- SECTION 3: SLIDERS ---
+        // --- SECTION 4: SLIDERS ---
         add_settings_section(
             'section_hero_sliders',
-            '3. Sliders Latéraux',
+            '4. Hero Sliders Latéraux',
             null,
             'trendylux-home-settings'
         );
         $this->add_field( 'hero_slider_ids', 'Images du Slider', 'section_hero_sliders', 'gallery' );
 
-        // --- SECTION 4: SLIDER MARQUES ---
+        // --- SECTION 5: SLIDER MARQUES ---
         add_settings_section(
             'section_brand_slider',
-            '4. Défilement Marques',
+            '5. Slider marques',
             null,
             'trendylux-home-settings'
         );
         $this->add_field( 'brand_slider_title', 'Titre', 'section_brand_slider', 'text', ['default' => 'Choisis parmi les plus grandes Marques...'] );
         $this->add_field( 'brand_slider_ids', 'Logos Marques', 'section_brand_slider', 'gallery' );
 
-        // --- SECTION 5: BLOCS MARKETING ---
+        // --- SECTION 6: PRODUITS À LA UNE (INCONTOURNABLES) ---
         add_settings_section(
-            'section_marketing',
-            '5. Blocs Marketing (Grands)',
+            'section_featured_products',
+            '6. Produits à la Une (Incontournables)',
             null,
             'trendylux-home-settings'
         );
-        // Bloc 1
-        $this->add_field( 'block_1_title', 'Bloc 1: Titre', 'section_marketing', 'text', ['default' => 'Collab\'s'] );
-        $this->add_field( 'block_1_url', 'Bloc 1: Lien', 'section_marketing', 'text' );
-        $this->add_field( 'block_1_image', 'Bloc 1: Image', 'section_marketing', 'image' );
-        // Bloc 2
-        $this->add_field( 'block_2_title', 'Bloc 2: Titre', 'section_marketing', 'text', ['default' => 'Ventes Flash'] );
-        $this->add_field( 'block_2_url', 'Bloc 2: Lien', 'section_marketing', 'text' );
-        $this->add_field( 'block_2_image', 'Bloc 2: Image', 'section_marketing', 'image' );
+        $this->add_field( 'products_title', 'Titre', 'section_featured_products', 'text', ['default' => 'Les Incontournables'] );
+        $this->add_field( 'products_subtitle', 'Sous-titre', 'section_featured_products', 'text', ['default' => 'Nos pièces les plus convoitées du moment'] );
 
-        // --- SECTION 5b: TOP CATÉGORIES (Bento Grid) ---
+        // --- SECTION 7: BLOCS MARKETING ---
         add_settings_section(
-            'section_bento',
-            '5b. Top Catégories (Bento Grid - 6 emplacements)',
-            function() { echo '<p>Configurez les 6 blocs de la grille. L\'ordre détermine la taille (1=Haut Large, 2=Milieu Gauche, 3=Milieu Centre, 4=Milieu Droite Vertical, 5=Bas Gauche, 6=Bas Centre Large).</p>'; },
-            'trendylux-home-settings'
+                'section_bento',
+                '7. Top Catégories (Bento Grid - 6 emplacements)',
+                function() { echo '<p>Configurez les 6 blocs de la grille. L\'ordre détermine la taille (1=Haut Large, 2=Milieu Gauche, 3=Milieu Centre, 4=Milieu Droite Vertical, 5=Bas Gauche, 6=Bas Centre Large).</p>'; },
+                'trendylux-home-settings'
         );
 
         for ( $i = 1; $i <= 6; $i++ ) {
@@ -140,27 +144,27 @@ class Trendylux_Theme_Options {
                 case 5: $label_suffix = ' (Bas Gauche)'; break;
                 case 6: $label_suffix = ' (Bas Centre Large)'; break;
             }
-            
+
             $this->add_field( "bento_{$i}_slug",  "Bloc #{$i}{$label_suffix} - Slug Catégorie", 'section_bento', 'text' );
             $this->add_field( "bento_{$i}_title", "Bloc #{$i} - Titre Personnalisé", 'section_bento', 'text' );
             $this->add_field( "bento_{$i}_link",  "Bloc #{$i} - Lien Personnalisé (Optionnel)", 'section_bento', 'text' );
             $this->add_field( "bento_{$i}_image", "Bloc #{$i} - Image Personnalisée", 'section_bento', 'image' );
             // Espace visuel entre les blocs dans l'admin
-             add_settings_field(
-                "bento_sep_$i",
-                '<hr>',
-                function(){},
-                'trendylux-home-settings',
-                'section_bento'
+            add_settings_field(
+                    "bento_sep_$i",
+                    '<hr>',
+                    function(){},
+                    'trendylux-home-settings',
+                    'section_bento'
             );
         }
 
-        // --- SECTION 6: CARTE CADEAU ---
+        // --- SECTION 8: CARTE CADEAU ---
         add_settings_section(
-            'section_gift_card',
-            '6. Carte Cadeau',
-            null,
-            'trendylux-home-settings'
+                'section_gift_card',
+                '8. Bloc promo full largeur',
+                null,
+                'trendylux-home-settings'
         );
         $this->add_field( 'gift_title', 'Titre', 'section_gift_card', 'text', ['default' => 'Le Plaisir <br><span class="text-primary">D\'offrir</span>'] );
         $this->add_field( 'gift_text', 'Description', 'section_gift_card', 'textarea', ['default' => 'Faites plaisir à coup sûr avec la Carte Cadeau Trendy Lux...'] );
@@ -168,12 +172,12 @@ class Trendylux_Theme_Options {
         $this->add_field( 'gift_btn_url', 'Lien Bouton', 'section_gift_card', 'text', ['default' => '/produit/carte-cadeau-exclusive-trendy-lux/'] );
         $this->add_field( 'gift_image', 'Image de fond', 'section_gift_card', 'image' );
 
-        // --- SECTION 6b: TOP MARQUES (Grille) ---
+        // --- SECTION 9a: TOP MARQUES (Grille) ---
         add_settings_section(
-            'section_top_brands',
-            '6b. Top Marques (Grille)',
-            function() { echo '<p>Configurez jusqu\'à 12 marques à afficher dans la grille.</p>'; },
-            'trendylux-home-settings'
+                'section_top_brands',
+                '9a. Top Marques (Grille)',
+                function() { echo '<p>Configurez jusqu\'à 12 marques à afficher dans la grille.</p>'; },
+                'trendylux-home-settings'
         );
 
         for ( $i = 1; $i <= 12; $i++ ) {
@@ -183,22 +187,37 @@ class Trendylux_Theme_Options {
             // Petit séparateur visuel (astuce via un champ dummy ou juste l'espacement naturel)
         }
 
-        // --- SECTION 6c: PUBLICITÉ SACS ---
+        // --- SECTION 9b: PUBLICITÉ SACS ---
         add_settings_section(
-            'section_ads_bags',
-            '6c. Encart Publicitaire (Sacs)',
-            null,
-            'trendylux-home-settings'
+                'section_ads_bags',
+                '9b. Encart Publicitaire (Sacs)',
+                null,
+                'trendylux-home-settings'
         );
         $this->add_field( 'ads_bags_image', 'Image', 'section_ads_bags', 'image' );
         $this->add_field( 'ads_bags_title', 'Titre', 'section_ads_bags', 'text', ['default' => 'Découvrir les Sacs'] );
         $this->add_field( 'ads_bags_link', 'Lien', 'section_ads_bags', 'text', ['default' => '/categorie-produit/femme/accessoires-femme/femme-sacs/'] );
 
+        // --- SECTION 10: BLOCS MARKETING ---
+        add_settings_section(
+            'section_marketing',
+            '10. Blocs Marketing (Grands)',
+            null,
+            'trendylux-home-settings'
+        );
+        // Bloc 1
+        $this->add_field( 'block_1_title', 'Bloc 1: Titre', 'section_marketing', 'text', ['default' => 'Collab\'s'] );
+        $this->add_field( 'block_1_url', 'Bloc 1: Lien', 'section_marketing', 'text' );
+        $this->add_field( 'block_1_image', 'Bloc 1: Image', 'section_marketing', 'image' );
+        // Bloc 2
+        $this->add_field( 'block_2_title', 'Bloc 2: Titre', 'section_marketing', 'text', ['default' => 'Ventes Flash'] );
+        $this->add_field( 'block_2_url', 'Bloc 2: Lien', 'section_marketing', 'text' );
+        $this->add_field( 'block_2_image', 'Bloc 2: Image', 'section_marketing', 'image' );
 
-        // --- SECTION 7: PIED DE PAGE (FOOTER) ---
+        // --- SECTION 11: PIED DE PAGE (FOOTER) ---
         add_settings_section(
             'section_footer',
-            '7. Pied de Page (Footer)',
+            '11. Footer',
             null,
             'trendylux-home-settings'
         );

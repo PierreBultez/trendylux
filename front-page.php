@@ -205,8 +205,8 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
     <!-- 2. Carousel de Produits (Top Ventes) - Redesign Premium -->
     <div class="container mx-auto py-16 px-4 overflow-hidden">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-5xl font-bold font-serif uppercase tracking-tight mb-3">Les Incontournables</h2>
-            <p class="text-gray-500 text-lg italic font-serif">Nos pièces les plus convoitées du moment</p>
+            <h2 class="text-3xl md:text-5xl font-bold font-serif uppercase tracking-tight mb-3"><?php echo esc_html( $home_opts['products_title'] ?? 'Les Incontournables' ); ?></h2>
+            <p class="text-gray-500 text-lg italic font-serif"><?php echo esc_html( $home_opts['products_subtitle'] ?? 'Nos pièces les plus convoitées du moment' ); ?></p>
             <div class="w-24 h-1 bg-primary mx-auto mt-6"></div>
         </div>
 
