@@ -368,101 +368,123 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Catégories</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
             <?php
-            // DÉFINITION MANUELLE DES CATÉGORIES (SLUGS + TITRES PERSONNALISÉS)
-            // Format: 'slug' => 'Titre personnalisé' (ou null pour utiliser le nom de la catégorie par défaut)
-            $category_config = [
-                'vetements-femme'   => 'La garde-robe de Madame',               // #0: Grande largeur haut
-                'chaussures-femme'  => 'Les chaussures de Madame',              // #1: Large gauche
-                'accessoires-homme' => 'Accessoires Homme',                     // #2: Carré centre
-                'chaussures-homme'  => 'Sneakers & Chaussures homme',           // #3: Vertical droite
-                'accessoires-femme' => 'Accessoires Femme',                     // #4: Carré bas gauche
-                'vetements-homme'   => 'Le dressing de Monsieur',               // #5: Large bas centre (Titre par défaut)
-            ];
+            $bento_items = [];
+            $has_custom_bento = false;
 
-            // On récupère les objets catégories correspondants
-            $target_slugs = array_keys($category_config);
-            $bento_cats = [];
-            
-            foreach ($target_slugs as $slug) {
-                $term = get_term_by('slug', $slug, 'product_cat');
-                if ($term) {
-                    $bento_cats[] = $term;
-                }
-            }
-
-            // Fallback: Si on a moins de 6 catégories valides, on complète avec des catégories populaires
-            if (count($bento_cats) < 6) {
-                $needed = 6 - count($bento_cats);
-                // On exclut ceux déjà trouvés
-                $exclude_ids = array_map(function($t) { return $t->term_id; }, $bento_cats);
+            // 1. Vérification si configuration personnalisée (Au moins le bloc 1)
+            if ( ! empty($home_opts['bento_1_slug']) || ! empty($home_opts['bento_1_title']) || ! empty($home_opts['bento_1_image']) ) {
+                $has_custom_bento = true;
                 
-                $extras = get_terms([
-                    'taxonomy'   => 'product_cat',
-                    'number'     => $needed,
-                    'exclude'    => $exclude_ids,
-                    'hide_empty' => true,
-                    'orderby'    => 'count',
-                    'order'      => 'DESC'
-                ]);
-                
-                if (!is_wp_error($extras) && !empty($extras)) {
-                    $bento_cats = array_merge($bento_cats, $extras);
-                }
-            }
-
-            if ( ! empty( $bento_cats ) ) :
-                $i = 0;
-                foreach ( $bento_cats as $cat ) :
-                    if ($i >= 6) break; // Sécurité max 6 items
-
-                    $thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
-                    $image_url = wp_get_attachment_url( $thumbnail_id );
-                    if ( ! $image_url ) {
-                        $image_url = wc_placeholder_img_src();
-                    }
-                    $cat_link = get_term_link( $cat );
-
-                    // Détermination du nom à afficher
-                    $display_name = $cat->name;
-                    if ( isset($category_config[$cat->slug]) && !empty($category_config[$cat->slug]) ) {
-                        $display_name = $category_config[$cat->slug];
-                    }
-
-                    // Bento Grid Classes based on 4-column layout
-                    $bento_class = 'md:col-span-1 md:row-span-1'; // Default
+                for( $i = 1; $i <= 6; $i++ ) {
+                    $slug   = $home_opts["bento_{$i}_slug"] ?? '';
+                    $title  = $home_opts["bento_{$i}_title"] ?? '';
+                    $link   = $home_opts["bento_{$i}_link"] ?? '';
+                    $img_id = $home_opts["bento_{$i}_image"] ?? '';
                     
-                    switch ($i) {
-                        case 0:
-                            $bento_class = 'md:col-span-4 md:row-span-1'; // Top Full Width
-                            break;
-                        case 1:
-                            $bento_class = 'md:col-span-2 md:row-span-1'; // Middle Left Wide
-                            break;
-                        case 2:
-                            $bento_class = 'md:col-span-1 md:row-span-1'; // Middle Center Square
-                            break;
-                        case 3:
-                            $bento_class = 'md:col-span-1 md:row-span-2'; // Right Vertical Tall
-                            break;
-                        case 4:
-                            $bento_class = 'md:col-span-1 md:row-span-1'; // Bottom Left Square
-                            break;
-                        case 5:
-                            $bento_class = 'md:col-span-2 md:row-span-1'; // Bottom Center Wide
-                            break;
+                    $item = [
+                        'title' => $title,
+                        'link'  => $link,
+                        'image' => $img_id ? wp_get_attachment_url($img_id) : '',
+                    ];
+
+                    // Enrichissement via le Slug Catégorie
+                    if ( $slug ) {
+                        $term = get_term_by('slug', $slug, 'product_cat');
+                        if ( $term && !is_wp_error($term) ) {
+                             if ( empty($item['title']) ) $item['title'] = $term->name;
+                             if ( empty($item['link']) )  $item['link']  = get_term_link($term);
+                             if ( empty($item['image']) ) {
+                                 $thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+                                 if($thumb_id) $item['image'] = wp_get_attachment_url($thumb_id);
+                             }
+                        }
+                    }
+                    
+                    // Fallbacks finaux
+                    if ( empty($item['image']) ) $item['image'] = wc_placeholder_img_src();
+                    if ( empty($item['link']) ) $item['link'] = '#';
+                    
+                    $bento_items[] = $item;
+                }
+
+            } else {
+                // 2. FALLBACK : DÉFINITION MANUELLE (Hardcoded)
+                $category_config = [
+                    'vetements-femme'   => 'La garde-robe de Madame',
+                    'chaussures-femme'  => 'Les chaussures de Madame',
+                    'accessoires-homme' => 'Accessoires Homme',
+                    'chaussures-homme'  => 'Sneakers & Chaussures homme',
+                    'accessoires-femme' => 'Accessoires Femme',
+                    'vetements-homme'   => 'Le dressing de Monsieur',
+                ];
+
+                $target_slugs = array_keys($category_config);
+                $terms = [];
+                foreach ($target_slugs as $slug) {
+                    $t = get_term_by('slug', $slug, 'product_cat');
+                    if($t) $terms[] = $t;
+                }
+
+                // Complément auto
+                if (count($terms) < 6) {
+                    $exclude = array_map(function($t){return $t->term_id;}, $terms);
+                    $extras = get_terms([
+                        'taxonomy'   => 'product_cat',
+                        'number'     => 6 - count($terms),
+                        'exclude'    => $exclude,
+                        'hide_empty' => true,
+                        'orderby'    => 'count',
+                        'order'      => 'DESC'
+                    ]);
+                    if(!is_wp_error($extras) && !empty($extras)) $terms = array_merge($terms, $extras);
+                }
+
+                foreach($terms as $cat) {
+                    if(count($bento_items) >= 6) break;
+                    
+                    $thumb_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
+                    $img = $thumb_id ? wp_get_attachment_url($thumb_id) : wc_placeholder_img_src();
+                    
+                    $name = $category_config[$cat->slug] ?? $cat->name;
+                    
+                    $bento_items[] = [
+                        'title' => $name,
+                        'link'  => get_term_link($cat),
+                        'image' => $img
+                    ];
+                }
+            }
+
+            // 3. RENDU DES ITEMS
+            if ( ! empty( $bento_items ) ) :
+                $idx = 0;
+                foreach ( $bento_items as $item ) :
+                    if ($idx >= 6) break;
+
+                    // Bento Grid Classes
+                    $bento_class = 'md:col-span-1 md:row-span-1'; 
+                    switch ($idx) {
+                        case 0: $bento_class = 'md:col-span-4 md:row-span-1'; break; // Top
+                        case 1: $bento_class = 'md:col-span-2 md:row-span-1'; break; // Mid Left
+                        case 2: $bento_class = 'md:col-span-1 md:row-span-1'; break; // Mid Center
+                        case 3: $bento_class = 'md:col-span-1 md:row-span-2'; break; // Right Vertical
+                        case 4: $bento_class = 'md:col-span-1 md:row-span-1'; break; // Bot Left
+                        case 5: $bento_class = 'md:col-span-2 md:row-span-1'; break; // Bot Center
                     }
                     ?>
-                    <a href="<?php echo esc_url( $cat_link ); ?>" class="group relative block overflow-hidden rounded-box <?php echo $bento_class; ?> h-full">
-                        <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $display_name ); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <a href="<?php echo esc_url( $item['link'] ); ?>" class="group relative block overflow-hidden rounded-box <?php echo $bento_class; ?> h-full shadow-md">
+                        <img src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 transition-colors">
-                            <h3 class="text-white font-bold text-2xl uppercase drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300"><?php echo esc_html( $display_name ); ?></h3>
+                            <h3 class="text-white font-bold text-xl md:text-2xl uppercase drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                <?php echo esc_html( $item['title'] ); ?>
+                            </h3>
                         </div>
                     </a>
                 <?php 
-                $i++;
+                $idx++;
                 endforeach;
             else :
-                echo '<p class="col-span-full text-center">Aucune catégorie trouvée.</p>';
+                echo '<p class="col-span-full text-center py-8">Aucune catégorie à afficher.</p>';
             endif;
             ?>
         </div>

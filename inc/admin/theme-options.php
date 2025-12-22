@@ -122,6 +122,39 @@ class Trendylux_Theme_Options {
         $this->add_field( 'block_2_url', 'Bloc 2: Lien', 'section_marketing', 'text' );
         $this->add_field( 'block_2_image', 'Bloc 2: Image', 'section_marketing', 'image' );
 
+        // --- SECTION 5b: TOP CATÉGORIES (Bento Grid) ---
+        add_settings_section(
+            'section_bento',
+            '5b. Top Catégories (Bento Grid - 6 emplacements)',
+            function() { echo '<p>Configurez les 6 blocs de la grille. L\'ordre détermine la taille (1=Haut Large, 2=Milieu Gauche, 3=Milieu Centre, 4=Milieu Droite Vertical, 5=Bas Gauche, 6=Bas Centre Large).</p>'; },
+            'trendylux-home-settings'
+        );
+
+        for ( $i = 1; $i <= 6; $i++ ) {
+            $label_suffix = '';
+            switch ($i) {
+                case 1: $label_suffix = ' (Haut Large)'; break;
+                case 2: $label_suffix = ' (Milieu Gauche)'; break;
+                case 3: $label_suffix = ' (Milieu Centre)'; break;
+                case 4: $label_suffix = ' (Droite Vertical)'; break;
+                case 5: $label_suffix = ' (Bas Gauche)'; break;
+                case 6: $label_suffix = ' (Bas Centre Large)'; break;
+            }
+            
+            $this->add_field( "bento_{$i}_slug",  "Bloc #{$i}{$label_suffix} - Slug Catégorie", 'section_bento', 'text' );
+            $this->add_field( "bento_{$i}_title", "Bloc #{$i} - Titre Personnalisé", 'section_bento', 'text' );
+            $this->add_field( "bento_{$i}_link",  "Bloc #{$i} - Lien Personnalisé (Optionnel)", 'section_bento', 'text' );
+            $this->add_field( "bento_{$i}_image", "Bloc #{$i} - Image Personnalisée", 'section_bento', 'image' );
+            // Espace visuel entre les blocs dans l'admin
+             add_settings_field(
+                "bento_sep_$i",
+                '<hr>',
+                function(){},
+                'trendylux-home-settings',
+                'section_bento'
+            );
+        }
+
         // --- SECTION 6: CARTE CADEAU ---
         add_settings_section(
             'section_gift_card',
