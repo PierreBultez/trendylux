@@ -135,6 +135,33 @@ class Trendylux_Theme_Options {
         $this->add_field( 'gift_btn_url', 'Lien Bouton', 'section_gift_card', 'text', ['default' => '/produit/carte-cadeau-exclusive-trendy-lux/'] );
         $this->add_field( 'gift_image', 'Image de fond', 'section_gift_card', 'image' );
 
+        // --- SECTION 6b: TOP MARQUES (Grille) ---
+        add_settings_section(
+            'section_top_brands',
+            '6b. Top Marques (Grille)',
+            function() { echo '<p>Configurez jusqu\'à 12 marques à afficher dans la grille.</p>'; },
+            'trendylux-home-settings'
+        );
+
+        for ( $i = 1; $i <= 12; $i++ ) {
+            $this->add_field( "top_brand_{$i}_image", "Marque #{$i} - Image", 'section_top_brands', 'image' );
+            $this->add_field( "top_brand_{$i}_name", "Marque #{$i} - Nom", 'section_top_brands', 'text' );
+            $this->add_field( "top_brand_{$i}_link", "Marque #{$i} - Lien", 'section_top_brands', 'text' );
+            // Petit séparateur visuel (astuce via un champ dummy ou juste l'espacement naturel)
+        }
+
+        // --- SECTION 6c: PUBLICITÉ SACS ---
+        add_settings_section(
+            'section_ads_bags',
+            '6c. Encart Publicitaire (Sacs)',
+            null,
+            'trendylux-home-settings'
+        );
+        $this->add_field( 'ads_bags_image', 'Image', 'section_ads_bags', 'image' );
+        $this->add_field( 'ads_bags_title', 'Titre', 'section_ads_bags', 'text', ['default' => 'Découvrir les Sacs'] );
+        $this->add_field( 'ads_bags_link', 'Lien', 'section_ads_bags', 'text', ['default' => '/categorie-produit/femme/accessoires-femme/femme-sacs/'] );
+
+
         // --- SECTION 7: PIED DE PAGE (FOOTER) ---
         add_settings_section(
             'section_footer',

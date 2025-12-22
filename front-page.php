@@ -501,44 +501,72 @@ $hero_img      = !empty($home_opts['hero_main_image']) ? wp_get_attachment_url($
         <h2 class="text-3xl font-bold text-center mb-8 uppercase font-serif">Top Marques</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <?php 
-            // Configuration des marques : Assurez-vous que l'ordre correspond aux images top-marques-1.webp à top-marques-12.webp
-            $top_brands = [
-                'Calvin klein Jeans',
-                'Blauer',
-                'Desigual',
-                'Guess',
-                'Icon',
-                'Lacoste',
-                'The North Face',
-                'Alviero Martini Prima Classe',
-                'Only',
-                'Tommy Hilfiger',
-                'Superdry',
-                'Yos'
-            ];
+            // 1. Vérification si des marques personnalisées existent
+            $has_custom_brands = false;
+            for ( $i = 1; $i <= 12; $i++ ) {
+                if ( ! empty( $home_opts["top_brand_{$i}_image"] ) ) {
+                    $has_custom_brands = true;
+                    break;
+                }
+            }
 
-            for ($i = 1; $i <= 12; $i++): 
-                // Récupération du nom de la marque ou fallback
-                $brand_name = isset($top_brands[$i-1]) ? $top_brands[$i-1] : 'Marque ' . $i;
-                // Création de l'URL de recherche
-                $search_link = home_url( '/marque/' . sanitize_title($brand_name) );
+            // 2. Affichage
+            if ( $has_custom_brands ) {
+                // BOUCLE DYNAMIQUE
+                for ( $i = 1; $i <= 12; $i++ ) {
+                    $img_id = $home_opts["top_brand_{$i}_image"] ?? '';
+                    if ( ! $img_id ) continue; // On saute les slots vides
+
+                    $img_url    = wp_get_attachment_url( $img_id );
+                    $brand_name = $home_opts["top_brand_{$i}_name"] ?? '';
+                    $brand_link = $home_opts["top_brand_{$i}_link"] ?? '#';
+                    
+                    ?>
+                    <a href="<?php echo esc_url($brand_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
+                        <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
+                        <?php if ( $brand_name ) : ?>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
+                                <span class="text-sm font-bold uppercase tracking-widest text-white">Voir <?php echo esc_html($brand_name); ?></span>
+                            </div>
+                        <?php endif; ?>
+                    </a>
+                    <?php
+                }
+            } else {
+                // FALLBACK : CONTENU PAR DÉFAUT (Hardcoded)
+                $top_brands = [
+                    'Calvin klein Jeans', 'Blauer', 'Desigual', 'Guess',
+                    'Icon', 'Lacoste', 'The North Face', 'Alviero Martini Prima Classe',
+                    'Only', 'Tommy Hilfiger', 'Superdry', 'Yos'
+                ];
+
+                for ($i = 1; $i <= 12; $i++): 
+                    $brand_name = isset($top_brands[$i-1]) ? $top_brands[$i-1] : 'Marque ' . $i;
+                    $search_link = home_url( '/marque/' . sanitize_title($brand_name) );
+                ?>
+                    <a href="<?php echo esc_url($search_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
+                        <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-<?php echo $i; ?>.webp" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
+                            <span class="text-sm font-bold uppercase tracking-widest text-white">Voir <?php echo esc_html($brand_name); ?></span>
+                        </div>
+                    </a>
+                <?php endfor; 
+            }
             ?>
-                <a href="<?php echo esc_url($search_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group">
-                    <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-<?php echo $i; ?>.webp" alt="<?php echo esc_attr($brand_name); ?>" class="w-full aspect-square object-cover block group-hover:scale-110 transition-transform duration-300" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
-                        <span class="text-sm font-bold uppercase tracking-widest text-white">Voir <?php echo esc_html($brand_name); ?></span>
-                    </div>
-                </a>
-            <?php endfor; ?>
         </div>
     </div>
 
     <!-- Section Publicitaire Sacs -->
+    <?php
+    $ads_bags_img   = !empty($home_opts['ads_bags_image']) ? wp_get_attachment_url($home_opts['ads_bags_image']) : get_template_directory_uri() . '/public/top-marques-bags.webp';
+    $ads_bags_title = $home_opts['ads_bags_title'] ?? 'Découvrir les Sacs';
+    $ads_bags_link  = $home_opts['ads_bags_link'] ?? '/categorie-produit/femme/accessoires-femme/femme-sacs/';
+    ?>
     <div class="container mx-auto py-12 px-4 w-full md:w-3/4">
-        <a href="/categorie-produit/femme/accessoires-femme/femme-sacs/" class="block relative overflow-hidden rounded-box shadow-lg group">
-            <img src="<?php echo get_template_directory_uri(); ?>/public/top-marques-bags.webp" alt="Collection Sacs" class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300" />
+        <a href="<?php echo esc_url($ads_bags_link); ?>" class="block relative overflow-hidden rounded-box shadow-lg group">
+            <img src="<?php echo esc_url($ads_bags_img); ?>" alt="<?php echo esc_attr($ads_bags_title); ?>" class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-300" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end justify-center p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span class="text-3xl md:text-5xl font-bold uppercase tracking-widest text-white drop-shadow-lg">Découvrir les Sacs</span>
+                <span class="text-3xl md:text-5xl font-bold uppercase tracking-widest text-white drop-shadow-lg"><?php echo esc_html($ads_bags_title); ?></span>
             </div>
         </a>
     </div>
