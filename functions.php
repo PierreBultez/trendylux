@@ -354,33 +354,33 @@ add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 //add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
 
 /**
- * FORCE la recherche WordPress sur TITRE et SKU UNIQUEMENT.
- * Règle le problème de pagination et le problème "Typologie" sans Relevanssi.
+ * FORCE la recherche sur TITRE et SKU UNIQUEMENT.
+ * Compatible avec la pagination AJAX de TrendyLux.
  */
-function trendylux_search_force_title_sku( $search, $wp_query ) {
+function trendylux_search_force_title_sku_ajax( $search, $wp_query ) {
     global $wpdb;
 
-//    // 1. Sécurités : On n'applique ça que sur le frontend, pour une recherche produit
-//    if ( is_admin() || ! is_search() ) {
-//        return $search;
-//    }
-
-    // Vérifie qu'on cherche bien des produits (le query var est souvent défini par WooCommerce)
-    $post_type = $wp_query->get( 'post_type' );
-    if ( $post_type !== 'product' && ! is_array( $post_type ) ) {
-        // Parfois le post_type n'est pas encore défini explicitement, on vérifie si c'est la main query
-        if ( ! $wp_query->is_main_query() ) return $search;
+    // 1. Vérifier qu'il y a un terme de recherche
+    $q = $wp_query->get( 's' );
+    if ( empty( $q ) ) {
+        return $search;
     }
 
-    $q = $wp_query->get( 's' );
-    if ( empty( $q ) ) return $search;
+    // 2. Vérifier qu'on cherche bien des produits
+    // En AJAX custom, le post_type est défini dans $args de new WP_Query
+    if ( $wp_query->get( 'post_type' ) !== 'product' ) {
+        return $search;
+    }
 
-    // 2. On nettoie le terme de recherche
+    // 3. LA CORRECTION : On autorise l'exécution si c'est de l'AJAX
+    // On ne bloque que si c'est l'interface d'administration réelle (Backend)
+    if ( is_admin() && ! wp_doing_ajax() ) {
+        return $search;
+    }
+
+    // 4. Nettoyage et Réécriture SQL (Titre OU Sku, jamais Description)
     $keyword = '%' . $wpdb->esc_like( $q ) . '%';
 
-    // 3. On réécrit la requête SQL (C'est là que la magie opère)
-    // On cherche dans le TITRE (post_title) OU le SKU (meta_value)
-    // On ignore totalement post_content (Description)
     $search = " AND (
         {$wpdb->posts}.post_title LIKE '{$keyword}'
         OR EXISTS (
@@ -393,7 +393,8 @@ function trendylux_search_force_title_sku( $search, $wp_query ) {
 
     return $search;
 }
-add_filter( 'posts_search', 'trendylux_search_force_title_sku', 500, 2 );
+// Note la priorité tardive (500) pour écraser tout le reste
+add_filter( 'posts_search', 'trendylux_search_force_title_sku_ajax', 500, 2 );
 
 /**
  * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
