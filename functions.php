@@ -361,6 +361,16 @@ add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 //}
 //add_filter( 'posts_search', 'trendylux_search_filter', 10, 2 );
 
+/* Force Relevanssi à ignorer le contenu (description) des produits */
+add_filter( 'relevanssi_content_to_index', 'trendylux_relevanssi_no_content', 10, 2 );
+function trendylux_relevanssi_no_content( $content, $post ) {
+    // Si c'est un produit, on vide le texte que Relevanssi s'apprête à lire
+    if ( $post->post_type === 'product' ) {
+        return '';
+    }
+    return $content;
+}
+
 /**
  * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
  * pour y ajouter les classes de DaisyUI et Tailwind. (Version corrigée)
