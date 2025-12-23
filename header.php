@@ -89,27 +89,27 @@ $tagline = ! empty( $opts['header_tagline'] ) ? $opts['header_tagline'] : 'Choos
             </div>
 
             <!-- Barre de recherche (nouvel élément) -->
-<!--            <div class="navbar-center flex-grow max-w-xl hidden lg:block">-->
-<!--                <form class="w-xl" role="search" method="get" action="--><?php //echo esc_url( home_url( '/' ) ); ?><!--">-->
-<!--                    <label class="input input-bordered flex items-center gap-2 w-full">-->
-<!--                        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">-->
-<!--                            <g-->
-<!--                                    stroke-linejoin="round"-->
-<!--                                    stroke-linecap="round"-->
-<!--                                    stroke-width="2.5"-->
-<!--                                    fill="none"-->
-<!--                                    stroke="currentColor"-->
-<!--                            >-->
-<!--                                <circle cx="11" cy="11" r="8"></circle>-->
-<!--                                <path d="m21 21-4.3-4.3"></path>-->
-<!--                            </g>-->
-<!--                        </svg>-->
-<!--                        <input type="search" class="grow text-primary-content" placeholder="Rechercher" name="s" value="--><?php //echo get_search_query(); ?><!--" />-->
-<!--                        <button type="submit" class="hidden" aria-label="Lancer la recherche"></button>-->
-<!--                    </label>-->
-<!--                </form>-->
-<!--            </div>-->
-            <?php echo do_shortcode('[fibosearch]'); ?>
+            <div class="navbar-center flex-grow max-w-xl hidden lg:block">
+                <form class="w-xl" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                    <label class="input input-bordered flex items-center gap-2 w-full">
+                        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <g
+                                    stroke-linejoin="round"
+                                    stroke-linecap="round"
+                                    stroke-width="2.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                            >
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.3-4.3"></path>
+                            </g>
+                        </svg>
+                        <input type="search" class="grow text-primary-content" placeholder="Rechercher" name="s" value="<?php echo get_search_query(); ?>" />
+                        <button type="submit" class="hidden" aria-label="Lancer la recherche"></button>
+                    </label>
+                </form>
+            </div>
+<!--            --><?php //echo do_shortcode('[fibosearch]'); ?>
 
             <!-- Icônes (conservées et ajoutées) -->
             <div class="navbar-end">
