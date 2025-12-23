@@ -339,41 +339,61 @@ function trendylux_add_alpine_attributes_to_kses( $allowed_tags ) {
 }
 add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 
-///**
-// * Force la recherche WordPress/WooCommerce uniquement sur le TITRE.
-// * Règle le problème de pertinence (Polo vs Basket) et le bug de pagination.
-// */
-//function trendylux_search_filter( $search, $wp_query ) {
-//    global $wpdb;
-//
-//    // On n'applique ça que si c'est une recherche et qu'on n'est pas dans l'admin
-//    if ( empty( $search ) || is_admin() || ! isset( $wp_query->query_vars['s'] ) ) {
-//        return $search;
+///* Force Relevanssi à ignorer le contenu (description) des produits */
+//add_filter( 'relevanssi_content_to_index', 'trendylux_relevanssi_no_content', 10, 2 );
+//function trendylux_relevanssi_no_content( $content, $post ) {
+//    // Si c'est un produit, on vide le texte que Relevanssi s'apprête à lire
+//    if ( $post->post_type === 'product' ) {
+//        return '';
 //    }
-//
-//    // On récupère le terme recherché
-//    $q = $wp_query->query_vars['s'];
-//
-//    // On nettoie la requête SQL pour ne chercher QUE dans post_title
-//    $n = ! empty( $q ) ? ' AND (' . $wpdb->posts . '.post_title LIKE \'%' . esc_sql( $wpdb->esc_like( $q ) ) . '%\')' : '';
-//
-//    return $n;
+//    return $content;
 //}
-//add_filter( 'posts_search', 'trendylux_search_filter', 10, 2 );
+//
+///* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats
+//   Cela laisse Relevanssi gérer la pagination correctement. */
+//add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
 
-/* Force Relevanssi à ignorer le contenu (description) des produits */
-add_filter( 'relevanssi_content_to_index', 'trendylux_relevanssi_no_content', 10, 2 );
-function trendylux_relevanssi_no_content( $content, $post ) {
-    // Si c'est un produit, on vide le texte que Relevanssi s'apprête à lire
-    if ( $post->post_type === 'product' ) {
-        return '';
+/**
+ * FORCE la recherche WordPress sur TITRE et SKU UNIQUEMENT.
+ * Règle le problème de pagination et le problème "Typologie" sans Relevanssi.
+ */
+function trendylux_search_force_title_sku( $search, $wp_query ) {
+    global $wpdb;
+
+    // 1. Sécurités : On n'applique ça que sur le frontend, pour une recherche produit
+    if ( is_admin() || ! is_search() ) {
+        return $search;
     }
-    return $content;
-}
 
-/* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats
-   Cela laisse Relevanssi gérer la pagination correctement. */
-add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
+    // Vérifie qu'on cherche bien des produits (le query var est souvent défini par WooCommerce)
+    $post_type = $wp_query->get( 'post_type' );
+    if ( $post_type !== 'product' && ! is_array( $post_type ) ) {
+        // Parfois le post_type n'est pas encore défini explicitement, on vérifie si c'est la main query
+        if ( ! $wp_query->is_main_query() ) return $search;
+    }
+
+    $q = $wp_query->get( 's' );
+    if ( empty( $q ) ) return $search;
+
+    // 2. On nettoie le terme de recherche
+    $keyword = '%' . $wpdb->esc_like( $q ) . '%';
+
+    // 3. On réécrit la requête SQL (C'est là que la magie opère)
+    // On cherche dans le TITRE (post_title) OU le SKU (meta_value)
+    // On ignore totalement post_content (Description)
+    $search = " AND (
+        {$wpdb->posts}.post_title LIKE '{$keyword}'
+        OR EXISTS (
+            SELECT * FROM {$wpdb->postmeta} 
+            WHERE post_id = {$wpdb->posts}.ID 
+            AND meta_key = '_sku' 
+            AND meta_value LIKE '{$keyword}'
+        )
+    ) ";
+
+    return $search;
+}
+add_filter( 'posts_search', 'trendylux_search_force_title_sku', 500, 2 );
 
 /**
  * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
