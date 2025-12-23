@@ -340,6 +340,28 @@ function trendylux_add_alpine_attributes_to_kses( $allowed_tags ) {
 add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 
 /**
+ * Force la recherche WordPress/WooCommerce uniquement sur le TITRE.
+ * Règle le problème de pertinence (Polo vs Basket) et le bug de pagination.
+ */
+function trendylux_search_filter( $search, $wp_query ) {
+    global $wpdb;
+
+    // On n'applique ça que si c'est une recherche et qu'on n'est pas dans l'admin
+    if ( empty( $search ) || is_admin() || ! isset( $wp_query->query_vars['s'] ) ) {
+        return $search;
+    }
+
+    // On récupère le terme recherché
+    $q = $wp_query->query_vars['s'];
+
+    // On nettoie la requête SQL pour ne chercher QUE dans post_title
+    $n = ! empty( $q ) ? ' AND (' . $wpdb->posts . '.post_title LIKE \'%' . esc_sql( $wpdb->esc_like( $q ) ) . '%\')' : '';
+
+    return $n;
+}
+add_filter( 'posts_search', 'trendylux_search_filter', 10, 2 );
+
+/**
  * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
  * pour y ajouter les classes de DaisyUI et Tailwind. (Version corrigée)
  */
