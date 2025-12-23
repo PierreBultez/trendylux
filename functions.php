@@ -360,10 +360,10 @@ add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 function trendylux_search_force_title_sku( $search, $wp_query ) {
     global $wpdb;
 
-    // 1. Sécurités : On n'applique ça que sur le frontend, pour une recherche produit
-    if ( is_admin() || ! is_search() ) {
-        return $search;
-    }
+//    // 1. Sécurités : On n'applique ça que sur le frontend, pour une recherche produit
+//    if ( is_admin() || ! is_search() ) {
+//        return $search;
+//    }
 
     // Vérifie qu'on cherche bien des produits (le query var est souvent défini par WooCommerce)
     $post_type = $wp_query->get( 'post_type' );
