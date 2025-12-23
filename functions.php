@@ -371,6 +371,10 @@ function trendylux_relevanssi_no_content( $content, $post ) {
     return $content;
 }
 
+/* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats
+   Cela laisse Relevanssi gérer la pagination correctement. */
+add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
+
 /**
  * Personnalise les arguments des champs du formulaire de paiement de WooCommerce
  * pour y ajouter les classes de DaisyUI et Tailwind. (Version corrigée)
