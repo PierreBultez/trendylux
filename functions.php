@@ -381,7 +381,7 @@ function trendylux_search_force_title_sku_ajax( $search, $wp_query ) {
     // 4. Nettoyage et Réécriture SQL (Titre OU Sku, jamais Description)
     $keyword = '%' . $wpdb->esc_like( $q ) . '%';
 
-    $search = " OR (
+    $search = " AND (
         {$wpdb->posts}.post_title LIKE '{$keyword}'
         OR EXISTS (
             SELECT * FROM {$wpdb->postmeta} 
