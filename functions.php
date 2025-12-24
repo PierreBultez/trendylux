@@ -834,6 +834,22 @@ function trendylux_pre_get_posts_search_products( $query ): void {
 }
 add_action( 'pre_get_posts', 'trendylux_pre_get_posts_search_products' );
 
+/**
+ * Force l'utilisation de search.php si le paramètre 's' est présent.
+ * Ceci corrige le cas où des plugins (comme FiboSearch) altèrent le type de requête
+ * et font charger archive-product.php à la place.
+ */
+function trendylux_force_search_template( $template ) {
+    if ( ! empty( $_GET['s'] ) ) {
+        $search_template = locate_template( 'search.php' );
+        if ( $search_template ) {
+            return $search_template;
+        }
+    }
+    return $template;
+}
+add_filter( 'template_include', 'trendylux_force_search_template', 99 );
+
 
 // =========================================================================
 // == PERSONNALISATION DE LA PAGE PANIER (cart.php)
