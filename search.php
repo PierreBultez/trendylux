@@ -76,7 +76,7 @@ get_header();
                             ?>
                             <div class="filter-group mb-6" x-data="{ expanded: false }">
                                 <h3 class="font-bold mb-3 text-sm uppercase tracking-wide text-neutral"><?php echo esc_html__('Catégories', 'trendylux'); ?></h3>
-                                <ul class="space-y-2">
+                                <ul class="space-y-2" :class="expanded ? 'max-h-60 overflow-y-auto pr-2' : ''">
                                     <?php 
                                     $count = 0;
                                     foreach ($matching_categories as $cat): 
@@ -128,7 +128,7 @@ get_header();
                                     ?>
                                     <div class="filter-group mb-6" x-data="{ expanded: false }">
                                         <h3 class="font-bold mb-3 text-sm uppercase tracking-wide text-neutral"><?php echo wc_attribute_label($attribute); ?></h3>
-                                        <ul class="space-y-2">
+                                        <ul class="space-y-2" :class="expanded ? 'max-h-60 overflow-y-auto pr-2' : ''">
                                             <?php 
                                             $count = 0;
                                             foreach ($terms as $term): 
