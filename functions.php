@@ -339,8 +339,8 @@ function trendylux_add_alpine_attributes_to_kses( $allowed_tags ) {
 }
 add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 
-/* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats */
-add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
+///* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats */
+//add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
 
 /**
  * FORCE la recherche sur TITRE et SKU UNIQUEMENT.
@@ -1437,3 +1437,50 @@ function trendylux_comment_callback($comment, $args, $depth) {
     <!-- </li> is closed by WordPress -->
     <?php
 }
+
+/**
+ * AJAX Live Search
+ */
+function trendylux_ajax_search(): void
+{
+    $term = isset($_GET['term']) ? sanitize_text_field($_GET['term']) : '';
+
+    if (empty($term)) {
+        wp_send_json_success([]);
+    }
+
+    // Le filtre trendylux_search_force_title_sku_ajax s'applique automatiquement
+    // car on est en AJAX et le post_type est 'product'
+    $args = [
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => 5, // Limite à 5 résultats pour l'autocomplétion
+        's'              => $term,
+    ];
+
+    $query = new WP_Query($args);
+    $products = [];
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $product = wc_get_product(get_the_ID());
+
+            $products[] = [
+                'id'        => get_the_ID(),
+                'title'     => get_the_title(),
+                'url'       => get_permalink(),
+                'price'     => $product->get_price_html(),
+                'image_sm'  => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
+                'image_lg'  => get_the_post_thumbnail_url(get_the_ID(), 'large'), // Image plus grande pour la preview
+                'excerpt'   => wp_trim_words($product->get_short_description(), 10, '...'),
+                'add_to_cart_url' => $product->add_to_cart_url(),
+            ];
+        }
+        wp_reset_postdata();
+    }
+
+    wp_send_json_success($products);
+}
+add_action('wp_ajax_trendylux_ajax_search', 'trendylux_ajax_search');
+add_action('wp_ajax_nopriv_trendylux_ajax_search', 'trendylux_ajax_search');
