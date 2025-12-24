@@ -339,8 +339,7 @@ function trendylux_add_alpine_attributes_to_kses( $allowed_tags ) {
 }
 add_filter( 'wp_kses_allowed_html', 'trendylux_add_alpine_attributes_to_kses' );
 
-/* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats
-   Cela laisse Relevanssi gérer la pagination correctement. */
+/* Empêche FiboSearch de s'initier sur la requête principale de la page de résultats */
 add_filter( 'dgwt/wcas/search/load_results', '__return_false' );
 
 /**
@@ -357,29 +356,46 @@ function trendylux_search_force_title_sku_ajax( $search, $wp_query ) {
     }
 
     // 2. Vérifier qu'on cherche bien des produits
-    // En AJAX custom, le post_type est défini dans $args de new WP_Query
     if ( $wp_query->get( 'post_type' ) !== 'product' ) {
         return $search;
     }
 
-    // 3. LA CORRECTION : On autorise l'exécution si c'est de l'AJAX
-    // On ne bloque que si c'est l'interface d'administration réelle (Backend)
+    // 3. On autorise l'exécution si c'est de l'AJAX ou le Frontend
     if ( is_admin() && ! wp_doing_ajax() ) {
         return $search;
     }
 
-    // 4. Nettoyage et Réécriture SQL (Titre OU Sku, jamais Description)
-    $keyword = '%' . $wpdb->esc_like( $q ) . '%';
+    // 4. Nettoyage et séparation des termes
+    // On sépare les mots par espace pour imiter le comportement standard de WP (AND)
+    $terms = explode( ' ', $q );
+    $search_conditions = [];
 
-    $search = " AND (
-        {$wpdb->posts}.post_title LIKE '{$keyword}'
-        OR EXISTS (
-            SELECT * FROM {$wpdb->postmeta} 
-            WHERE post_id = {$wpdb->posts}.ID 
-            AND meta_key = '_sku' 
-            AND meta_value LIKE '{$keyword}'
-        )
-    ) ";
+    foreach ( $terms as $term ) {
+        $term = trim( $term );
+        if ( empty( $term ) ) {
+            continue;
+        }
+        
+        $like = '%' . $wpdb->esc_like( $term ) . '%';
+        
+        // Pour chaque mot, on cherche dans le TITRE OU le SKU
+        $search_conditions[] = "(
+            {$wpdb->posts}.post_title LIKE '{$like}'
+            OR EXISTS (
+                SELECT * FROM {$wpdb->postmeta} 
+                WHERE post_id = {$wpdb->posts}.ID 
+                AND meta_key = '_sku' 
+                AND meta_value LIKE '{$like}'
+            )
+        )";
+    }
+
+    if ( empty( $search_conditions ) ) {
+        return $search;
+    }
+
+    // On combine toutes les conditions avec AND (tous les mots doivent être trouvés)
+    $search = " AND " . implode( ' AND ', $search_conditions );
 
     return $search;
 }
