@@ -120,6 +120,7 @@ $get_opt = function($key, $default = '') use ($options) {
             </nav>
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary opacity-100 text-3xl md:text-xl">Informations</header>
+                <a class="link link-hover text-xl md:text-sm" href="/a-propos/">&Agrave; propos</a>
                 <a class="link link-hover text-xl md:text-sm" href="/mentions-legales/">Mentions l&eacute;gales</a>
                 <a class="link link-hover text-xl md:text-sm" href="/politique-en-matiere-de-confidentialite/">Confidentialit&eacute;</a>
                 <a class="link link-hover text-xl md:text-sm" href="/conditions-generales-de-vente/">CGV</a>
