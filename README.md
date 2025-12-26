@@ -127,4 +127,112 @@ Le thème utilise un fichier `manifest.json` généré par Vite pour mapper les 
 
 ---
 
+# Documentation de Passation du Serveur Trendylux.fr
+
+## 1. Introduction
+
+Ce document a pour but de faciliter la reprise de la maintenance du serveur hébergeant le site web [trendylux.fr](https://trendylux.fr). Il décrit l'architecture technique du serveur, les services en cours d'exécution et les procédures de maintenance de base.
+
+Le serveur est une machine virtuelle sous environnement Linux Ubuntu.
+
+## 2. Accès au Serveur
+
+L'accès au serveur se fait via SSH.
+
+-   **Utilisateur non-root :** `pierre`
+-   **Répertoire personnel :** `/home/pierre/`
+
+Il est fortement recommandé de se connecter avec l'utilisateur `pierre` et d'utiliser `sudo` pour les opérations nécessitant des privilèges root. L'accès direct en `root` devrait être désactivé si ce n'est pas déjà le cas.
+
+**Recommandation :** Assurez-vous d'utiliser un accès par clé SSH et de désactiver l'authentification par mot de passe pour des raisons de sécurité.
+
+## 3. Caractéristiques du Système
+
+### 3.1. Matériel
+
+-   **Processeur (CPU) :** 6 Cores (Intel Core Processor Haswell)
+-   **Mémoire vive (RAM) :** 12 Go
+-   **Disque principal :** 96 Go d'espace total, 49 Go utilisés (51%) sur la partition `/`.
+
+### 3.2. Système d'exploitation
+
+-   **Distribution :** Ubuntu 25.10
+-   **Noyau Linux :** 6.17.0-6-generic
+
+### 3.3. Réseau
+
+-   **Adresse IPv4 publique :** `37.59.109.245`
+-   **Adresse IPv6 publique :** `2001:41d0:305:2100::b8fd`
+-   **Pare-feu (Firewall) :** Un pare-feu est probablement actif (ports 80 et 443 ouverts). La commande `sudo ufw status` permettra de lister les règles actives.
+
+## 4. Stack Applicative (trendylux.fr)
+
+Le site web est basé sur le CMS **WordPress**.
+
+### 4.1. Serveur Web
+
+-   **Service :** Nginx
+-   **Fichier de configuration principal du site :** `/etc/nginx/sites-enabled/prod.trendylux.fr`
+-   **Répertoire racine du site (Web Root) :** `/var/www/trendylux.fr`
+-   **Logs Nginx :** Les journaux d'accès et d'erreur se trouvent dans `/var/log/nginx/`.
+
+### 4.2. Application
+
+-   **Langage :** PHP
+-   **Version :** 8.4.11
+-   **Service PHP :** La communication entre Nginx et PHP se fait via le socket FPM `/run/php/php8.4-fpm.sock`.
+
+### 4.3. Base de données
+
+-   **Service :** MariaDB (compatible MySQL)
+-   **Accès :** La base de données n'est accessible que localement (`localhost:3306`).
+-   **Identifiants :** Les identifiants de connexion à la base de données se trouvent dans le fichier de configuration de WordPress : `/var/www/trendylux.fr/wp-config.php`.
+
+### 4.4. Cache
+
+-   **Cache d'objets :** Un service **Redis** est actif et écoute sur `127.0.0.1:6379`. Il est probablement utilisé par WordPress via un plugin de cache (ex: "Redis Object Cache") pour accélérer le site.
+-   **Cache d'images :** La configuration Nginx inclut des règles pour servir des images aux formats **WebP** et **AVIF** via le plugin "Converter for Media", ce qui optimise le temps de chargement.
+
+### 4.5. Certificat SSL/TLS
+
+-   **Service :** Les certificats HTTPS sont fournis par **Let's Encrypt** et gérés via l'outil **Certbot**.
+-   **Configuration :** Les chemins vers les certificats sont définis dans le fichier de configuration Nginx du site.
+-   **Renouvellement :** Le renouvellement des certificats est normalement automatisé via une tâche `cron` ou un `timer` systemd installé par Certbot. Il peut être lancé manuellement avec `sudo certbot renew`.
+
+## 5. Guide de Maintenance
+
+### 5.1. Mises à jour du système
+
+Les mises à jour des paquets Ubuntu s'effectuent avec les commandes standards :
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
+### 5.2. Gestion des services
+
+Voici les commandes `systemd` pour gérer les services principaux :
+```bash
+# Pour Nginx
+sudo systemctl status nginx
+sudo systemctl restart nginx
+sudo systemctl reload nginx # Recharger la configuration sans coupure
+
+# Pour MariaDB
+sudo systemctl status mariadb
+sudo systemctl restart mariadb
+
+# Pour PHP-FPM
+sudo systemctl status php8.4-fpm
+sudo systemctl restart php8.4-fpm
+```
+
+### 5.3. Sauvegardes (Backups)
+
+Aucun système de sauvegarde personnalisé n'a été détecté via le `crontab` de l'utilisateur. Il est **impératif** de :
+1.  Vérifier les cronjobs système (`/etc/crontab`, `/etc/cron.d/`).
+2.  **Mettre en place une stratégie de sauvegarde robuste** pour les fichiers du site (`/var/www/trendylux.fr`) et la base de données (via un `mysqldump`).
+
+Bonne continuation !
+
 *Généré le 26/12/2025.*
