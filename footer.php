@@ -125,6 +125,7 @@ $get_opt = function($key, $default = '') use ($options) {
                 <a class="link link-hover text-xl md:text-sm" href="/politique-en-matiere-de-confidentialite/">Confidentialit&eacute;</a>
                 <a class="link link-hover text-xl md:text-sm" href="/conditions-generales-de-vente/">CGV</a>
                 <a class="link link-hover text-xl md:text-sm" href="/politique-en-matiere-de-remboursements-et-de-retours/">Retours</a>
+                <a class="link link-hover text-xl md:text-sm" href="/faq/">Foire aux questions</a>
             </nav>
             <nav class="flex flex-col gap-2">
                 <header class="footer-title text-primary opacity-100 text-3xl md:text-xl">Pratique</header>

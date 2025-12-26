@@ -44,6 +44,7 @@ require_once get_template_directory() . '/inc/class-trendylux-mobile-walker.php'
 require_once get_template_directory() . '/inc/admin/theme-options.php';
 require_once get_template_directory() . '/inc/admin/mega-menu-options.php';
 require_once get_template_directory() . '/inc/class-trendylux-seo.php';
+require_once get_template_directory() . '/inc/cpt-faq.php';
 
 function trendylux_register_nav_menu(): void
 {
