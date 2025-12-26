@@ -182,10 +182,15 @@ get_header();
                         // PRESERVE URL PARAMETERS IN FILTER FORM (Hidden Inputs)
                         // This ensures that filters like ?f_product_brand=lacoste are passed to the AJAX handler
                         // We use 'f_' prefix to avoid conflicting with main query vars and triggering redirects
-                        $preserved_params = ['f_product_brand', 'f_pa_marque'];
+                        $preserved_params = ['f_product_brand', 'f_pa_marque', 'product_brand', 'pa_marque'];
                         foreach ($preserved_params as $param) {
-                            if ( isset($_GET[$param]) && !empty($_GET[$param]) ) {
-                                echo '<input type="hidden" name="' . esc_attr($param) . '" value="' . esc_attr(sanitize_text_field($_GET[$param])) . '">';
+                            $val = isset($_GET[$param]) ? $_GET[$param] : get_query_var($param);
+                            if ( !empty($val) ) {
+                                // If it's an array (unlikely for main query vars, but possible for f_ params), handle it
+                                if ( is_array($val) ) {
+                                    $val = implode(',', $val); 
+                                }
+                                echo '<input type="hidden" name="' . esc_attr($param) . '" value="' . esc_attr(sanitize_text_field($val)) . '">';
                             }
                         }
 
@@ -341,10 +346,23 @@ get_header();
                                                 // CHECK IF SELECTED IN URL
                                                 $isChecked = false;
                                                 $param_name = 'f_' . $attribute;
+                                                
+                                                // Check f_ prefixed param
                                                 if ( isset($_GET[$param_name]) ) {
                                                     $url_values = is_array($_GET[$param_name]) ? $_GET[$param_name] : explode(',', $_GET[$param_name]);
                                                     if ( in_array($term->slug, $url_values) ) {
                                                         $isChecked = true;
+                                                    }
+                                                }
+                                                
+                                                // Check standard param (e.g. product_brand)
+                                                if ( !$isChecked ) {
+                                                    $val = isset($_GET[$attribute]) ? $_GET[$attribute] : get_query_var($attribute);
+                                                    if ( !empty($val) ) {
+                                                        $url_values = is_array($val) ? $val : explode(',', $val);
+                                                        if ( in_array($term->slug, $url_values) ) {
+                                                            $isChecked = true;
+                                                        }
                                                     }
                                                 }
                                             ?>
