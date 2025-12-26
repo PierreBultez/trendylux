@@ -135,6 +135,14 @@ Ce document a pour but de faciliter la reprise de la maintenance du serveur héb
 
 Le serveur est une machine virtuelle sous environnement Linux Ubuntu.
 
+Il est hébergé chez OVHCloud dans la catégorie "Bare Metal Cloud" et "Serveurs Privés Virtuels".
+
+Le modèle de l'offre est VPS-2 6 vCores 12Go RAM 100Go SSD nvme. Il est dans la zone Region OpenStack: os-gra6 et localisé à Gravelines (GRA) - France.
+
+Une option Backup automatisé Premium à été souscrite ainsi qu'une option snapshot qui permet de prendre une "image" à un instant T de l'entièreté du serveur.
+
+Il n'y a pas d'engagement et la date de renouvellement est au 1er de chaque mois pour un montant de 12.00€ ttc par mois..
+
 ## 2. Accès au Serveur
 
 L'accès au serveur se fait via SSH.
