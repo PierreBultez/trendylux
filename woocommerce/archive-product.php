@@ -180,8 +180,9 @@ get_header();
                         $filter_object_ids = null;
 
                         // PRESERVE URL PARAMETERS IN FILTER FORM (Hidden Inputs)
-                        // This ensures that filters like ?product_brand=lacoste are passed to the AJAX handler
-                        $preserved_params = ['product_brand', 'pa_marque'];
+                        // This ensures that filters like ?f_product_brand=lacoste are passed to the AJAX handler
+                        // We use 'f_' prefix to avoid conflicting with main query vars and triggering redirects
+                        $preserved_params = ['f_product_brand', 'f_pa_marque'];
                         foreach ($preserved_params as $param) {
                             if ( isset($_GET[$param]) && !empty($_GET[$param]) ) {
                                 echo '<input type="hidden" name="' . esc_attr($param) . '" value="' . esc_attr(sanitize_text_field($_GET[$param])) . '">';
@@ -260,7 +261,7 @@ get_header();
 
                                 // 2. Hide Brand filters if we are already in a Brand context
                                 if ( $attribute === 'pa_marque' || $attribute === 'product_brand' ) {
-                                    if ( isset($_GET['pa_marque']) || isset($_GET['product_brand']) ) {
+                                    if ( isset($_GET['f_pa_marque']) || isset($_GET['f_product_brand']) ) {
                                         continue;
                                     }
                                 }
@@ -339,8 +340,9 @@ get_header();
                                                 
                                                 // CHECK IF SELECTED IN URL
                                                 $isChecked = false;
-                                                if ( isset($_GET[$attribute]) ) {
-                                                    $url_values = is_array($_GET[$attribute]) ? $_GET[$attribute] : explode(',', $_GET[$attribute]);
+                                                $param_name = 'f_' . $attribute;
+                                                if ( isset($_GET[$param_name]) ) {
+                                                    $url_values = is_array($_GET[$param_name]) ? $_GET[$param_name] : explode(',', $_GET[$param_name]);
                                                     if ( in_array($term->slug, $url_values) ) {
                                                         $isChecked = true;
                                                     }
@@ -348,7 +350,7 @@ get_header();
                                             ?>
                                                 <li <?php echo $isHidden ? 'x-show="expanded" x-cloak' : ''; ?> class="mb-1 transition-all duration-300">
                                                     <label class="cursor-pointer flex items-center gap-3 group">
-                                                        <input type="checkbox" name="<?php echo $attribute; ?>[]" value="<?php echo $term->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" <?php checked($isChecked); ?> />
+                                                        <input type="checkbox" name="<?php echo 'f_' . $attribute; ?>[]" value="<?php echo $term->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" <?php checked($isChecked); ?> />
                                                         <span class="text-sm text-gray-600 group-hover:text-primary transition-colors"><?php echo $term->name; ?></span>
                                                     </label>
                                                 </li>

@@ -652,6 +652,45 @@ function trendylux_replace_variation_add_to_cart_button(): void
 }
 add_action( 'init', 'trendylux_replace_variation_add_to_cart_button' );
 
+/**
+ * Intercept custom filters (prefixed with 'f_') and apply them to the main query.
+ * This handles the "Back" button and standard page loads.
+ */
+function trendylux_handle_custom_filters($query) {
+    if (is_admin() || !$query->is_main_query() || !$query->is_post_type_archive('product') && !$query->is_tax()) {
+        return;
+    }
+
+    $tax_query = $query->get('tax_query') ?: ['relation' => 'AND'];
+    $found_filter = false;
+
+    foreach ($_GET as $key => $value) {
+        if (strpos($key, 'f_') === 0 && !empty($value)) {
+            $taxonomy = substr($key, 2); // Remove 'f_' prefix
+            $taxonomy = str_replace('[]', '', $taxonomy); // Remove '[]' suffix if present
+
+            if (taxonomy_exists($taxonomy)) {
+                $terms = is_array($value) ? $value : explode(',', $value);
+                // Sanitize terms
+                $terms = array_map('sanitize_text_field', $terms);
+
+                $tax_query[] = [
+                    'taxonomy' => $taxonomy,
+                    'field'    => 'slug',
+                    'terms'    => $terms,
+                    'operator' => 'IN',
+                ];
+                $found_filter = true;
+            }
+        }
+    }
+
+    if ($found_filter) {
+        $query->set('tax_query', $tax_query);
+    }
+}
+add_action('pre_get_posts', 'trendylux_handle_custom_filters');
+
 function trendylux_filter_products(): void
 {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -686,7 +725,8 @@ function trendylux_filter_products(): void
             continue;
         }
 
-        $clean_key = str_replace('[]', '', $key);
+        // Clean key: remove '[]' and 'f_' prefix
+        $clean_key = str_replace(['[]', 'f_'], '', $key);
 
         if ($clean_key === 'product_cat') {
             $tax_query[] = [
