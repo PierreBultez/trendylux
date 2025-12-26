@@ -701,8 +701,9 @@ function trendylux_preserve_filters_in_pagination($args) {
 
     // Add explicitly listed params
     foreach ($preserve as $key) {
-        if (isset($_GET[$key]) && !empty($_GET[$key])) {
-            $add_args[$key] = sanitize_text_field($_GET[$key]);
+        $val = isset($_GET[$key]) ? $_GET[$key] : get_query_var($key);
+        if (!empty($val)) {
+            $add_args[$key] = sanitize_text_field($val);
         }
     }
 
