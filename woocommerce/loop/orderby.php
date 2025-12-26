@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $id_suffix = wp_unique_id();
 ?>
-<form class="woocommerce-ordering" method="get">
+<form class="trendylux-ordering" method="get">
 	<?php if ( $use_label ) : ?>
 		<label for="woocommerce-orderby-<?php echo esc_attr( $id_suffix ); ?>"><?php echo esc_html__( 'Sort by', 'woocommerce' ); ?></label>
 	<?php endif; ?>

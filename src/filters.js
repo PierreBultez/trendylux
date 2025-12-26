@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterForm = document.querySelector('#product-filters');
     const productArchiveContainer = document.querySelector('#product-archive-container');
     const resultCount = document.querySelector('.woocommerce-result-count');
-    const orderingForm = document.querySelector('.woocommerce-ordering');
+    const orderingForm = document.querySelector('.trendylux-ordering');
 
     const checkFilters = () => {
         const checkedFilters = filterForm.querySelectorAll('input[type="checkbox"]:checked');
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Get sort order
-        const orderby = document.querySelector('.woocommerce-ordering .orderby')?.value || new URLSearchParams(window.location.search).get('orderby');
+        const orderby = document.querySelector('.trendylux-ordering .orderby')?.value || new URLSearchParams(window.location.search).get('orderby');
 
         // Get search query
         const searchQuery = new URLSearchParams(window.location.search).get('s') || '';
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyFilters(1); // Reset to page 1 on filter change
         }
         
-        if (event.target.matches('.woocommerce-ordering .orderby')) {
+        if (event.target.matches('.trendylux-ordering .orderby')) {
             event.preventDefault(); // Try to prevent default
             applyFilters(1);
         }
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Prevent standard form submission for sorting
     document.body.addEventListener('submit', function(event) {
-        if (event.target.matches('.woocommerce-ordering')) {
+        if (event.target.matches('.trendylux-ordering')) {
             event.preventDefault();
             // If the submit happened despite our efforts, applyFilters would have run on 'change'. 
             // But if it was a manual submit, we should run it here too? 
