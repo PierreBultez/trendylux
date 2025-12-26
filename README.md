@@ -127,4 +127,4 @@ Le thème utilise un fichier `manifest.json` généré par Vite pour mapper les 
 
 ---
 
-*Généré automatiquement le 26/12/2025.*
+*Généré le 26/12/2025.*
