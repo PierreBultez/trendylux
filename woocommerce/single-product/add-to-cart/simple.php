@@ -34,6 +34,11 @@ if ( $product->is_in_stock() ) : ?>
         <?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
     </form>
 
+    <div class="paypal-4x-info mt-3 text-sm flex items-center gap-2 text-base-content/70">
+        <span>Payer en 4x sans frais avec</span>
+        <img src="<?php echo esc_url( get_template_directory_uri() . '/public/checkout/paypal.svg' ); ?>" alt="PayPal" class="h-4 w-auto">
+    </div>
+
     <?php do_action( 'woocommerce_after_add_to_cart_form' ); ?>
 
 <?php endif; ?>
