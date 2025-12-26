@@ -10,7 +10,7 @@ $get_opt = function($key, $default = '') use ($options) {
     
     <!-- Section R&eacute;assurance -->
     <div class="container mx-auto px-4 py-8 border-neutral-focus">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-8 text-center">
             
             <!-- Bloc 1 -->
             <?php
@@ -75,6 +75,15 @@ $get_opt = function($key, $default = '') use ($options) {
                 <h3 class="font-bold"><?php echo wp_kses_post($r4_title); ?></h3>
                 <p class="text-xs text-neutral-content/70"><?php echo wp_kses_post($r4_sub); ?></p>
             </div>
+
+            <!-- Bloc 5 : CONTACT -->
+            <a href="<?php echo home_url('/contact/'); ?>" class="flex flex-col items-center group hover:text-primary transition-colors">
+                <svg class="h-8 w-8 text-primary mb-2 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <h3 class="font-bold">Service Client</h3>
+                <p class="text-xs text-neutral-content/70">&Agrave; votre &eacute;coute</p>
+            </a>
 
         </div>
     </div>

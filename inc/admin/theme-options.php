@@ -258,6 +258,17 @@ class Trendylux_Theme_Options {
         // Crédits
         $this->add_field( 'footer_credits_1', 'Crédits Ligne 1', 'section_footer', 'text', ['default' => 'SAS Trendy Lux n\'est pas un distributeur officiel des marques vendues sur le site web trendylux.fr'] );
         $this->add_field( 'footer_credits_2', 'Crédits Ligne 2', 'section_footer', 'text', ['default' => 'Copyright © TRENDY LUX. Tous droits réservés. Tous les logos et marques déposées présents sur ce site appartiennent à leurs propriétaires respectifs.'] );
+
+        // --- SECTION 12: PAGE CONTACT ---
+        add_settings_section(
+            'section_contact_page',
+            '12. Page Contact',
+            null,
+            'trendylux-home-settings'
+        );
+        $this->add_field( 'contact_phone', 'Téléphone', 'section_contact_page', 'text', ['default' => '06 52 19 62 15'] );
+        $this->add_field( 'contact_email', 'Email de contact', 'section_contact_page', 'text', ['default' => 'contact@trendylux.fr'] );
+        $this->add_field( 'contact_address', 'Adresse postale', 'section_contact_page', 'textarea', ['default' => 'Trendy Lux 60 rue François 1er 75008 Paris'] );
     }
 
     /**

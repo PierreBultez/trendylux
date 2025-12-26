@@ -297,3 +297,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+// Gestion du formulaire de contact (Page Contact)
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('trendylux-contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const msgContainer = document.getElementById('contact-form-message');
+            const originalBtnText = submitBtn.innerText;
+
+            // Reset UI
+            msgContainer.classList.add('hidden');
+            msgContainer.classList.remove('text-success', 'text-error', 'alert', 'alert-success', 'alert-error');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading loading-spinner"></span> Envoi...';
+
+            const formData = new FormData(this);
+            formData.append('action', 'trendylux_send_contact_email');
+            formData.append('nonce', trendylux_ajax.contact_nonce);
+
+            fetch(trendylux_ajax.ajax_url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                msgContainer.classList.remove('hidden');
+                if (data.success) {
+                    msgContainer.className = 'alert alert-success mt-4';
+                    msgContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>${data.data}</span>`;
+                    contactForm.reset();
+                } else {
+                    msgContainer.className = 'alert alert-error mt-4';
+                    msgContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>${data.data}</span>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                msgContainer.classList.remove('hidden');
+                msgContainer.className = 'alert alert-error mt-4';
+                msgContainer.innerText = 'Une erreur technique est survenue.';
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
+            });
+        });
+    }
+});

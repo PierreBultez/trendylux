@@ -186,8 +186,9 @@ function trendylux_vite_assets(): void {
     
     // Localize script for AJAX (applies to both dev and prod handles if they share the name or we target both)
     wp_localize_script('trendylux-main-js', 'trendylux_ajax', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce'    => wp_create_nonce('trendylux_newsletter_nonce')
+        'ajax_url'      => admin_url('admin-ajax.php'),
+        'nonce'         => wp_create_nonce('trendylux_newsletter_nonce'),
+        'contact_nonce' => wp_create_nonce('trendylux_contact_nonce')
     ]);
 }
 add_action('wp_enqueue_scripts', 'trendylux_vite_assets');
@@ -1484,3 +1485,62 @@ function trendylux_ajax_search(): void
 }
 add_action('wp_ajax_trendylux_ajax_search', 'trendylux_ajax_search');
 add_action('wp_ajax_nopriv_trendylux_ajax_search', 'trendylux_ajax_search');
+
+/**
+ * Traitement du formulaire de contact en AJAX
+ */
+function trendylux_send_contact_email() {
+    // 1. Vérification nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'trendylux_contact_nonce')) {
+        wp_send_json_error('Erreur de sécurité. Veuillez recharger la page.');
+    }
+
+    // 2. Récupération et nettoyage des champs
+    $name    = sanitize_text_field($_POST['name'] ?? '');
+    $email   = sanitize_email($_POST['email'] ?? '');
+    $subject = sanitize_text_field($_POST['subject'] ?? '');
+    $message = sanitize_textarea_field($_POST['message'] ?? '');
+
+    // 3. Validation
+    if (empty($name) || empty($email) || empty($message)) {
+        wp_send_json_error('Veuillez remplir tous les champs obligatoires.');
+    }
+
+    if (!is_email($email)) {
+        wp_send_json_error('Adresse email invalide.');
+    }
+
+    // 4. Récupération de l\'email destinataire depuis les options
+    $opts = get_option('trendylux_home_options', []);
+    $to = !empty($opts['contact_email']) ? $opts['contact_email'] : 'contact@trendylux.fr';
+
+    // 5. Construction de l'email
+    $headers = [
+        'Content-Type: text/html; charset=UTF-8',
+        'From: ' . get_bloginfo('name') . ' <no-reply@trendylux.fr>',
+        'Reply-To: ' . $name . ' <' . $email . '>'
+    ];
+
+    $email_subject = '[Contact Site] ' . ($subject ? $subject : 'Nouveau message');
+    
+    $email_body = "
+        <h2>Nouveau message depuis le site Trendy Lux</h2>
+        <p><strong>Nom :</strong> $name</p>
+        <p><strong>Email :</strong> $email</p>
+        <p><strong>Sujet :</strong> $subject</p>
+        <hr>
+        <p><strong>Message :</strong></p>
+        <p>" . nl2br($message) . "</p>
+    ";
+
+    // 6. Envoi
+    $sent = wp_mail($to, $email_subject, $email_body, $headers);
+
+    if ($sent) {
+        wp_send_json_success('Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.');
+    } else {
+        wp_send_json_error('Une erreur est survenue lors de l\'envoi de l\'email. Veuillez réessayer plus tard.');
+    }
+}
+add_action('wp_ajax_trendylux_send_contact_email', 'trendylux_send_contact_email');
+add_action('wp_ajax_nopriv_trendylux_send_contact_email', 'trendylux_send_contact_email');
