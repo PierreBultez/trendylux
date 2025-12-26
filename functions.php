@@ -691,6 +691,44 @@ function trendylux_handle_custom_filters($query) {
 }
 add_action('pre_get_posts', 'trendylux_handle_custom_filters');
 
+/**
+ * Ensure filter parameters are preserved in pagination links.
+ */
+function trendylux_preserve_filters_in_pagination($args) {
+    // List of parameters to preserve
+    $preserve = ['product_brand', 'pa_marque', 'orderby'];
+    $add_args = [];
+
+    // Add explicitly listed params
+    foreach ($preserve as $key) {
+        if (isset($_GET[$key]) && !empty($_GET[$key])) {
+            $add_args[$key] = sanitize_text_field($_GET[$key]);
+        }
+    }
+
+    // Add all 'f_' prefixed params
+    foreach ($_GET as $key => $value) {
+        if (strpos($key, 'f_') === 0 && !empty($value)) {
+             // Handle arrays (e.g. f_color[]=red)
+             if (is_array($value)) {
+                 $add_args[$key] = array_map('sanitize_text_field', $value);
+             } else {
+                 $add_args[$key] = sanitize_text_field($value);
+             }
+        }
+    }
+
+    // Merge with existing add_args if any
+    if (isset($args['add_args']) && is_array($args['add_args'])) {
+        $args['add_args'] = array_merge($args['add_args'], $add_args);
+    } else {
+        $args['add_args'] = $add_args;
+    }
+
+    return $args;
+}
+add_filter('woocommerce_pagination_args', 'trendylux_preserve_filters_in_pagination');
+
 function trendylux_filter_products(): void
 {
     $data = json_decode(file_get_contents('php://input'), true);
