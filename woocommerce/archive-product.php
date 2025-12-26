@@ -175,6 +175,18 @@ get_header();
 
                         <?php
                         $current_object = get_queried_object();
+                        
+                        // Robust check for Category Context:
+                        // If we are on a URL like /categorie-produit/homme/vetements-homme/?product_brand=guess,
+                        // WordPress might return the Brand as the queried object because of the param.
+                        // We must force the context back to the Category if 'product_cat' is in the query vars.
+                        if ( $cat_slug = get_query_var( 'product_cat' ) ) {
+                            $cat_term = get_term_by( 'slug', $cat_slug, 'product_cat' );
+                            if ( $cat_term && ! is_wp_error( $cat_term ) ) {
+                                $current_object = $cat_term;
+                            }
+                        }
+
                         $current_term_id = 0;
                         $current_taxonomy = '';
                         $filter_object_ids = null;
