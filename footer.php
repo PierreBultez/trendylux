@@ -84,13 +84,20 @@ $get_opt = function($key, $default = '') use ($options) {
         <div class="container mx-auto p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
             <aside class="md:col-span-2 flex flex-col justify-center">
                 <div class="flex flex-col items-center gap-y-4 mb-2 md:flex-row md:items-center md:gap-24">
+                    <?php
+                    // Logo Footer
+                    $footer_logo_id = $get_opt('footer_logo');
+                    $footer_logo_src = $footer_logo_id ? wp_get_attachment_image_url($footer_logo_id, 'full') : get_template_directory_uri() . '/public/logo-trendy-lux.svg';
+                    
+                    // Tagline Footer
+                    $footer_tagline = $get_opt('footer_tagline', 'Choose your style … <br><span class="ml-8">Be Trendy</span>');
+                    ?>
                     <a href="<?php echo home_url(); ?>" class="logo-glow-gold transition duration-300 shrink-0">
-                        <img src="<?php echo get_template_directory_uri(); ?>/public/logo-trendy-lux.svg" alt="TrendyLux" class="h-32 w-auto object-contain">
+                        <img src="<?php echo esc_url($footer_logo_src); ?>" alt="TrendyLux" class="h-32 w-auto object-contain">
                     </a>
                     <div class="relative hidden md:block">
                         <p class="md:text-xl lg:text-2xl xl:text-4xl text-primary -rotate-12 transform origin-bottom-left text-glow-gold leading-tight" style="font-family: 'Mrs Saint Delafield', cursive;">
-                            Choose your style … <br>
-                            <span class="ml-8">Be Trendy</span>
+                            <?php echo wp_kses_post($footer_tagline); ?>
                         </p>
                     </div>
                 </div>

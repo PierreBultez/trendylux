@@ -242,6 +242,12 @@ class Trendylux_Theme_Options {
         $this->add_field( 'reassurance_4_title', 'Réassurance 4: Titre', 'section_footer', 'text', ['default' => 'Satisfait ou Remboursé'] );
         $this->add_field( 'reassurance_4_subtitle', 'Réassurance 4: Sous-titre', 'section_footer', 'text', ['default' => 'Retours sous 14 jours'] );
 
+        // --- NEW FIELDS ---
+        $this->add_field( 'footer_logo', 'Logo du Footer', 'section_footer', 'image' );
+        $this->add_field( 'footer_tagline', 'Slogan (Tagline) du Footer', 'section_footer', 'textarea', [
+            'default' => 'Choose your style … <br><span class="ml-8">Be Trendy</span>'
+        ]);
+
         // Newsletter
         $this->add_field( 'footer_newsletter_text', 'Texte Newsletter', 'section_footer', 'textarea', ['default' => 'Inscrivez-vous à notre newsletter pour profiter de la livraison offerte sur votre première commande'] );
 
