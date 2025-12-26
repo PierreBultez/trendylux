@@ -22,8 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
                 data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>"
         />
         <span class="font-semibold"><?php echo $gateway->get_title(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?></span>
-        <div class="ml-auto">
+        <div class="ml-auto flex items-center gap-6">
             <?php echo $gateway->get_icon(); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>
+            <?php if ( strpos( strtolower( $gateway->get_title() ), 'carte bancaire' ) !== false || $gateway->id === 'stripe' ) : ?>
+                <img src="<?php echo esc_url( get_template_directory_uri() . '/public/checkout/visa.svg' ); ?>" alt="logo Visa" class="h-6 w-auto">
+                <img src="<?php echo esc_url( get_template_directory_uri() . '/public/checkout/mastercard.svg' ); ?>" alt="logo Mastercard" class="h-6 w-auto">
+            <?php endif; ?>
         </div>
     </label>
 

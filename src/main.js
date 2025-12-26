@@ -145,6 +145,7 @@ document.head.appendChild(style);
 
 // AJAX Live Search Logic
 document.addEventListener('DOMContentLoaded', function() {
+
     const searchInput = document.getElementById('trendylux-search-input');
     const resultsContainer = document.getElementById('trendylux-search-results');
     let debounceTimer;
@@ -343,10 +344,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 msgContainer.className = 'alert alert-error mt-4';
                 msgContainer.innerText = 'Une erreur technique est survenue.';
             })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalBtnText;
+                        .finally(() => {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = originalBtnText;
+                        });
+                    });
+                }
             });
-        });
-    }
-});
