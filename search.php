@@ -47,6 +47,16 @@ get_header();
                         </div>
 
                         <?php
+                        // PRESERVE URL PARAMETERS IN FILTER FORM (Hidden Inputs)
+                        // This ensures that filters like ?f_product_brand=lacoste are passed to the AJAX handler
+                        // We use 'f_' prefix to avoid conflicting with main query vars and triggering redirects
+                        $preserved_params = ['f_product_brand', 'f_pa_marque'];
+                        foreach ($preserved_params as $param) {
+                            if ( isset($_GET[$param]) && !empty($_GET[$param]) ) {
+                                echo '<input type="hidden" name="' . esc_attr($param) . '" value="' . esc_attr(sanitize_text_field($_GET[$param])) . '">';
+                            }
+                        }
+
                         // Get all product IDs for the current search to filter terms
                         $product_ids_args = [
                             'post_type' => 'product',
@@ -82,10 +92,19 @@ get_header();
                                     foreach ($matching_categories as $cat): 
                                         $count++;
                                         $isHidden = $count > 5;
+                                        
+                                        // CHECK IF SELECTED IN URL
+                                        $isChecked = false;
+                                        if ( isset($_GET['f_product_cat']) ) {
+                                            $url_values = is_array($_GET['f_product_cat']) ? $_GET['f_product_cat'] : explode(',', $_GET['f_product_cat']);
+                                            if ( in_array($cat->slug, $url_values) ) {
+                                                $isChecked = true;
+                                            }
+                                        }
                                     ?>
                                         <li <?php echo $isHidden ? 'x-show="expanded" x-cloak' : ''; ?> class="mb-1 transition-all duration-300">
                                             <label class="cursor-pointer flex items-center gap-3 group">
-                                                <input type="checkbox" name="product_cat[]" value="<?php echo $cat->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" />
+                                                <input type="checkbox" name="f_product_cat[]" value="<?php echo $cat->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" <?php checked($isChecked); ?> />
                                                 <span class="text-sm text-gray-600 group-hover:text-primary transition-colors"><?php echo $cat->name; ?></span>
                                             </label>
                                         </li>
@@ -134,10 +153,20 @@ get_header();
                                             foreach ($terms as $term): 
                                                 $count++;
                                                 $isHidden = $count > 5;
+                                                
+                                                // CHECK IF SELECTED IN URL
+                                                $isChecked = false;
+                                                $param_name = 'f_' . $attribute;
+                                                if ( isset($_GET[$param_name]) ) {
+                                                    $url_values = is_array($_GET[$param_name]) ? $_GET[$param_name] : explode(',', $_GET[$param_name]);
+                                                    if ( in_array($term->slug, $url_values) ) {
+                                                        $isChecked = true;
+                                                    }
+                                                }
                                             ?>
                                                 <li <?php echo $isHidden ? 'x-show="expanded" x-cloak' : ''; ?> class="mb-1 transition-all duration-300">
                                                     <label class="cursor-pointer flex items-center gap-3 group">
-                                                        <input type="checkbox" name="<?php echo $attribute; ?>[]" value="<?php echo $term->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" />
+                                                        <input type="checkbox" name="<?php echo 'f_' . $attribute; ?>[]" value="<?php echo $term->slug; ?>" class="checkbox checkbox-sm checkbox-primary rounded-sm" <?php checked($isChecked); ?> />
                                                         <span class="text-sm text-gray-600 group-hover:text-primary transition-colors"><?php echo $term->name; ?></span>
                                                     </label>
                                                 </li>
@@ -169,7 +198,24 @@ get_header();
                         <?php woocommerce_result_count(); ?>
                     </div>
                     <div class="flex gap-4">
-                        <?php woocommerce_catalog_ordering(); ?>
+                        <?php 
+                            $catalog_orderby_options = apply_filters( 'woocommerce_catalog_orderby', array(
+                                'menu_order' => __( 'Default sorting', 'woocommerce' ),
+                                'popularity' => __( 'Sort by popularity', 'woocommerce' ),
+                                'rating'     => __( 'Sort by average rating', 'woocommerce' ),
+                                'date'       => __( 'Sort by latest', 'woocommerce' ),
+                                'price'      => __( 'Sort by price: low to high', 'woocommerce' ),
+                                'price-desc' => __( 'Sort by price: high to low', 'woocommerce' ),
+                            ) );
+                            
+                            $orderby = isset( $_GET['orderby'] ) ? wc_clean( $_GET['orderby'] ) : apply_filters( 'woocommerce_default_catalog_orderby', get_option( 'woocommerce_default_catalog_orderby' ) );
+
+                            wc_get_template( 'loop/orderby.php', array( 
+                                'catalog_orderby_options' => $catalog_orderby_options,
+                                'orderby' => $orderby,
+                                'show_default_orderby' => 'menu_order'
+                            ) );
+                        ?>
                     </div>
                 </div>
 

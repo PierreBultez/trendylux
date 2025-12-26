@@ -657,7 +657,7 @@ add_action( 'init', 'trendylux_replace_variation_add_to_cart_button' );
  * This handles the "Back" button and standard page loads.
  */
 function trendylux_handle_custom_filters($query) {
-    if (is_admin() || !$query->is_main_query() || !$query->is_post_type_archive('product') && !$query->is_tax()) {
+    if (is_admin() || !$query->is_main_query() || (!$query->is_post_type_archive('product') && !$query->is_tax() && !$query->is_search())) {
         return;
     }
 
