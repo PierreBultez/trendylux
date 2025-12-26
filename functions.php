@@ -731,37 +731,30 @@ function trendylux_filter_products(): void
 
     switch ($orderby_value) {
         case 'date':
-            $args['orderby'] = 'date';
-            $args['order']   = 'DESC';
+            $args['orderby'] = ['date' => 'DESC', 'ID' => 'DESC'];
             break;
         case 'price':
             $args['meta_key'] = '_price';
-            $args['orderby']  = 'meta_value_num';
-            $args['order']    = 'ASC';
+            $args['orderby']  = ['meta_value_num' => 'ASC', 'ID' => 'DESC'];
             break;
         case 'price-desc':
             $args['meta_key'] = '_price';
-            $args['orderby']  = 'meta_value_num';
-            $args['order']    = 'DESC';
+            $args['orderby']  = ['meta_value_num' => 'DESC', 'ID' => 'DESC'];
             break;
         case 'popularity':
             $args['meta_key'] = 'total_sales';
-            $args['orderby']  = 'meta_value_num';
-            $args['order']    = 'DESC';
+            $args['orderby']  = ['meta_value_num' => 'DESC', 'ID' => 'DESC'];
             break;
         case 'rating':
             $args['meta_key'] = '_wc_average_rating';
-            $args['orderby']  = 'meta_value_num';
-            $args['order']    = 'DESC';
+            $args['orderby']  = ['meta_value_num' => 'DESC', 'ID' => 'DESC'];
             break;
         case 'title':
-            $args['orderby'] = 'title';
-            $args['order']   = 'ASC';
+            $args['orderby'] = ['title' => 'ASC', 'ID' => 'DESC'];
             break;
         case 'menu_order':
         default:
-            $args['orderby'] = 'menu_order title';
-            $args['order']   = 'ASC';
+            $args['orderby'] = ['menu_order' => 'ASC', 'title' => 'ASC', 'ID' => 'DESC'];
             break;
     }
 
